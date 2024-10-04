@@ -1,0 +1,27 @@
+<app-header></app-header>
+
+<div (click)="searchService.hideSearch()" class="content">
+  <app-sidebar></app-sidebar>
+  <app-channel
+    *ngIf="channelSelectionService.isChannelOpen() == 'channel'"
+  ></app-channel>
+  <app-direct-messages
+    *ngIf="channelSelectionService.isChannelOpen() == 'directMessage'"
+  ></app-direct-messages>
+  <app-new-message
+    *ngIf="channelSelectionService.isChannelOpen() == 'newMessage'"
+  ></app-new-message>
+  <app-create-channel></app-create-channel>
+  <app-open-sidebar></app-open-sidebar>
+  <app-edit-profil></app-edit-profil>
+  <app-edit-profil-contactform></app-edit-profil-contactform>
+  <app-user-profil></app-user-profil>
+  <app-open-img></app-open-img>
+
+  <app-add-user-to-channel></app-add-user-to-channel>
+  <app-channel-userlist></app-channel-userlist>
+  <app-reaction-list *ngIf="selectedReaction"></app-reaction-list>
+  <app-edit-channel
+    *ngIf="editChannelService.isEditChannel()"
+  ></app-edit-channel>
+</div>

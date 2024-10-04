@@ -1,0 +1,37 @@
+.contentThreadClosed {
+  height: 100%;
+  width: 100%;
+  transition: width 0.3s;
+}
+
+.contentThreadOpen {
+  width: 65% !important;
+  transition: width 0.3s;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  margin-right: 20px;
+  overflow-x: hidden;
+}
+
+app-thread {
+  display: block;
+  height: 100%;
+  margin-left: 20px;
+}
+
+.thread {
+  width: 0px;
+  transition: width 0.3s;
+}
+
+.slide-in-right {
+  width: 35%;
+}
+
+.slide-out-right {
+  width: 0px;
+}

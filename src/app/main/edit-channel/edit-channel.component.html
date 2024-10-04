@@ -1,0 +1,155 @@
+<div *ngIf="this.selectetChannelData" class="contentContainer" (click)="editChannelService.setEditChannel(false, null)">
+  <div class="mainContent" (click)="$event.stopPropagation()">
+    <div class="header">
+      <p class="channel-name">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+          <mask id="mask0_70303_6026" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24"
+            height="25">
+            <rect y="0.5" width="24" height="24" fill="#D9D9D9" />
+          </mask>
+          <g mask="url(#mask0_70303_6026)">
+            <path
+              d="M7.25001 20.5C6.93334 20.5 6.67501 20.375 6.47501 20.125C6.27501 19.875 6.21668 19.6 6.30001 19.3L7.00001 16.5H4.77501C4.44168 16.5 4.17501 16.371 3.97501 16.113C3.77501 15.8543 3.71668 15.5667 3.80001 15.25C3.85001 15.0167 3.96668 14.8333 4.15001 14.7C4.33334 14.5667 4.54168 14.5 4.77501 14.5H7.50001L8.50001 10.5H5.77501C5.44168 10.5 5.17501 10.371 4.97501 10.113C4.77501 9.85433 4.71668 9.56667 4.80001 9.25C4.85001 9.01667 4.96668 8.83333 5.15001 8.7C5.33334 8.56667 5.54168 8.5 5.77501 8.5H9.00001L9.82501 5.225C9.87501 5.00833 9.98334 4.83333 10.15 4.7C10.3167 4.56667 10.5167 4.5 10.75 4.5C11.0667 4.5 11.325 4.625 11.525 4.875C11.725 5.125 11.7833 5.4 11.7 5.7L11 8.5H15L15.825 5.225C15.875 5.00833 15.9833 4.83333 16.15 4.7C16.3167 4.56667 16.5167 4.5 16.75 4.5C17.0667 4.5 17.325 4.625 17.525 4.875C17.725 5.125 17.7833 5.4 17.7 5.7L17 8.5H19.225C19.5583 8.5 19.825 8.629 20.025 8.887C20.225 9.14567 20.2833 9.43333 20.2 9.75C20.15 9.98333 20.0333 10.1667 19.85 10.3C19.6667 10.4333 19.4583 10.5 19.225 10.5H16.5L15.5 14.5H18.225C18.5583 14.5 18.825 14.629 19.025 14.887C19.225 15.1457 19.2833 15.4333 19.2 15.75C19.15 15.9833 19.0333 16.1667 18.85 16.3C18.6667 16.4333 18.4583 16.5 18.225 16.5H15L14.175 19.775C14.125 19.9917 14.0167 20.1667 13.85 20.3C13.6833 20.4333 13.4833 20.5 13.25 20.5C12.9333 20.5 12.675 20.375 12.475 20.125C12.275 19.875 12.2167 19.6 12.3 19.3L13 16.5H9.00001L8.17501 19.775C8.12501 19.9917 8.01668 20.1667 7.85001 20.3C7.68334 20.4333 7.48334 20.5 7.25001 20.5ZM9.50001 14.5H13.5L14.5 10.5H10.5L9.50001 14.5Z"
+              fill="black" />
+          </g>
+        </svg>
+        {{ this.selectetChannelData.name }}
+      </p>
+      <p class="cursor-pointer" (click)="editChannelService.setEditChannel(false, null)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <mask id="mask0_70303_11039" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24"
+            height="24">
+            <rect width="24" height="24" fill="#D9D9D9" />
+          </mask>
+          <g mask="url(#mask0_70303_11039)">
+            <path
+              d="M12 13.4L7.10005 18.3C6.91672 18.4833 6.68338 18.575 6.40005 18.575C6.11672 18.575 5.88338 18.4833 5.70005 18.3C5.51672 18.1167 5.42505 17.8833 5.42505 17.6C5.42505 17.3167 5.51672 17.0833 5.70005 16.9L10.6 12L5.70005 7.09999C5.51672 6.91665 5.42505 6.68332 5.42505 6.39999C5.42505 6.11665 5.51672 5.88332 5.70005 5.69999C5.88338 5.51665 6.11672 5.42499 6.40005 5.42499C6.68338 5.42499 6.91672 5.51665 7.10005 5.69999L12 10.6L16.9 5.69999C17.0834 5.51665 17.3167 5.42499 17.6 5.42499C17.8834 5.42499 18.1167 5.51665 18.3 5.69999C18.4834 5.88332 18.575 6.11665 18.575 6.39999C18.575 6.68332 18.4834 6.91665 18.3 7.09999L13.4 12L18.3 16.9C18.4834 17.0833 18.575 17.3167 18.575 17.6C18.575 17.8833 18.4834 18.1167 18.3 18.3C18.1167 18.4833 17.8834 18.575 17.6 18.575C17.3167 18.575 17.0834 18.4833 16.9 18.3L12 13.4Z"
+              fill="black" />
+          </g>
+        </svg>
+      </p>
+    </div>
+    <div class="scroll-container">
+      <div class="content-edit" *ngIf="this.editChannelNameOpen">
+        <div class="nameHeader-edit">
+          <span>Channel-Name</span><button (click)="saveChannelName()"
+            class="edit-button"><span>Speichern</span></button>
+            <img src="../../../assets/img/edit-channel/check_circle.png"  class="edit-icon-responsive" (click)="saveChannelName()">
+        </div>
+        <div class="channel-name-container">
+          <input type="text" class="input-field" [(ngModel)]="channelName" id="channelName" name="channelName"
+            placeholder="{{ this.selectetChannelData.name }}">
+          <img src="../../../assets/img/header/tag.png" class="tag-icon">
+        </div>
+      </div>
+      <div class="content" *ngIf="!this.editChannelNameOpen">
+        <div class="nameHeader">
+          <span>Channel-Name</span><button (click)="editChannelName()"
+            class="edit-button"><span>Bearbeiten</span></button>
+            <img src="../../../assets/img/edit-channel/edit (1).png" class="edit-icon-responsive" (click)="editChannelName()">
+        </div>
+        <div class="channel-tag-name">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+            <mask id="mask0_70303_6026" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24"
+              height="25">
+              <rect y="0.5" width="24" height="24" fill="#D9D9D9" />
+            </mask>
+            <g mask="url(#mask0_70303_6026)">
+              <path
+                d="M7.25001 20.5C6.93334 20.5 6.67501 20.375 6.47501 20.125C6.27501 19.875 6.21668 19.6 6.30001 19.3L7.00001 16.5H4.77501C4.44168 16.5 4.17501 16.371 3.97501 16.113C3.77501 15.8543 3.71668 15.5667 3.80001 15.25C3.85001 15.0167 3.96668 14.8333 4.15001 14.7C4.33334 14.5667 4.54168 14.5 4.77501 14.5H7.50001L8.50001 10.5H5.77501C5.44168 10.5 5.17501 10.371 4.97501 10.113C4.77501 9.85433 4.71668 9.56667 4.80001 9.25C4.85001 9.01667 4.96668 8.83333 5.15001 8.7C5.33334 8.56667 5.54168 8.5 5.77501 8.5H9.00001L9.82501 5.225C9.87501 5.00833 9.98334 4.83333 10.15 4.7C10.3167 4.56667 10.5167 4.5 10.75 4.5C11.0667 4.5 11.325 4.625 11.525 4.875C11.725 5.125 11.7833 5.4 11.7 5.7L11 8.5H15L15.825 5.225C15.875 5.00833 15.9833 4.83333 16.15 4.7C16.3167 4.56667 16.5167 4.5 16.75 4.5C17.0667 4.5 17.325 4.625 17.525 4.875C17.725 5.125 17.7833 5.4 17.7 5.7L17 8.5H19.225C19.5583 8.5 19.825 8.629 20.025 8.887C20.225 9.14567 20.2833 9.43333 20.2 9.75C20.15 9.98333 20.0333 10.1667 19.85 10.3C19.6667 10.4333 19.4583 10.5 19.225 10.5H16.5L15.5 14.5H18.225C18.5583 14.5 18.825 14.629 19.025 14.887C19.225 15.1457 19.2833 15.4333 19.2 15.75C19.15 15.9833 19.0333 16.1667 18.85 16.3C18.6667 16.4333 18.4583 16.5 18.225 16.5H15L14.175 19.775C14.125 19.9917 14.0167 20.1667 13.85 20.3C13.6833 20.4333 13.4833 20.5 13.25 20.5C12.9333 20.5 12.675 20.375 12.475 20.125C12.275 19.875 12.2167 19.6 12.3 19.3L13 16.5H9.00001L8.17501 19.775C8.12501 19.9917 8.01668 20.1667 7.85001 20.3C7.68334 20.4333 7.48334 20.5 7.25001 20.5ZM9.50001 14.5H13.5L14.5 10.5H10.5L9.50001 14.5Z"
+                fill="black" />
+            </g>
+          </svg>
+          <p>{{ this.selectetChannelData.name }}</p>
+        </div>
+      </div>
+      <div class="content" *ngIf="!this.editChannelDescriptionOpen">
+        <div class="nameHeader">
+          <span>Beschreibung</span><button (click)="editChannelDescription()"
+            class="edit-button"><span>Bearbeiten</span></button>
+            <img src="../../../assets/img/edit-channel/edit (1).png" class="edit-icon-responsive" (click)="editChannelDescription()">
+        </div>
+        <div>
+          {{
+          this.channelInfo.AllChannelsDescriptions[
+          this.channelInfo.currentChannelNumber
+          ]
+          }}
+        </div>
+        <div class="spacer"></div>
+        <div class="nameHeader">
+          <span>Erstellt von</span>
+        </div>
+        <div>
+          @if(this.authService.currentUserSignal()?.uId ==
+          channelInfo.AllChannelsCreatorsUids[channelInfo.currentChannelNumber]){
+          <span class="creator-name">{{this.authService.currentUserSignal()?.name}}</span>
+          }@else {
+          <span class="creator-name">
+            {{
+            this.channelInfo.AllChannelsCreatorsNames[
+            this.channelInfo.currentChannelNumber
+            ]
+            }}
+          </span>
+          }
+        </div>
+      </div>
+      <div class="content-edit" *ngIf="this.editChannelDescriptionOpen">
+        <div class="nameHeader-edit">
+          <span>Beschreibung</span><button (click)="saveChannelDescription()"
+            class="edit-button"><span>Speichern</span></button>
+            <img src="../../../assets/img/edit-channel/check_circle.png" class="edit-icon-responsive" (click)="saveChannelDescription()">
+        </div>
+        <div class="channel-name-container">
+          <input type="text" class="input-field" [(ngModel)]="channelDescription" id="channelDescription"
+            name="channelDescription" placeholder="Dein Text hier">
+          <img src="../../../assets/img/header/tag.png" class="tag-icon">
+        </div>
+        <div class="spacer-edit"></div>
+        <div class="nameHeader edit-description">
+          <span>Erstellt von</span>
+        </div>
+        <div>
+          @if(this.authService.currentUserSignal()?.uId ==
+          channelInfo.AllChannelsCreatorsUids[channelInfo.currentChannelNumber]){
+          <span class="creator-name">{{this.authService.currentUserSignal()?.name}}</span>
+          }@else {
+          <span class="creator-name">
+            {{
+            this.channelInfo.AllChannelsCreatorsNames[
+            this.channelInfo.currentChannelNumber
+            ]
+            }}
+          </span>
+          }
+        </div>
+      </div>
+      <div class="responsive-userlist-container">
+        <div class="userlist">
+          <div *ngFor=" let user of channelInfo.AllChannelsUsers[channelInfo.currentChannelNumber]; let i = index">
+            <div class="user fs-18" (click)="openUserProfil(i)">
+              <img src="{{channelInfo.AllChannelsImages[channelInfo.currentChannelNumber][i]}}" class="selected-img">
+              @if(channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i] ==
+              authService.currentUserSignal()?.uId){
+              <span>{{ authService.currentUserSignal()?.name }}</span>
+              }@else{
+              <span>{{ user }}</span>
+              }
+              @if(authService.currentUserSignal()?.uId ==
+              channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i] || this.channelInfo.onlineUserUidList.includes(channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i])){
+              <img class="online-icon" src="../../../assets/img/sidebar/Online.png" />
+              }@else {
+              <img class="online-icon" src="../../../assets/img/sidebar/Offline.png" />
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="button-container">
+        <button type="submit" class="abandon" (click)="abandon()"><span class="fs-18 button-text">Channel
+            verlassen</span></button>
+      </div>
+    </div>
+  </div>
+</div>

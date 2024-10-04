@@ -1,0 +1,43 @@
+@media(max-width: 1000px){
+    .dialog {
+    border-radius: 30px;
+    top : calc(50vh - 313px);
+    left: calc(50vw - 228px);
+    }
+
+    .header-title {
+        white-space: nowrap;
+    }
+
+    .account-icon {
+        display: flex;
+    }
+    
+    .mail-icon{
+        display: flex;
+    }
+}
+
+@media(max-width: 500px){
+    .dialog {
+    width: calc(100vw - 60px);
+    left: 0;
+    }
+
+    .channel-name-container {
+        width: calc(100vw - 50px);
+    }
+}
+
+@media(max-width: 400px){
+    .dialog {
+        padding: 20px 15px 20px 15px;
+        width: calc(100vw - 30px);
+        top : calc(50vh - 297px);
+        left: 0;
+    }
+
+    .input-field {
+        padding: 0px 20px;
+    }
+}

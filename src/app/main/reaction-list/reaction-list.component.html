@@ -1,0 +1,21 @@
+<div
+  (click)="channelSelectionService.setselectedReaction('')"
+  class="contentContainer"
+>
+  <div class="content" (click)="$event.stopPropagation()">
+    <p
+      *ngFor="
+        let content of splitStringBySpace(selectedReaction);
+        let i = index
+      "
+    >
+      <span *ngIf="user == content"> du</span>
+      <span *ngIf="user != content && getUser(content)">
+        {{ getUser(content).name }}</span
+      >
+      <span *ngIf="i < splitStringBySpace(selectedReaction).length - 1">
+        und
+      </span>
+    </p>
+  </div>
+</div>

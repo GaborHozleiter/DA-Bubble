@@ -1,0 +1,22 @@
+.contentThreadClosed {
+  height: 100%;
+  width: 100%;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  margin-right: 20px;
+  overflow-x: hidden;
+}
+
+.contentContainer-display-flex {
+  display: flex !important;
+}
+
+@media(max-width: 1000px){
+  .contentContainer {
+    display: none;
+  }
+}

@@ -1,0 +1,78 @@
+<div class="animation-wrapper-global"></div>
+
+<section>
+    <div class="animation-wrapper-local">
+        <div class="logo-wrapper">
+            <img class="animated-logo" src="../../../assets/img/landing-page/animation-step1.png" alt="daBubble-logo">
+        </div>
+    </div>
+
+    <img class="logo" src="../../../assets/img/landing-page/DABubble-logo.png" alt="daBubble-logo">
+
+    <div class="sign-in-section">
+        <p  class="fs-18">Neu bei DABubble?</p>
+        <a class="fs-18 purp-link" [routerLink]="['/sign-up']">Konto erstellen</a>
+    </div>
+
+    <div class="login-section">
+        <h1 class="fs-46">Anmeldung</h1>
+
+        <p  class="fs-20">Wir empfehlen dir, die E-Mail-Adresse zu nutzen,
+            die du bei der Arbeit verwendest.</p>
+
+        <form [formGroup]="form" class="formfield" (ngSubmit)="onSubmit()">
+            <div class="input-container" style="position: relative;">
+                <img class="input-icon" src="../../../assets/img/landing-page/mail.png" alt="">
+                <input formControlName="email" class="input-design" placeholder="beispielname@email.com" type="text">
+                <span *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)"
+                    class="error-message">
+                    *Diese E-Mail-Adresse ist leider ungültig.
+                </span>
+            </div>
+
+            <div class="input-container" style="position: relative;">
+                <img class="input-icon-lock" src="../../../assets/img/landing-page/lock.png" alt="">
+                <img (click)="revealPasswordService.togglePassword()" class="input-icon-reveal" src="{{revealPasswordService.imgUrl}}" alt="">
+                <input maxlength="21" formControlName="password" class="input-design" placeholder="Passwort" type="{{revealPasswordService.type}}">
+                <span
+                    *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)"
+                    class="error-message">
+                    Passwort is erforderlich.
+                </span>
+            </div>
+
+            <div *ngIf="errorMessage" class="error-message">
+                {{ errorMessage }}
+            </div>
+
+            <a class="fs-18 password-link" [routerLink]="['/reset-password']">Passwort vergessen?</a>
+
+            <div class="separator">
+                <div class="grey-line"></div>
+                <p class="fs-18">ODER</p>
+                <div class="grey-line"></div>
+            </div>
+
+            <button type="button" (click)="googleSignIn()" class="login-google-btn cursor-pointer fs-18"><img
+                    src="../../../assets/img/landing-page/Google.png" alt="">Anmelden mit Google</button>
+
+            <span class="btn-container">
+                <button [disabled]="!form.valid" [ngClass]="{'blue-btn': form.valid, 'disabled-btn fs-18': !form.valid}"
+                    type="submit" class="blue-btn fs-18 cursor-pointer">Anmelden</button>
+                    
+                <button (click)="guestLogin()" class="white-btn fs-18 cursor-pointer">Gäste-Login</button>
+            </span>
+        </form>
+    </div>
+
+    <div class="sign-in-section-phone">
+        <p class="fs-18">Neu bei DABubble?</p>
+        <a class="fs-18 purp-link" href="sign-up">Konto erstellen</a>
+    </div>
+
+    <div class="legal-section">
+        <a class="fs-18 purp-link" href="impressum">Impressum</a>
+        <a class="fs-18 purp-link" href="privacy">Datenschutz</a>
+    </div>
+
+</section>

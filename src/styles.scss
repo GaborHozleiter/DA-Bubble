@@ -1,0 +1,165 @@
+@font-face {
+  font-family: "Nunito";
+  src: url("../../DABubble/src/assets/font/Nunito-Bold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Nunito";
+  src: url("../../DABubble/src/assets/font/Nunito-Regular.ttf");
+  font-weight: 400;
+}
+
+@import "@ctrl/ngx-emoji-mart/picker";
+
+* {
+  font-family: "Nunito";
+  margin: 0;
+}
+
+body {
+  background-color: #eceefe;
+  margin: 0;
+}
+
+.fs-18 {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.fs-20 {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.fs-24 {
+  font-size: 24px;
+}
+
+.fs-25 {
+  font-size: 25px;
+  color: #444df2;
+}
+
+.fs-32 {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.fs-36 {
+  font-size: 36px;
+  font-weight: 700;
+  color: white;
+}
+
+.fs-46 {
+  font-size: 46px;
+  color: #444df2;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.purp-link {
+  text-decoration: none;
+  color: #797ef3;
+  border: 1px solid transparent;
+  padding: 10px 15px 10px 15px;
+  transition-duration: 0.2s;
+  &:hover {
+    color: #464bdf;
+    border: 1px solid #797ef3;
+    border-radius: 50px;
+  }
+}
+
+.cursor-pointer {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #797ef3;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #444df2;
+  border-radius: 10px;
+}
+
+.blue-btn {
+  padding: 12px 25px 12px 25px;
+  background-color: #444df2;
+  color: white;
+  border-radius: 25px;
+  border-width: 0;
+  transition-duration: 0.2s;
+  font-size: 18px;
+  cursor: pointer;
+  &:hover {
+    background-color: #444df29f;
+  }
+}
+
+.white-btn {
+  padding: 12px 25px 12px 25px;
+  border-radius: 25px;
+  border: 1px solid #797ef3;
+  color: #444df2;
+  font-weight: 700;
+  transition-duration: 0.2s;
+  &:hover {
+    background-color: #444df2;
+    color: white;
+  }
+}
+
+.disabled-btn {
+  padding: 12px 25px 12px 25px;
+  background-color: gray;
+  color: white;
+  border-radius: 25px;
+  border-width: 0;
+  &:hover {
+    cursor: unset;
+  }
+}
+
+.highlight {
+  background-color: #797df39f !important;
+  font-weight: bold;
+}
+
+.tagHighlight,
+.tagHighlightInput,
+.tagHighlightChannel {
+  background-color: #797ef3 !important;
+  color: white;
+  padding: 6px 6px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.tagHighlightSend,
+.tagHighlightSendChannel {
+  background-color: #c8d1fc !important;
+  color: white;
+  padding: 6px 6px;
+  border-radius: 10px;
+  cursor: pointer;
+}

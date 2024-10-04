@@ -1,0 +1,94 @@
+.display-flex {
+    display: flex;
+}
+
+.display-none {
+    display: none;
+}
+
+.profil-options-popup-container {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 4;
+}
+
+.dialog {
+    background-color: white;
+    position: absolute;
+    gap: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 282px;
+    height: 181px;
+    gap: 32px;
+    border-radius: 30px 0px 30px 30px;
+    top: 100px;
+    right: 40px;
+}
+
+span {
+    font-weight: 600;
+}
+
+.button {
+    width: 70%;
+    height: 33px;
+    padding: 8px;
+    border-radius: 33px;
+    white-space: nowrap;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+        color: rgba(121, 126, 243, 1);
+        background-color: #ECEEFE;
+
+        .profile-icon{
+            background-image: url('/assets/img/open-menu/account_circle_focus.png');
+        }
+
+        .log-out-icon{
+            background-image: url('/assets/img/open-menu/logout_focus.png');
+        }
+    }
+
+    &:focus {
+        color: rgba(121, 126, 243, 1);
+        background-color: #ECEEFE;
+
+        .profile-icon{
+            background-image: url('/assets/img/open-menu/account_circle_focus.png');
+        }
+
+        .log-out-icon{
+            background-image: url('/assets/img/open-menu/logout_focus.png');
+        }
+    }
+}
+
+.button-icon {
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: none;
+}
+
+.profile-icon {
+    background-image: url('/assets/img/open-menu/account_circle.png');
+    
+}
+
+.log-out-icon {
+    background-image: url('/assets/img/open-menu/logout.png');
+}
+
+.rectangle {
+    display: none;
+}

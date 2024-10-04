@@ -1,0 +1,38 @@
+app-header {
+  display: block;
+  width: 100%;
+  height: 115px;
+}
+app-sidebar {
+  display: block;
+  margin-bottom: 10px;
+}
+
+app-open-sidebar {
+  position: fixed;
+  bottom: 25px;
+}
+
+app-channel {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+app-new-message {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+app-direct-messages {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 115px);
+}

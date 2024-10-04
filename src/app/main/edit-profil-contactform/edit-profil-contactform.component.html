@@ -1,0 +1,62 @@
+<div class="edit-profil-container" (click)="closeDialog()" [ngClass]="{'display-flex': hideOrShowPopUp.editProfilContactformOpen, 
+'display-none': !hideOrShowPopUp.editProfilContactformOpen }">
+    <div class="dialog" (click)="notCloseDialog($event)">
+
+        <div class="header">
+            <span class="header-title fs-24">Dein Profil bearbeiten</span>
+            <div class="close-button" (click)="closeDialog()"></div>
+        </div>
+
+        <div>
+            @if (authService.currentUserSignal() == null ) {
+            <img class="profil-image" src="../../../assets/img/landing-page/profile.png">
+            } @else {
+            <img class="profil-image" src="{{authService.currentUserSignal()?.imgUrl}}">
+            }
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="input-container">
+            <div class="channel-name-container">
+                <div class="input-title">
+                    <img src="../../../assets/img/sidebar/account_circle.png" class="account-icon">
+                    <span class="fs-18">Vollständiger Name</span>
+                </div>
+                @if (authService.currentUserSignal()?.name === 'Gast') {
+                <input disabled value="Guest"  type="text" class="disabled-input" name="name">
+                } @else {
+                <input value="{{authService.currentUserSignal()?.name}}" formControlName="name" type="text"
+                    class="input-field" id="name" name="name">
+                }
+            </div>
+
+            <div class="channel-name-container">
+                <div class="input-title">
+                    <img src="../../../assets/img/sidebar/mail.png" class="mail-icon">
+                    <span class="fs-18">E-Mail-Adresse</span>
+                </div>
+                @if (authService.currentUserSignal()?.name === 'Gast') {
+                <input disabled value="guest@guestmail.com"  type="text" class="disabled-input" name="name">
+                } @else {
+                <input value="{{authService.currentUserSignal()?.email}}" formControlName="email" type="text"
+                    class="input-field" id="email" name="email">
+                }
+            </div>
+
+            <div class="message-container">
+                <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+                <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+                <div *ngIf="authService.currentUserSignal()?.name === 'Gast'" class="error-message">Änderungen am Gast Profil sind nicht möglich.</div>
+            </div>
+
+            <div class="buttons-container">
+                <button type="button" class="cancel" (click)="cancel()"><span class="fs-18">Abbrechen</span></button>
+                @if (authService.currentUserSignal()?.name === 'Gast') {
+                <button disabled type="submit" class="disabled-btn"><span class="fs-18">Speichern</span></button>
+                } @else {
+                <button type="submit" class="save"><span class="fs-18">Speichern</span></button>
+                }
+            </div>
+
+        </form>
+    </div>
+</div>

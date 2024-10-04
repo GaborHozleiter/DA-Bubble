@@ -1,0 +1,50 @@
+<div class="edit-profil-container" (click)="closeDialog()" [ngClass]="{'display-flex': hideOrShowPopUp.editProfilOpen, 
+'display-none': !hideOrShowPopUp.editProfilOpen }">
+    <div class="dialog" (click)="notCloseDialog($event)">
+        <div class="header">
+            <span class="header-title fs-24">Profil</span>
+            <div class="close-button" (click)="closeDialog()"></div>
+        </div>
+        <div>
+            @if (authService.currentUserSignal() == null ) {
+                <img class="profil-image" src="../../../assets/img/landing-page/profile.png">
+            } @else {
+                <img class="profil-image" src="{{authService.currentUserSignal()?.imgUrl}}">
+            }
+            
+        </div>
+        <div class="name-container">
+            <div class="name-edit">
+                <span class="user-name fs-32">{{authService.currentUserSignal()?.name}}</span>
+                <span class="edit fs-18" (click)="editUser()">Bearbeiten</span>
+                <div (click)="editUser()" class="responsive-edit-icon"></div>
+            </div>
+            <div class="online">
+                @if(!userOnline){
+                    <div class="online-icon"></div>
+                    <span class="fs-20">Aktiv</span>
+                }@else {
+                    <div class="offline-icon"></div>
+                    <span class="fs-20">Abwesend</span>
+                }
+            </div>
+        </div>
+        <div class="email-container">
+            <div class="email-title-container">
+                <img src="../../../assets/img/header/mail (1).png">
+                <span class="fs-20 email-adress-title">E-Mail-Adresse</span>
+            </div>
+            <div class="email-adress-container">
+                <span class="fs-18">{{authService.currentUserSignal()?.email}}</span>
+            </div>
+        </div>
+        <!--
+        
+        <div class="send-message-button" (click)="sendMessage()">
+            <img src="../../../assets/img/header/mode_comment.png">
+            <span class="fs-18 message">Nachricht</span>
+        </div>
+        
+        -->
+    </div>
+</div>

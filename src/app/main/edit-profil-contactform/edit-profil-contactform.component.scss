@@ -1,0 +1,203 @@
+.edit-profil-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 6;
+}
+
+.dialog {
+    width: 400px;
+    //height: 500px;
+    padding: 35px 30px 35px 30px;
+    gap: 45px;
+    border-radius: 30px;
+    background-color: white;
+    position: absolute;
+    gap: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    top : 100px;
+    right: 40px;
+}
+
+.display-flex {
+    display: flex;
+}
+
+.display-none {
+    display: none;
+}
+
+.header {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;   
+    align-items: center;
+}
+
+.header-title {
+    font-weight: 700;
+}
+
+.close-button {
+    background-image: url('../../../assets/img/create-channel/close_button.png');
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    &:hover {
+        background-image: url('../../../assets/img/create-channel/close_button_hover.png');
+    }
+}
+
+.profil-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 500px;
+    object-fit: cover;
+}
+
+.channel-name-container {
+    width: 400px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 10px;
+    gap: 10px;
+    span {
+        font-weight: 700;
+    }
+}
+
+input {
+    width: 792px;
+    height: 60px;
+    border-radius: 40px;
+    border: 1px solid rgba(173, 176, 217, 1);
+    padding: 18px, 20px, 18px, 20px;
+    font-size: 18px;
+    gap: 10px;
+}
+
+.input-field {
+    width: 100%; 
+    padding: 0px 30px;
+    box-sizing: border-box;
+    &:focus {
+        border-color: none;
+    }
+}
+
+.buttons-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap : 10px;
+    margin-top: 40px;
+}
+
+button {
+    width: 141px;
+    height: 49px;
+    padding: 12px 25px 12px 25px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.cancel {
+    border: 1px solid #797EF3;
+    background-color: white;
+    color:  #444DF2;
+    ; 
+    span {
+        font-weight: 700;
+    }
+    &:hover {
+        color: white;
+        background-color: #444DF2;
+        border: none;
+    }
+}
+
+.save {
+    border: none;
+    background-color: #444DF2;
+    color:  white;
+    ; 
+    span {
+        font-weight: 700;
+    }
+    &:hover {
+        background-color: #797EF3;
+    }
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+}
+
+.success-message {
+    color: #92C83E;
+    font-size: 14px;
+}
+
+.message-container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.disabled-btn {
+    padding: 12px 25px 12px 25px;
+    background-color: gray;
+    color: white;
+    border-radius: 25px;
+    border-width: 0;
+    cursor: auto;
+}
+
+.disabled-input{
+    width: calc(100% - 24px);
+    border: none;
+    background-color: #22222242;
+    outline: none;
+    height: 26px;
+    border-radius: 25px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.account-icon {
+    width: 24px;
+    height: 24px;
+    display: none;
+}
+
+.mail-icon {
+    width: 24px;
+    height: 24px;
+    display: none;
+}
+
+.input-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}

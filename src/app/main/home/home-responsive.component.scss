@@ -1,0 +1,15 @@
+@media(max-width: 1000px){
+    app-sidebar {
+        margin-bottom: 0px;
+      }
+
+    app-header {
+    height: 80px;
+    }
+
+    .content {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 80px);
+    }
+}

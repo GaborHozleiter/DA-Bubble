@@ -1,0 +1,33 @@
+<header>
+    @if(this.responsiveService.isSidebarOpen){
+        <img src="../../../assets/img/sidebar/Bubble-icon.png" class="bubble-icon">
+    }@else {
+        <div class="header-left-responsive" (click)="backToSidebar()">
+            <img src="../../../assets/img/header/keyboard_arrow_left.png" class="arrow-left">
+            <img src="../../../assets/img/sidebar/Workspace logo.png" class="workspace-logo">
+            <span class="responsive-title">Devspace</span>
+        </div>
+    }
+    <app-search-field class="responsive"></app-search-field>
+    <app-profil-options-popup></app-profil-options-popup>
+    <div class="user-account" (click)="openDialog()">
+        <div class="user-name">
+            @if (authService.currentUserSignal() == null) {
+                <span>Gast</span>
+              } @else {
+                <span>{{authService.currentUserSignal()?.name}}</span>
+              }
+        </div>
+        <div class="profil">
+            @if (authService.currentUserSignal() == null) {
+                <img class="profil-image" src="../../../assets/img/landing-page/profile.png">
+            } @else {
+                <img class="profil-image" src="{{authService.currentUserSignal()?.imgUrl}}">
+            }
+            
+            <img class="online-icon" src="../../../assets/img/sidebar/Online.png">
+        </div>
+        <div class="arrow">
+        </div>
+    </div>
+</header>

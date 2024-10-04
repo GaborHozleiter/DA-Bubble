@@ -1,0 +1,170 @@
+
+@media (max-width: 460px) {
+    .signUp-section {
+        max-width: 350px;
+
+    }
+
+    .avatar-title{
+        width: 200px;
+        text-align: center;
+    }
+
+    .logo{
+        top: 100px;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+    }
+
+    .arrow-back {
+        top: 46px;
+        left: 20px;
+    }
+
+    .formfield .form-container {
+        gap: 20px;
+    }
+
+    .blue-btn{
+        font-size: 12px;
+    }
+
+    .sign-up-description{
+        width: 300px;
+    }
+
+    .default-profile-imgs {
+        width: 40px;
+    }
+    .image-container {
+         gap: 0; 
+    }
+
+    .logo {
+        height: 50px;
+    }
+
+    .input-design {
+        width: 300px;
+        height: 40px;
+    }
+
+    .input-icon {
+        top: 15px;
+    }
+
+    .input-icon-reveal {
+        height: 20px;
+        top: 10px;
+    }
+
+    .sign-up-message{
+        padding: 20px;
+        bottom: 50px;
+        p{
+            font-size: 14px;
+        }
+    }
+
+    .input-icon-lock {
+        top: 11px;
+    }
+}
+
+@media (max-width: 375px) {
+    .signUp-section {
+        max-width: 300px;
+        padding: 10px;
+    }
+
+    .error-message{
+        font-size: 10px;
+        max-width: 250px;
+    }
+
+    .avatar-title{
+        width: 200px;
+        text-align: center;
+    }
+
+    .logo{
+        top: 30px;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+    }
+
+    .avatar {
+        width: 110px;
+        height: 110px;
+    }
+
+    .arrow-back {
+        top: 28px;
+        left: 0px;
+    }
+
+    .formfield .form-container {
+        gap: 15px;
+
+        label {
+            font-size: 12px;
+            padding: 5px 10px 5px 10px;
+        }
+
+        button {
+            font-size: 12px;
+        }
+
+        p{
+            font-size: 12px;
+        }
+    }
+
+    .legal-section {
+        bottom: 25px;
+    }
+
+    .blue-btn{
+        font-size: 12px;
+    }
+
+    .sign-up-description{
+        width: 250px;
+    }
+
+    .default-profile-imgs {
+        width: 35px;
+        padding: 3px;
+    }
+
+    .image-container {
+         gap: 0; 
+    }
+
+    .input-design {
+        width: 250px;
+        height: 30px;
+    }
+
+    .privacyPolicy-container{
+        p{
+            font-size: 12px;
+        }
+    }
+
+    .input-icon {
+        top: 9px;
+    }
+
+    .input-icon-lock {
+        top: 7px;
+    }
+
+    .input-icon-reveal {
+        top: 6px;
+    }
+}

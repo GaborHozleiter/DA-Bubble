@@ -1,0 +1,16 @@
+@media(max-width: 1000px){
+    .header-right {
+        display: none;
+      }
+
+      .add-user-icon-responsive {
+        display: block;
+        transform: scale(0.8);
+      }
+
+      .header {
+        padding: 25px;
+        border-radius: 0;
+      }
+        
+}

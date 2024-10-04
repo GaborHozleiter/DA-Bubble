@@ -1,0 +1,435 @@
+section {
+    max-width: 1920px;
+    margin: 0 auto;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    position: absolute;
+    animation: logoSlideOriginal;
+    animation-delay: 2500ms;
+    animation-timing-function: ease-in-out;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+}
+
+.legal-section {
+    display: flex;
+    position: absolute;
+    bottom: 30px;
+    gap: 16px;
+}
+
+.sign-in-section-phone {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    z-index: 990;
+}
+
+.sign-in-section {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50px;
+    right: 30px;
+    align-items: end;
+
+    p {
+        padding-right: 10px;
+    }
+}
+
+.login-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 2px 10px 0px #00000014;
+    background-color: #FFFFFF;
+    padding: 50px;
+    max-width: 606px;
+    border-radius: 30px;
+    gap: 30px;
+
+    p {
+        max-width: 486px;
+        text-align: center
+    }
+}
+
+.formfield {
+    z-index: 997;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.input-design {
+    border-radius: 100px;
+    background-color: #ECEEFE;
+    width: 500px;
+    height: 60px;
+    cursor: pointer;
+    text-indent: 70px;
+    border-style: hidden;
+    font-size: 18px;
+    font-family: Nunito;
+
+    &:hover {
+        outline: 1px solid black;
+    }
+
+    &:focus {
+        outline: 1px solid #444DF2;
+    }
+}
+
+.grey-line {
+    background-color: #ADB0D9;
+    height: 1px;
+    width: 210px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 25px;
+    top: 22px
+}
+
+.input-icon-lock {
+    position: absolute;
+    left: 25px;
+    top: 19px
+}
+
+.input-icon-reveal{
+    position: absolute;
+    right: 25px;
+    top: 19px;
+    height: 25px;
+}
+
+.separator {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.login-google-btn {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 500px;
+    height: 60px;
+    background-color: #ECEEFE;
+    border-radius: 100px;
+    gap: 10px;
+    border: 1px solid transparent;
+    color: #444DF2;
+    transition-duration: 0.2s;
+
+    &:hover {
+        border: 1px solid #444DF2;
+        font-weight: 700;
+    }
+}
+
+.btn-container {
+    display: flex;
+    gap: 30px;
+}
+
+.password-link {
+    text-decoration: none;
+    color: #797ef3;
+    border: 1px solid transparent;
+    padding: 8px;
+    transition-duration: 0.2s;
+
+    &:hover {
+        font-weight: 700;
+        color: #464bdf;
+        background-color: #ECEEFE;
+        border-radius: 50px;
+    }
+}
+
+.animation-wrapper-global {
+    width: 100vw;
+    height: 100%;
+    position: absolute;
+    z-index: 998;
+    background: linear-gradient(1.46deg, #313AE6 1.22%, #797EF3 98.76%);
+    animation: backgroundAnimation;
+    animation-delay: 2500ms;
+    animation-timing-function: ease-out;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+}
+
+.animation-wrapper-local {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    animation: backgroundAnimation;
+}
+
+.animated-logo {
+    height: auto;
+    width: auto;
+    animation: logoAnimation;
+    animation-delay: 500ms;
+    animation-timing-function: ease-out;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+    height: auto;
+    max-width: 100%;
+}
+
+.logo-wrapper {
+    z-index: 999;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: logoSlide;
+    animation-delay: 2500ms;
+    animation-timing-function: ease-in-out;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    padding-top: 5px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: baseline;
+}
+
+@keyframes backgroundAnimation {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        z-index: -1;
+    }
+}
+
+@keyframes logoAnimation {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        content: url("../../../assets/img/landing-page/animation-step2.png");
+        transform: translateX(-5%)
+    }
+
+    100% {
+        content: url("../../../assets/img/landing-page/animation-step3.png");
+        transform: translateX(0);
+    }
+}
+
+@keyframes logoSlide {
+    0% {
+        opacity: 1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    100% {
+        top: 50px;
+        left: 30px;
+        transform: translate(0, 0);
+        z-index: 1;
+        height: 70px;
+        width: 243px;
+        opacity: 0;
+    }
+}
+
+@keyframes logoSlidePhone {
+    0% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    100% {
+        top: 50px;
+        left: 30px;
+        transform: translate(0, 0);
+        z-index: 1;
+        height: 50px;
+        width: auto;
+    }
+}
+
+@keyframes logoSlideOriginal {
+    0% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    100% {
+        top: 50px;
+        left: 30px;
+        transform: translate(0, 0);
+        z-index: 1;
+        height: 70px;
+        width: 243px;
+    }
+}
+
+@media (max-width: 1360px) {
+
+    .login-section {
+        padding: 25px;
+
+        h1 {
+            font-size: 40px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        a {
+            font-size: 16px;
+        }
+
+        button {
+            font-size: 16px;
+        }
+
+        input {
+            font-size: 16px;
+        }
+    }
+
+    .sign-in-section {
+        p {
+            font-size: 16px;
+        }
+
+        a {
+            font-size: 16px;
+        }
+    }
+}
+
+@media (max-width: 650px) {
+
+    .login-section {
+        padding: 25px;
+
+        h1 {
+            font-size: 35px;
+        }
+
+        p {
+            font-size: 12px;
+        }
+
+        a {
+            font-size: 12px;
+        }
+
+        button {
+            font-size: 12px;
+        }
+
+        input {
+            font-size: 12px;
+        }
+
+        p {
+            max-width: 400px;
+        }
+    }
+
+    .error-message {
+        font-size: 12px;
+    }
+
+    .sign-in-section {
+        p {
+            font-size: 12px;
+        }
+
+        a {
+            font-size: 12px;
+        }
+    }
+
+    .legal-section {
+        a {
+            font-size: 12px;
+        }
+    }
+
+    .logo {
+        animation: logoSlidePhone;
+        animation-delay: 2500ms;
+        animation-timing-function: ease-in-out;
+        animation-duration: 500ms;
+        animation-fill-mode: forwards;
+    }
+
+    .animated-logo {
+        height: 50px;
+    }
+
+    .input-design {
+        width: 400px;
+        height: 45px;
+        text-indent: 60px;
+    }
+
+    .grey-line {
+        width: 170px;
+    }
+
+    .login-google-btn {
+        width: 400px;
+        height: 45px;
+    }
+
+    .input-icon-reveal{
+        top: 11px;
+    }
+
+    .input-icon {
+        top: 15px;
+    }
+
+    .input-icon-lock {
+        top: 11px;
+    }
+}

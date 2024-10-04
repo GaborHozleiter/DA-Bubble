@@ -1,0 +1,93 @@
+@media(max-width: 1000px){
+    .sidebar-container {
+        width: 100vw !important;
+        max-width: 100% !important;
+        border-radius: 0px;
+        margin: 0;
+    }
+
+    .header {
+        display: none;
+    }
+
+    .channels-title-container{
+        width: 90vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+
+    .add-new-channel {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 20px;
+        margin-bottom: 28px;
+        margin-left: 60px;
+    }
+
+    .add-new-message-responsive {
+        background-image: url('../../../assets/img/sidebar/16B.\ edit_square.png');
+        height: 75px;
+        width: 75px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        z-index: 2;
+    }
+
+    .channel-title-active {
+        font-weight: 500;
+        color: black;
+    }
+
+    .channel-active {
+        background-color: white;
+        cursor: pointer;
+        .raute {
+            background-image: url('../../../assets/img/sidebar/tag.png');
+        }
+    }
+
+    .raute-active {
+        height: 24px;
+        width: 24px;
+        background-image: url('../../../assets/img/sidebar/tag.png');
+    }
+
+    .channel {
+        &:hover {
+            background-color: white;
+            cursor: pointer;
+            .raute {
+                background-image: url('../../../assets/img/sidebar/tag.png');
+            }
+        }
+        &:active {
+            background-color: white;
+            cursor: pointer;
+            .raute {
+                background-image: url('../../../assets/img/sidebar/tag.png');
+            }
+            .channel-title {
+                font-weight: 500;
+                color: black;
+            }
+        }
+    }
+
+    .search-field {
+        display: block;
+        width: 100vw !important;
+    }
+
+    .user-active {
+        font-weight: 500;
+        color: black;
+    }
+}

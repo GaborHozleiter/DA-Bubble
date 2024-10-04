@@ -1,0 +1,45 @@
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  gap: 10px;
+  height: calc(100% - 402px);
+  overflow: auto;
+  padding: 20px 45px;
+  font-size: 24px;
+}
+
+.channel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 20px;
+  &:hover {
+    background-color: #eceefe;
+  }
+}
+
+.user {
+  &:hover {
+    background-color: #eceefe;
+  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 20px;
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+  }
+}
+
+.selectedContent {
+  background-color: #c8d1fc !important;
+}

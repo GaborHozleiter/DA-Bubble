@@ -1,0 +1,79 @@
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100vw;
+}
+
+img {
+    position: absolute;
+    left: 35px;
+}
+
+.user-account {
+    right: 35px;
+    height: 70px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:50px;
+    cursor: pointer;
+    &:hover {
+        .arrow {
+            background-image: url('../../../assets/img/header/expand_more.png');
+        }
+        span {
+            color: rgba(121, 126, 243, 1);
+        }
+    }
+}
+
+.profil {
+    transform: translateY(-35px) translateX(-68px);
+}
+
+.profil-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 42px;
+    position: absolute;
+    right: 0;
+    object-fit: cover;
+}
+
+.online-icon {
+    width: 14px;
+    height: 14px;
+    transform: translateY(50px) translateX(57px);
+}
+
+.arrow {
+    background-image: url("../../../assets/img/header/keyboard_arrow_down.png");
+    width: 30px;
+    height: 30px;
+}
+
+span {
+    font-weight: 700;
+    font-size: 32px;
+}
+
+.header-left-responsive {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.arrow-left {
+    width: 30px;
+    height: 30px;
+}
+
+.workspace-logo {
+    margin-left: 25px;
+    transform: scale(0.8);
+}

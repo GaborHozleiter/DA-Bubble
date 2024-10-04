@@ -1,0 +1,106 @@
+<div class="create-channel-container" (click)="closeDialog()" 
+    [ngClass]="{'display-flex': hideOrShowSidebar.createChannelDialogActive, 'display-none': !hideOrShowSidebar.createChannelDialogActive }">
+    <div class="create-channel-dialog" (click)="notCloseDialog($event)">
+        <div class="dialog-title-container">
+            <span class="fs-24 dialog-title">Channel erstellen</span>
+            <div class="close-button" (click)="closeDialog()"></div>
+        </div>
+        <div class="description">
+            <span class="fs-18">Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein
+                #marketing zum Beispiel.</span>
+        </div>
+        <div class="channel-name-container">
+            <span class="fs-18">Channel-Name</span>
+            <input (input)="isNameValid()" type="text" class="input-field" [(ngModel)]="newChannel.name" [disabled]="loading"
+                id="channelDescription" name="channelDescription"  placeholder="z.B. Kooperationsprojekte">
+            <img src="../../../assets/img/create-channel/tag.png" class="tag-icon">
+            <span *ngIf="nameIsTaken" class="error-message">Dieser Name ist bereits vergeben.</span>
+            
+        </div>
+        <div class="channel-name-container">
+            <span class="fs-18">Beschreibung (optional)</span>
+            <input type="text" class="input-field" [(ngModel)]="newChannel.description" [disabled]="loading"
+                id="channelMessages" name="channelMessages" placeholder="Dein Text hier">
+        </div>
+        <div class="button-container">
+            <button class="fs-18 add-disabled" *ngIf="!isInputValid() || nameIsTaken">Erstellen</button>
+            <button class="fs-18 add" *ngIf="isInputValid() && !nameIsTaken" (click)="createChannel()" [disabled]="loading">Erstellen</button>
+        </div>
+    </div>
+</div>
+<div class="add-user-to-channel-container" (click)="closeDialogAddUser()"
+    [ngClass]="{'display-flex': hideOrShowSidebar.addUserToChanelOpen, 'display-none': !hideOrShowSidebar.addUserToChanelOpen }">
+    <div class="add-user-to-channel-dialog" (click)="notCloseDialogAddUser($event)">
+        <div class="rectangle-container">
+            <img class="rectangle" src="../../../../assets/img/open-menu/Rectangle.png" alt="">
+        </div>
+        <div class="dialog-title-container-addUser">
+            <span class="fs-24 dialog-title">Leute hinzufügen</span>
+            <div class="close-button" (click)="closeDialogAddUser()"></div>
+        </div>
+        <div class="select-user-group-container">
+            <div>
+                @if(this.hideOrShowSidebar.addAllUsersToChannel){
+                <div class="select-user-group">
+                    <img src="../../../assets/img/sidebar/radio_button_checked.png" class="radio-button">
+                    <span>Alle Mitglieder von DevSpace hinzufügen</span>
+                </div>
+                }@else {
+                <div (click)="addAllUser()" class="select-user-group">
+                    <img src="../../../assets/img/sidebar/radio_button_unchecked.png" class="radio-button">
+                    <span>Alle Mitglieder von DevSpace hinzufügen</span>
+                </div>
+                }
+            </div>
+            <div class="select-user-group">
+                @if(this.hideOrShowSidebar.addAllUsersToChannel){
+                <div (click)="addSelectedUser()" class="select-user-group">
+                    <img src="../../../assets/img/sidebar/radio_button_unchecked.png" class="radio-button">
+                    <span>Bestimmte Leute hinzufügen</span>
+                </div>
+                }@else {
+                <div class="select-user-group">
+                    <img src="../../../assets/img/sidebar/radio_button_checked.png" class="radio-button">
+                    <span>Bestimmte Leute hinzufügen</span>
+                </div>
+                }
+            </div>
+        </div>
+        <div>
+            @if(!this.hideOrShowSidebar.addAllUsersToChannel){
+                <div class="input-hidden">
+                    <div *ngFor="let selectedUser of hideOrShowSidebar.selectedUsers; let i = index" class="selected-user">
+                        <div>
+                            <img src="{{hideOrShowSidebar.selectedImages[i]}}" class="selected-img">
+                        </div>
+                        <span>{{ selectedUser }}</span>
+                        <div (click)="deleteUser(i)" class="close-button"></div>
+                    </div>
+                    <div>
+                        <input type="text" class="input-field-add-user-to-channel" id="name" name="name" placeholder="Name eingeben"
+                        (input)="onSearch($event)" [(ngModel)]="searchTerm">
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="button-container-addUser">
+            @if(this.hideOrShowSidebar.addSelectedUsersToChannel){
+                <div class="userList" (click)="notCloseDialog($event)">
+                    <div *ngFor="let user of filteredUserList; let i = index" class="user" (click)="selectUser(i)">
+                        <img class="profil-image" [src]="filteredImageList[i]">
+                        @if(authService.currentUserSignal()?.uId == filteredUidList[i]){
+                        <img class="online-icon" src="../../../assets/img/sidebar/Online.png" />
+                      }@else {
+                        <img class="online-icon" src="../../../assets/img/sidebar/Offline.png" />
+                      }
+                        <span>{{ user }}</span>
+                      </div>
+                </div>
+            }
+            <button type="submit" class="save" (click)="saveChannel()"><span class="fs-18">Erstellen</span></button>
+        </div> 
+        @if(this.hideOrShowSidebar.addSelectedUsersToChannel){
+            <div class="responsive-white-container"></div>
+        }
+    </div>
+</div>

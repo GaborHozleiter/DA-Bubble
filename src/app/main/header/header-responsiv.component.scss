@@ -1,0 +1,46 @@
+@media(max-width: 1300px){
+    .user-name {
+        display: none;
+    }
+
+    .responsive {
+        transform: translateX(130px);
+    }
+}
+
+@media(max-width: 1000px){
+    header {
+        justify-content: flex-start;
+    }
+
+    .responsive {
+        display: none;
+    }
+
+    .arrow {
+        display: none;
+    }
+
+    .user-account {
+        margin-right: 40px;
+    }
+
+    .bubble-icon {
+        transform: translateX(-60px) scale(0.6);
+    }
+
+    .profil-image {
+        transform: translateX(25px) scale(0.7);
+    }
+
+    .online-icon {
+        width: 10px;
+        height: 10px;
+        transform: translateY(47px) translateX(73px);
+    }
+
+    .responsive-title {
+        transform: translateX(120px);
+        font-size: 24px;
+    }
+}

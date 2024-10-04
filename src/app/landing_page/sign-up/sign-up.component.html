@@ -1,0 +1,138 @@
+<section>
+    <img class="logo" src="../../../assets/img/landing-page/DABubble-logo.png" alt="daBubble-logo">
+
+    <div class="signUp-section">
+        <form [formGroup]="form" class="formfield" action="" (ngSubmit)="onSubmit()">
+
+            <div *ngIf="!stepTwo" class="form-container">
+                <a (click)="goBack()"><img class="arrow-back cursor-pointer" [src]="imgSrcArrow"
+                        (mouseover)="imgSrcArrow = '../../../assets/img/landing-page/arrow-back-hover.png'"
+                        (mouseout)="imgSrcArrow = '../../../assets/img/landing-page/arrow-back.png'"
+                        alt="arrow-back"></a>
+
+                <h1 class="fs-46">Konto erstellen</h1>
+
+                <p class="sign-up-description fs-20">Mit deinem Namen und deiner
+                    E-Mail-Adresse
+                    hast
+                    du dein neues DABubble-Konto.</p>
+
+                <div class="input-container" style="position: relative;">
+                    <img class="input-icon" src="../../../assets/img/landing-page/person.png" alt="person">
+                    <input formControlName="name" required class="input-design" placeholder="Name und Nachname"
+                        type="text">
+                    <span *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)"
+                        class="error-message">
+                        Bitte schreiben Sie einen Namen.
+                    </span>
+                </div>
+
+                <div class="input-container" style="position: relative;">
+                    <img class="input-icon" src="../../../assets/img/landing-page/mail.png" alt="mail">
+                    <input formControlName="email" required class="input-design" placeholder="beispielname@email.com"
+                        type="email" />
+                    <span *ngIf="
+                        form.get('email')?.invalid &&
+                        (form.get('email')?.dirty || form.get('email')?.touched) &&
+                        !errorMessage
+                      " class="error-message">
+                        *Diese E-Mail-Adresse ist leider ungültig.
+                    </span>
+                    <span *ngIf="errorMessage" class="error-message">
+                        {{errorMessage}}
+                    </span>
+                </div>
+
+                <div class="input-container" style="position: relative;">
+                    <img class="input-icon-lock" src="../../../assets/img/landing-page/lock.png" alt="lock">
+                    <input formControlName="password" minlength="6" maxlength="21" required class="input-design"
+                        placeholder="Passwort" type="{{revealPasswordService.type}}">
+                    <img (click)="revealPasswordService.togglePassword()" class="input-icon-reveal"
+                        src="{{revealPasswordService.imgUrl}}" alt="">
+                    <span
+                        *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)"
+                        class="error-message">
+                        Das Passwort muss mindestens 6 Zeichen lang sein.
+                    </span>
+                </div>
+
+                <div class="input-container">
+                    <div class="privacyPolicy-container">
+                        <img style="cursor: pointer;" (click)="toggleCheck()" [src]="imgSrcCheck"
+                            alt="checkbox-unchecked" (mouseover)="mouseOver()" (mouseout)="mouseOut()">
+                        <p class="fs-18">Ich stimme der<a class="fs-18 password-link"
+                                href="privacy">Datenschutzerklärung</a>zu.</p>
+                    </div>
+
+                    <span *ngIf="!isClicked" class="error-message">
+                        Bitte akzeptieren Sie die Datenschutzrichtlinie.
+                    </span>
+                </div>
+
+                <span class="btn-container">
+                    <button
+                        [ngClass]="{'blue-btn': form.valid && isClicked, 'disabled-btn fs-18': !form.valid || !isClicked}"
+                        (click)="toggleStep()" [disabled]="!isClicked || !form.valid">Weiter</button>
+                </span>
+            </div>
+
+            <div *ngIf="stepTwo" class="form-container">
+                <a (click)="toggleStep()"><img class="arrow-back cursor-pointer" [src]="imgSrcArrow"
+                        (mouseover)="imgSrcArrow = '../../../assets/img/landing-page/arrow-back-hover.png'"
+                        (mouseout)="imgSrcArrow = '../../../assets/img/landing-page/arrow-back.png'"
+                        alt="arrow-back"></a>
+
+                <h1 class="avatar-title fs-46">Wähle deinen Avatar</h1>
+                @if (imgUrl == '') {
+                <img class="avatar" src="../../../assets/img/landing-page/profile.png" alt="profile">
+                } @else {
+                <img class="avatar" src="{{imgUrl}}" alt="profile">
+                }
+
+                <h2 class="fs-32">{{form.controls.name.value}}</h2>
+
+                <div>
+                    <p class="fs-20">Aus der Liste wählen</p>
+                    <div class="image-container">
+                        @for (profileImg of profileImgsSrc; track $index) {
+                        <img (click)="chooseAvatar(profileImg)" class="default-profile-imgs cursor-pointer"
+                            src="{{profileImg}}" alt="profile">
+                        }
+                    </div>
+                </div>
+
+                <div class="uploader-container">
+                    <p class="fs-20">Eigenes Bild verwenden</p>
+                    <input type="file" class="">
+
+                    <label for="file-upload" class="white-btn fs-18 cursor-pointer">
+                        Datei hochladen
+                    </label>
+                    <input (change)="onFileSelected($event)" id="file-upload" type="file" />
+                </div>
+
+                <span *ngIf="errorMessage === 'auth/email-already-in-use'" class="error-message">
+                    Diese E-Mail-Adresse wird bereits verwendet. Bitte verwenden Sie eine andere E-Mail.
+                </span>
+
+                <div class="btn-container">
+                    <button [ngClass]="{'blue-btn cursor-pointer': imgChosen, 'disabled-btn fs-18': !imgChosen}"
+                        [disabled]="!imgChosen" type="submit">Weiter</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="legal-section">
+        <a class="fs-18 purp-link" href="impressum">Impressum</a>
+        <a class="fs-18 purp-link" href="privacy">Datenschutz</a>
+    </div>
+
+    <div class="message-container" [ngClass]="{'bg-white': registerSuccesful}">
+        <div class="sign-up-message" [ngClass]="{'animation-class': registerSuccesful}">
+            <p class="fs-36">Konto erfolgreich erstellt!</p>
+        </div>
+    </div>
+
+</section>

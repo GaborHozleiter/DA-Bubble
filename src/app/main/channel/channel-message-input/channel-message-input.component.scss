@@ -1,0 +1,178 @@
+.content {
+  background-color: white;
+  padding: 20px 45px 40px 45px;
+  width: calc(100% - 90px);
+  position: relative; /* Fügen Sie diese Zeile hinzu */
+  border-radius: 0 0 30px 30px;
+}
+
+.textArea {
+  border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
+  position: relative;
+  width: 100%;
+  border-radius: 20px 20px 0 0;
+  border: 1px solid #adb0d9;
+  border-bottom: 0px;
+  background: white;
+  padding: 20px;
+  height: 65px;
+  box-sizing: border-box; /* Sicherstellen, dass das Padding und der Border zur Breite beitragen */
+  p {
+    position: absolute;
+    pointer-events: none;
+    top: 50%;
+    left: 25px;
+    transform: translateY(-50%);
+    white-space: nowrap;
+  }
+}
+
+.inputButtons {
+  width: calc(100% - 42px);
+  height: 40px;
+  background-color: white;
+  border: 1px solid #adb0d9;
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+.spacer {
+  background-color: #adb0d9;
+  width: 1px;
+  height: 40px;
+}
+
+.inputFile {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+
+.inputFile input[type="file"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  display: none;
+}
+
+.inputFile svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.uploadedImgContainer {
+  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid #adb0d9;
+  background-color: white;
+  position: absolute;
+  height: 80px;
+  z-index: 3;
+  transform: translateY(-80px) translatex(+45px);
+  button {
+    border: 1px solid #adb0d9;
+    border-radius: 100%;
+    background-color: white;
+    position: absolute;
+    transform: translateY(-12px) translatex(-12px);
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    svg {
+      width: 16px;
+      height: 16px;
+      padding: 3px;
+    }
+  }
+}
+.uploadedImg {
+  border-radius: 8px;
+  height: 80px;
+}
+
+emoji-mart {
+  position: absolute;
+  transform: translateY(-618px) translatex(45px);
+}
+
+.tagContainer {
+  position: absolute;
+  transform: translateY(calc(-100% - 146px - 20px - 40px)) translateX(45px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: white;
+  padding: 16px;
+  border-radius: 30px;
+  border: 1px solid #d9d9d9;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.tagUser {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  padding: 6px 16px 6px 16px;
+  border-radius: 30px;
+  font-weight: 400;
+  cursor: pointer;
+  &:hover {
+    background-color: #eceefe;
+  }
+}
+
+.userListTitle {
+  padding: 6px 16px 6px 16px;
+}
+
+.online-icon {
+  position: absolute;
+  top: 35px;
+  left: 47px;
+  width: 10px;
+  height: 10px;
+}
+
+.selected-img {
+  height: 40px;
+  width: 40px;
+  border-radius: 80px;
+  margin-right: 10px;
+}

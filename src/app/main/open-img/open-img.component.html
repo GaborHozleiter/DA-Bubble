@@ -1,0 +1,11 @@
+<div
+  class="container"
+  *ngIf="src.length > 1"
+  (click)="channelSelectionService.setSelectedImg('')"
+>
+  <img
+    [ngClass]="getImageDimensionBasedOnAspect(src)"
+    src="{{ src }}"
+    (click)="stopEvent($event)"
+  />
+</div>

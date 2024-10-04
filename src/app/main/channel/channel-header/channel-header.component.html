@@ -1,0 +1,41 @@
+<div *ngIf="this.currentChannel" class="header">
+  <div class="channel-name-container" (click)="editChannelService.setEditChannel(true, this.currentChannelId)">
+    <div class="tag"></div>
+    <p  class="channel-name fs-20">
+      {{ this.currentChannel.name }}
+    </p>
+    <div class="arrow"></div>
+  </div>
+  <div class="header-right">
+    <div class="channelUserContainer">
+      <div class="channelUser" *ngFor="let userImage of channelInfo.AllChannelsImages[channelInfo.currentChannelNumber]; let i = index">
+      @if(channelInfo.AllChannelsImages[channelInfo.currentChannelNumber].length > 0 && i > channelInfo.AllChannelsImages[channelInfo.currentChannelNumber].length -4){
+          <img src="{{ userImage }}" class="profil-image" />
+        }
+      </div>
+      <div class="user-number-container">
+        <span class="fs-18 user-number"[ngClass]="{
+      'user-number-hover': divHover}">{{ userNumber }}</span>
+      </div>
+    </div>
+    @if(channelInfo.AllChannelsImages[channelInfo.currentChannelNumber].length == 2){
+      <div class="channelUser-background-two" [ngClass]="{
+        'channelUser-background-hover': divHover}"></div>
+      <div class ="channelUser-background-top-two" (mouseover)="hover()" (mouseout)="hoverOff()" (click)="openUserList()"></div>
+    }
+    @if(channelInfo.AllChannelsImages[channelInfo.currentChannelNumber].length == 1){
+      <div class="channelUser-background-one" [ngClass]="{
+        'channelUser-background-hover': divHover}"></div>
+      <div class ="channelUser-background-top-one" (mouseover)="hover()" (mouseout)="hoverOff()" (click)="openUserList()"></div>
+    }
+    @if(channelInfo.AllChannelsImages[channelInfo.currentChannelNumber].length > 2) {
+      <div class="channelUser-background" [ngClass]="{
+        'channelUser-background-hover': divHover}"></div>
+      <div class ="channelUser-background-top" (mouseover)="hover()" (mouseout)="hoverOff()" (click)="openUserList()"></div>
+    }
+    <div (click)="openAddUserToChannel()" class="add-user-icon">
+    </div>
+  </div>
+  <div (click)="openUserList()" class="add-user-icon-responsive">
+  </div>
+</div>

@@ -1,0 +1,26 @@
+.container {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4); /* Vollständig opak */
+  left: 0;
+  top: 0;
+}
+
+img {
+  object-fit: contain;
+}
+
+.width {
+  width: 80%;
+  max-height: 80%;
+}
+
+.height {
+  height: 80%;
+  max-width: 80%;
+}

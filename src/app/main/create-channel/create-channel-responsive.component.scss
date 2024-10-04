@@ -1,0 +1,62 @@
+@media(max-width: 1000px) {
+    .create-channel-dialog {
+        width: 100vw;
+        height: 100vh;
+        background-color: white;
+        border-radius: 0px;
+        position: absolute;
+        bottom: 0;
+        gap: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .description, .dialog-title-container, .channel-name-container {
+        max-width: calc(100vw - 100px);
+    }
+
+    .add-user-to-channel-container {
+        align-items: flex-end;
+    }
+
+    .add-user-to-channel-dialog {
+        width: 100vw;
+        padding: 30px;
+        gap: 20px;
+        border-radius: 30px 30px 0px 0px;
+        background-color: white;
+        box-shadow: 0px 6px 10px 0px rgba(0, 0, 0, 0.2);
+    }
+
+    .rectangle-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .rectangle {
+        display: block;
+    }
+
+    .responsive-white-container {
+        width: 100%;
+        height: 150px;
+    }
+
+    .selected-user {
+        height: 36px;
+    }
+
+    .selected-img {
+        transform: translateY(3px);
+    }
+
+    .input-hidden {
+        border-radius: 24px;
+        padding-top: 6px !important;
+        max-height: 150px;
+        overflow-y: auto;
+    }
+}

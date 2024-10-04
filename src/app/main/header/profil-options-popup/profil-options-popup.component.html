@@ -1,0 +1,17 @@
+<div class="profil-options-popup-container" (click)="closeDialog()"
+    [ngClass]="{'display-flex': hideOrShowPopUp.popUpOpen , 'display-none': !hideOrShowPopUp.popUpOpen }">
+    <div class="dialog" (click)="notCloseDialog($event)">
+        <img class="rectangle" src="../../../../assets/img/open-menu/Rectangle.png" alt="">
+        <div class="button-container">
+            <div class="button" (click)="openProfil()">
+                <div class="button-icon profile-icon"></div>
+                <span class="fs-24">Profil</span>
+            </div>
+            <div class="button" (click)="logOut()">
+                <div class="button-icon log-out-icon"></div>
+                <span class="fs-24">Log out</span>
+            </div>
+        </div>
+
+    </div>
+</div>

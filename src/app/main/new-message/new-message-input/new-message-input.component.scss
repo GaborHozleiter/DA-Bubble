@@ -1,0 +1,119 @@
+.content {
+  background-color: white;
+  padding: 20px 45px 40px 45px;
+  width: calc(100% - 90px);
+  position: relative; /* Fügen Sie diese Zeile hinzu */
+  border-radius: 0 0 30px 30px;
+}
+
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 100%;
+  border-radius: 20px 20px 0 0;
+  border: 1px solid #adb0d9;
+  border-bottom: 0px;
+  background: white;
+  padding: 20px;
+  height: 65px;
+  box-sizing: border-box; /* Sicherstellen, dass das Padding und der Border zur Breite beitragen */
+}
+
+.inputButtons {
+  width: calc(100% - 42px);
+  height: 40px;
+  background-color: white;
+  border: 1px solid #adb0d9;
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+.spacer {
+  background-color: #adb0d9;
+  width: 1px;
+  height: 40px;
+}
+
+.inputFile {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+
+.inputFile input[type="file"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  display: none;
+}
+
+.inputFile svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.uploadedImgContainer {
+  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid #adb0d9;
+  background-color: white;
+  position: absolute;
+  height: 80px;
+  z-index: 3;
+  transform: translateY(-80px) translatex(+45px);
+  button {
+    border: 1px solid #adb0d9;
+    border-radius: 100%;
+    background-color: white;
+    position: absolute;
+    transform: translateY(-12px) translatex(-12px);
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    svg {
+      width: 16px;
+      height: 16px;
+      padding: 3px;
+    }
+  }
+}
+.uploadedImg {
+  border-radius: 8px;
+  height: 80px;
+}
+
+emoji-mart {
+  position: absolute;
+  transform: translateY(-618px) translatex(45px);
+}

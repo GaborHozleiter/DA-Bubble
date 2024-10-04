@@ -1,0 +1,37 @@
+@media(max-width: 1000px){
+    .dialog {
+    border-radius: 30px;
+    top : calc(50vh - 266px);
+    left: calc(50vw - 228px);
+    }
+}
+
+@media(max-width: 500px){
+    .dialog {
+    width: calc(100vw - 60px);
+    left: 0;
+    }
+
+    .responsive-edit-icon {
+        display: block;
+        background-image: url('../../../assets/img/sidebar/edit.png');
+        width: 24px;
+        height: 24px;
+        &:active {
+            background-image: url('../../../assets/img/sidebar/edit-hover.png');
+        }
+    }
+
+    .edit {
+        display: none;
+    }
+}
+
+@media(max-width: 400px){
+    .dialog {
+        padding: 20px 15px 20px 15px;
+        width: calc(100vw - 30px);
+        top : calc(50vh - 250px);
+        left: 0;
+        }
+}
