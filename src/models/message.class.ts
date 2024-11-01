@@ -15,6 +15,7 @@ export class Message {
   fileUrl: any;
   fileName: any;
   threadCount?: any;
+  lastThreadMessage?: any;
   checkMark: any;
   handshake: any;
   thumbsUp: any;
@@ -41,6 +42,7 @@ export class Message {
     this.fileUrl = obj ? obj.fileUrl : '';
     this.fileName = obj ? obj.fileName : '';
     this.threadCount = obj ? obj.threadCount : '';
+    this.lastThreadMessage = obj ? obj.lastThreadMessage : '';
     this.checkMark = obj ? obj.checkMark : '';
     this.handshake = obj ? obj.handshake : '';
     this.thumbsUp = obj ? obj.thumbsUp : '';

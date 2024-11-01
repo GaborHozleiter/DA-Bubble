@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ThreadMessageInputComponent } from '../thread-message-input/thread-message-input.component';
 import { ThreadChatAreaComponent } from '../thread-chat-area/thread-chat-area.component';
 import { ThreadHeaderComponent } from '../thread-header/thread-header.component';
@@ -11,6 +11,7 @@ import {
   query,
 } from '@angular/fire/firestore';
 import { Message } from '../../../../models/message.class';
+import { ResponsiveService } from '../../../services/responsive.service';
 
 @Component({
   selector: 'app-thread',
@@ -21,7 +22,7 @@ import { Message } from '../../../../models/message.class';
     ThreadHeaderComponent,
   ],
   templateUrl: './thread.component.html',
-  styleUrl: './thread.component.scss',
+  styleUrls: ['./thread.component.scss', './thread-responsive.component.scss'],
 })
 export class ThreadComponent implements OnInit {
   @Input() thread: any;
@@ -30,6 +31,7 @@ export class ThreadComponent implements OnInit {
   allMessages: Message[] = [];
   allDates: any = [];
   dateCounter = 0;
+  responsiveService = inject(ResponsiveService);
 
   constructor(private firestore: Firestore) {}
   ngOnInit(): void {

@@ -19,12 +19,15 @@ export class EditProfilContactformComponent {
   successMessage: string | null = null;
 
   form = this.fb.nonNullable.group({
-    name: [this.authService.currentUserSignal()?.name ?? '',
-    [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
-    email: [this.authService.currentUserSignal()?.email ?? '',
-    [Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}')]],
+    name: [this.authService.currentUserSignal()?.name ?? '', [
+      Validators.minLength(6),
+      Validators.maxLength(20),
+    ]],
+    email: [this.authService.currentUserSignal()?.email ?? '', [
+      Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}'),
+    ]],
   });
- 
+
   /**
    * Closes the profile editing form.
    */
@@ -54,25 +57,38 @@ export class EditProfilContactformComponent {
    */
   async onSubmit() {
     const { email, name } = this.form.getRawValue();
-    if (this.form.invalid) {
-      this.errorMessage = 'Bitte füllen Sie das Formular korrekt aus.';
-      setTimeout(() => {
-        this.errorMessage = '';
-      }, 2000); 
+    if (!this.form.get('name')?.dirty && !this.form.get('email')?.dirty) {
+      this.errorMessage = 'Bitte ändern Sie mindestens ein Feld.';
+      this.resetErrorMessage();
       return;
-    }
-    try {
+    } if (this.form.invalid) {
+      this.errorMessage = 'Bitte füllen Sie das Formular korrekt aus.';
+      this.resetErrorMessage();
+      return;
+    } try {
       await this.authService.updateUserData(email, name);
       this.successMessage = 'Profil erfolgreich aktualisiert.';
-      setTimeout(() => {
-        this.closeDialog();
-        this.errorMessage = '';
-        this.successMessage = '';
-      }, 2000); 
+      this.closePopup();
     } catch (error) {
       console.error(error);
     }
   }
+
+  closePopup(){
+    setTimeout(() => {
+      this.closeDialog();
+      this.errorMessage = '';
+      this.successMessage = '';
+    }, 1500);
+  }
+
+  resetErrorMessage() {
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 1500);
+  }
 }
+
+
 
 

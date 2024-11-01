@@ -67,6 +67,7 @@ body {
   border: 1px solid transparent;
   padding: 10px 15px 10px 15px;
   transition-duration: 0.2s;
+
   &:hover {
     color: #464bdf;
     border: 1px solid #797ef3;
@@ -111,6 +112,7 @@ body {
   transition-duration: 0.2s;
   font-size: 18px;
   cursor: pointer;
+
   &:hover {
     background-color: #444df29f;
   }
@@ -123,6 +125,7 @@ body {
   color: #444df2;
   font-weight: 700;
   transition-duration: 0.2s;
+
   &:hover {
     background-color: #444df2;
     color: white;
@@ -135,6 +138,7 @@ body {
   color: white;
   border-radius: 25px;
   border-width: 0;
+
   &:hover {
     cursor: unset;
   }
@@ -151,8 +155,10 @@ body {
   background-color: #797ef3 !important;
   color: white;
   padding: 6px 6px;
+  margin: 0 2px;
   border-radius: 10px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .tagHighlightSend,
@@ -160,6 +166,18 @@ body {
   background-color: #c8d1fc !important;
   color: white;
   padding: 6px 6px;
+  margin: 0 2px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+@media (max-width: 430px) {
+  .tagHighlight,
+  .tagHighlightInput,
+  .tagHighlightChannel {
+    padding: 1px 2px;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
 }

@@ -12,6 +12,14 @@ export class OpenSidebarComponent {
 
   hideOrShowSidebar = inject(SidebarService);
 
+  /**
+ * Toggles the visibility of the sidebar menu.
+ * 
+ * This method updates the `sidebarOpen` property in the `hideOrShowSidebar` 
+ * object, switching its value between true and false. 
+ * If the sidebar is currently open, it will close it, 
+ * and if it is closed, it will open it.
+ */
   openSidebarMenu(){
     this.hideOrShowSidebar.sidebarOpen = !this.hideOrShowSidebar.sidebarOpen;
   }

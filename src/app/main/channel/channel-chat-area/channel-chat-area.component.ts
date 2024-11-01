@@ -38,16 +38,21 @@ import { SidebarService } from '../../../services/sidebar.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { ChatAreaService } from '../../../services/chat-area.service';
+import { SearchService } from '../../../services/search.service';
 
 @Component({
   selector: 'app-channel-chat-area',
   standalone: true,
   imports: [CommonModule, PickerComponent],
   templateUrl: './channel-chat-area.component.html',
-  styleUrl: './channel-chat-area.component.scss',
+  styleUrls: [
+    './channel-chat-area.component.scss',
+    './channel-chat-area.component.responsive.scss',
+  ],
 })
 export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
   authService = inject(AuthService);
+  searchService = inject(SearchService);
 
   allChannels: any = [];
   allMessagesSortedDate: any = [];
@@ -78,6 +83,10 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     { name: 'rocket', icon: './../../../../assets/reactions/rocket.png' },
     { name: 'nerdFace', icon: './../../../../assets/reactions/nerd-face.png' },
     {
+      name: 'noted',
+      icon: './../../../../assets/reactions/noted.png',
+    },
+    {
       name: 'shushingFace',
       icon: './../../../../assets/reactions/shushing-face.png',
     },
@@ -104,38 +113,66 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     private sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
-
-  setOpenUser() {
+  /**
+   * Sets the current user ID from the authentication service.
+   * @returns {void}
+   */
+  setOpenUser(): void {
     this.user = this.authService.currentUserSignal()?.uId;
   }
 
+  /**
+   * Lifecycle hook that is called after the component has been initialized.
+   * Adds a click event listener if the platform is a browser.
+   * @returns {void}
+   */
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       document.addEventListener('click', this.handleClick.bind(this));
     }
   }
 
+  /**
+   * Lifecycle hook that is called after the component's view has been fully initialized.
+   * Subscribes to channel changes, messages, and channel selections, and scrolls to the bottom of the messages container.
+   * @returns {void}
+   */
   ngAfterViewInit(): void {
     this.channelSelectionService.getSelectedChannel().subscribe((channel) => {
       this.currentChannelId = channel;
       this.subUser();
       this.subMessages();
       this.subChannels();
+      setTimeout(() => {
+        if (!this.searchService.searching) {
+          this.scrollToBottom();
+        }
+        this.searchService.searching = false;
+      }, 10);
     });
 
     this.messageLoaded.changes.subscribe((t) => {
       if (this.scrolled) {
         this.scrolled = false;
-        this.scrollToBottom();
+        // this.scrollToBottom();
       }
     });
   }
 
-  setImg(src: any) {
+  /**
+   * Sets the selected image for the current channel.
+   * @param {any} src - The source URL or data for the image.
+   * @returns {void}
+   */
+  setImg(src: any): void {
     this.channelSelectionService.setSelectedImg(src);
   }
 
-  subChannels() {
+  /**
+   * Subscribes to the channels collection in Firestore and updates the list of all channels.
+   * @returns {void}
+   */
+  subChannels(): void {
     const q = query(collection(this.firestore, 'Channels'), limit(1000));
     onSnapshot(q, (list) => {
       this.allChannels = [];
@@ -154,7 +191,12 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     });
   }
 
-  openThread(thread: any) {
+  /**
+   * Opens a thread and ensures that only one thread can be open at a time.
+   * @param {any} thread - The thread to be opened.
+   * @returns {void}
+   */
+  openThread(thread: any): void {
     if (this.threadService.isThreadOpen()) {
       this.threadService.closeThread();
       setTimeout(() => {
@@ -166,6 +208,11 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     }
   }
 
+  /**
+   * Subscribes to the messages of the currently selected channel.
+   * Updates the list of all messages and sorts them.
+   * @returns {void}
+   */
   subMessages() {
     if (this.currentChannelId) {
       const q = query(
@@ -190,7 +237,12 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     }
   }
 
-  subUser() {
+  /**
+   * Subscribes to the users collection in Firestore and updates the list of all users.
+   * Sets the current user.
+   * @returns {void}
+   */
+  subUser(): void {
     const q = query(collection(this.firestore, 'Users'), limit(1000));
     onSnapshot(q, (list) => {
       this.allUser = [];
@@ -203,6 +255,10 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     });
   }
 
+  /**
+   * Sorts the messages based on date and time in ascending order.
+   * @returns {void}
+   */
   sortMessages(): void {
     this.allMessagesSorted = [];
     this.allMessagesSorted = [...this.allMessages].sort((a, b) => {
@@ -222,21 +278,29 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
         b.minute,
         b.seconds
       );
-      return dateA.getTime() - dateB.getTime(); // Älteste zuerst, daher umgekehrt
+      return dateA.getTime() - dateB.getTime(); // Oldest first
     });
   }
 
-  scrollToBottom(): void {
+  /**
+   * Scrolls the messages container to the bottom to show the latest messages.
+   */
+  scrollToBottom() {
     if (typeof window !== 'undefined') {
-      // Browser-spezifischer Code hier
       const container = document.getElementById('messageContainer');
       if (container) {
-        container.scrollTop = container.scrollHeight;
+        setTimeout(() => {
+          container!.scrollTop = container!.scrollHeight;
+        }, 500);
       }
     }
   }
 
-  dateLoaded() {
+  /**
+   * Loads and formats the dates of the sorted messages for display.
+   * @returns {void}
+   */
+  dateLoaded(): void {
     this.allMessagesSortedDate = [];
     this.allDates = [];
 
@@ -261,12 +325,23 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     this.allMessagesSortedDate = this.allMessagesSorted;
   }
 
+  /**
+   * Handles the event when the selected channel changes.
+   * Subscribes to the new channel's messages.
+   * @param {string} channel - The ID of the new channel.
+   * @returns {void}
+   */
   onChannelChange(channel: string): void {
     setTimeout(() => {
       this.subMessages(); // Ensure messages are fetched on channel change
     }, 10);
   }
 
+  /**
+   * Retrieves the profile image of a user by their UID.
+   * @param {any} uid - The UID of the user.
+   * @returns {string | undefined} - The URL of the user's profile image or undefined if not found.
+   */
   getProfileImg(uid: any) {
     for (let i = 0; i < this.allUser.length; i++) {
       const element = this.allUser[i];
@@ -276,14 +351,25 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     }
   }
 
+  /**
+   * Toggles the visibility of the emoji selector.
+   */
   openEmojiSelection() {
     this.emojiselectior = !this.emojiselectior;
   }
 
+  /**
+   * Closes the emoji selector.
+   */
   closeEmojiSelector() {
     this.emojiselectior = false;
   }
 
+  /**
+   * Adds a reaction to a specific message.
+   * @param {any} reaction - The reaction to add.
+   * @param {any} message - The message to which the reaction is added.
+   */
   addReaction(reaction: any, message: any) {
     let src = [
       this.firestore,
@@ -291,7 +377,7 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
       this.currentChannelId,
       'messages',
       message.id,
-    ]; // src kann so lang sein, wie du es brauchst
+    ]; // src can be as long as needed
     this.chatAreaService.updateMessageVariable(
       message.id,
       this.authService.currentUserSignal()?.uId,
@@ -300,6 +386,11 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     );
   }
 
+  /**
+   * Returns the creator of the channel.
+   * @param {any} uid - The user ID of the channel creator.
+   * @returns {string} - A string indicating who created the channel.
+   */
   getChannelCreator(uid: any) {
     if (uid == this.authService.currentUserSignal()?.uId) {
       return 'Du hast diesen Channel';
@@ -312,6 +403,10 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     }
   }
 
+  /**
+   * Edits a specific message.
+   * @param {any} message - The message to edit.
+   */
   editMessage(message: any) {
     this.editedMessage = message.message;
     if (this.openEditMessage == message.id) {
@@ -324,41 +419,111 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     }
   }
 
+  /**
+   * Toggles the visibility of the emoji selector.
+   */
   openEmojiSelector() {
     this.emojiSelector = !this.emojiSelector;
   }
 
+  /**
+   * Inserts an emoji at the current cursor position in the textarea.
+   * @param {any} emoji - The emoji to insert.
+   */
   insertEmoji(emoji: any) {
     const textarea: HTMLTextAreaElement = this.messageTextarea.nativeElement;
 
-    // Aktuelle Position des Cursors
+    // Current cursor position
     const startPos = textarea.selectionStart;
     const endPos = textarea.selectionEnd;
 
-    // Wert des Textarea-Felds aktualisieren
+    // Update the textarea value
     this.editedMessage =
       textarea.value.substring(0, startPos) +
       emoji +
       textarea.value.substring(endPos, textarea.value.length);
 
-    // Cursor-Position nach dem Einfügen des Textes setzen
+    // Set cursor position after inserting the text
     setTimeout(() => {
       textarea.selectionStart = textarea.selectionEnd = startPos + emoji.length;
     }, 0);
   }
 
+  /**
+   * Handles emoji insertion from the event.
+   * @param {any} $event - The event containing the emoji to insert.
+   */
   addEmoji($event: any) {
     let element = $event;
     this.insertEmoji(element['emoji'].native);
   }
 
+  /**
+   * Saves the edited message.
+   * @param {any} event - The event triggering the save.
+   * @param {any} message - The message being edited.
+   */
   saveEdit(event: any, message: any) {
-    let editedMessage = this.inputChatArea.nativeElement.innerHTML;
-    this.updateMessage(event, message.id);
-    this.openEditMessage = '';
+    let editedMessage = this.inputChatArea.nativeElement;
+
+    if (
+      (editedMessage.innerHTML.length > 0 &&
+        editedMessage.textContent.length > 0) ||
+      message.fileUrl.length > 0
+    ) {
+      this.updateMessage(event, message.id);
+      this.openEditMessage = '';
+    } else {
+      console.log('nachricht leer');
+      this.deleteMessage(message);
+    }
   }
 
-  async updateMessage(event: any, messageId: string) {
+  async deleteMessage(message: any) {
+    try {
+      console.log(this.currentChannelId, message.id);
+      const messageRef = doc(
+        this.firestore,
+        'Channels',
+        this.currentChannelId,
+        'messages',
+        message.id
+      );
+      await deleteDoc(messageRef);
+      console.log('Message deleted successfully');
+    } catch (error) {
+      console.error('Error deleting message: ', error);
+    }
+  }
+
+  onInputChange(message: any) {
+    this.returnEditMessageLengh(message);
+  }
+
+  returnEditMessageLengh(message: any) {
+    if (this.inputChatArea) {
+      const editedMessage = this.inputChatArea.nativeElement;
+      if (
+        (editedMessage.innerHTML.length > 0 &&
+          editedMessage.textContent.length > 0) ||
+        message.fileUrl.length > 0
+      ) {
+        return 'speichern';
+      } else {
+        return 'Nachricht löschen';
+      }
+    } else {
+      return 'Nachricht löschen';
+    }
+  }
+
+  /**
+   * Updates a message in the Firestore database.
+   * @param {any} event - The event triggering the update.
+   * @param {string} messageId - The ID of the message to update.
+   * @returns {Promise<void>} - A promise that resolves when the update is complete.
+   */
+  async updateMessage(event: any, messageId: string): Promise<void> {
     event?.preventDefault();
     let message = '';
     const messageTextarea = document.querySelector(
@@ -374,31 +539,31 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
           child.nodeType === Node.ELEMENT_NODE &&
           (child as HTMLElement).tagName === 'SPAN'
         ) {
-          // Es ist ein span-Element, extrahiere das data-uid
+          // It's a span element, extract the data-uid
           const uid = (child as HTMLElement).getAttribute('data-uid');
           if (uid) {
-            // Überprüfe das erste Zeichen des data-uid
+            // Check the first character of the data-uid
             const firstChar = (child as HTMLElement).innerHTML.charAt(0);
             if (firstChar === '@') {
               result += `₿ЯæŶ∆Ωг${uid} `;
             } else if (firstChar === '#') {
               result += `₣Ж◊ŦΨø℧${uid} `;
             } else {
-              // Standardfall, falls das erste Zeichen weder @ noch # ist
+              // Default case if the first character is neither @ nor #
               result += `${uid} `;
             }
           }
         } else if (child.nodeType === Node.TEXT_NODE) {
-          // Es ist ein Textknoten, füge den Textinhalt hinzu
+          // It's a text node, add the text content
           result += child.textContent;
         }
       });
 
-      // Speichere das Ergebnis in der message.message Variable
-      message = result.trim(); // Ergebnis z.B.: "asddasd @zqk0MWq9TcWYUdYtXpTTKsnFro12 sdasad @7gMhlfm1xsVsPe7Hq7kdIPzLMQJ2"
+      // Store the result in the message.message variable
+      message = result.trim(); // Example result: "asddasd @zqk0MWq9TcWYUdYtXpTTKsnFro12 sdasad @7gMhlfm1xsVsPe7Hq7kdIPzLMQJ2"
     }
 
-    // Nachricht in der Firestore-Datenbank aktualisieren
+    // Update the message in the Firestore database
     const messageRef = doc(
       this.firestore,
       'Channels',
@@ -409,30 +574,24 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
 
     await updateDoc(messageRef, {
       message: message.trim(),
-      updatedAt: new Date(), // Optional: Zeitpunkt der letzten Änderung speichern
-    }).catch((err) => {
-      console.error('Fehler beim Aktualisieren der Nachricht:', err);
-    });
+      updatedAt: new Date(), // Optional: Store the last modified timestamp
+    }).catch((err) => {});
   }
 
-  // async updateMessage(messageId: any) {
-  //   const messageRef = doc(
-  //     this.firestore,
-  //     'Channels',
-  //     this.currentChannelId,
-  //     'messages',
-  //     messageId
-  //   );
-  //   await updateDoc(messageRef, {
-  //     message: this.editedMessage,
-  //   });
-  // }
-
+  /**
+   * Handles input changes in the message textarea.
+   * @param {Event} event - The input event.
+   */
   onMessageInput(event: Event) {
     const textarea = event.target as HTMLTextAreaElement;
     this.editedMessage = textarea.value;
   }
 
+  /**
+   * Checks if the user has reacted to the message.
+   * @param {any} id - The ID to check for reactions.
+   * @returns {boolean} - True if the user has reacted, otherwise false.
+   */
   reacted(id: any) {
     if (id.includes(this.user)) {
       return true;
@@ -441,6 +600,11 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     }
   }
 
+  /**
+   * Processes and formats a message for display.
+   * @param {any} message - The message to process.
+   * @returns {SafeHtml} - The processed message as safe HTML.
+   */
   getMessage(message: any): SafeHtml {
     const regexUser = /₿ЯæŶ∆Ωг(\S+)/g;
     const regexChannel = /₣Ж◊ŦΨø℧(\S+)/g;
@@ -453,7 +617,7 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
               ? 'tagHighlight'
               : 'tagHighlightSend';
           return /*html*/ `
-          <span class="${spanClass}" data-uid="${p1}" contentEditable="false" data-uid = "${p1}">@${
+              <span class="${spanClass}" data-uid="${p1}" contentEditable="false" data-uid = "${p1}">@${
             this.getUser(p1).name
           }</span>`;
         } else {
@@ -471,7 +635,7 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
             : 'tagHighlightSendChannel';
         if (this.getChannel(p1) != undefined) {
           return /*html*/ `
-          <span class="${spanClass}" data-uid="${p1}" contentEditable="false" data-uid = "${p1}">#${
+              <span class="${spanClass}" data-uid="${p1}" contentEditable="false" data-uid = "${p1}">#${
             this.getChannel(p1).name
           }</span>`;
         } else {
@@ -483,6 +647,10 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(modifiedMessage);
   }
 
+  /**
+   * Prepares a message for editing.
+   * @param {any} message - The message to prepare for editing.
+   */
   getMessageEdit(message: any) {
     const regexUser = /₿ЯæŶ∆Ωг(\S+)/g;
     const regexChannel = /₣Ж◊ŦΨø℧(\S+)/g;
@@ -517,6 +685,10 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     this.insertHTML(modifiedMessage);
   }
 
+  /**
+   * Inserts HTML content into the input chat area.
+   * @param {any} htmlContent - The HTML content to insert.
+   */
   insertHTML(htmlContent: any) {
     const interval = setInterval(() => {
       if (this.inputChatArea && this.inputChatArea.nativeElement) {
@@ -527,10 +699,16 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     }, 100);
   }
 
+  /**
+   * Handles click events on tagged elements.
+   * Opens user profile or channel based on the clicked element's class.
+   *
+   * @param {Event} event - The click event triggered by the user.
+   */
   handleClick(event: Event) {
     const target = event.target as HTMLElement;
 
-    // Überprüfen, ob das angeklickte Element eine der span-Tags ist
+    // Check if the clicked element is one of the span tags
     if (
       target.classList.contains('tagHighlight') ||
       target.classList.contains('tagHighlightSend')
@@ -550,6 +728,11 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     }
   }
 
+  /**
+   * Opens a channel for the specified user ID if the current user is a member.
+   *
+   * @param {any} uid - The user ID of the channel to be opened.
+   */
   openChannel(uid: any) {
     const currentUserId = this.authService.currentUserSignal()?.uId;
 
@@ -565,6 +748,11 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     }
   }
 
+  /**
+   * Opens the user profile for the specified user ID.
+   *
+   * @param {any} uid - The user ID of the profile to be opened.
+   */
   openUserProfil(uid: any) {
     this.channelInfo.userProfilOpen = true;
     this.channelInfo.activeUserProfil = 0;
@@ -574,6 +762,12 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     this.channelInfo.activeUid = uid;
   }
 
+  /**
+   * Retrieves user information for the specified user ID.
+   *
+   * @param {any} uid - The user ID of the user to be retrieved.
+   * @returns {{ name: string | undefined }} - The user object containing the name or an object with an undefined name if not found.
+   */
   getUser(uid: any) {
     for (let i = 0; i < this.allUser.length; i++) {
       const element = this.allUser[i];
@@ -584,6 +778,12 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
     return { name: undefined };
   }
 
+  /**
+   * Retrieves channel information for the specified channel ID.
+   *
+   * @param {any} id - The channel ID to be retrieved.
+   * @returns {object | undefined} - The channel object if found; otherwise, undefined.
+   */
   getChannel(id: any) {
     for (let i = 0; i < this.allChannels.length; i++) {
       const element = this.allChannels[i];
@@ -591,9 +791,15 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
         return element;
       }
     }
-    return undefined; // wird zurückgegeben, wenn nichts gefunden wurde
+    return undefined; // Returned if nothing is found
   }
 
+  /**
+   * Splits a string by spaces into an array of substrings.
+   *
+   * @param {string} input - The input string to be split.
+   * @returns {string[]} - An array of substrings split by spaces.
+   */
   splitStringBySpace(input: string): string[] {
     return input.split(' ');
   }

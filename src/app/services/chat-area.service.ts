@@ -10,6 +10,12 @@ export class ChatAreaService {
 
   constructor() {}
 
+  /**
+   * Sets up a note object with the provided properties.
+   * @param {any} obj - The object containing note details.
+   * @param {string} id - The unique identifier for the note.
+   * @returns {Object} The structured note object.
+   */
   setNoteObject(obj: any, id: string) {
     return {
       id: id,
@@ -27,6 +33,7 @@ export class ChatAreaService {
       fileUrl: obj.fileUrl || '',
       fileName: obj.fileName || '',
       threadCount: obj.threadCount || '',
+      lastThreadMessage: obj.lastThreadMessage || '',
       checkMark: obj.checkMark || '',
       handshake: obj.handshake || '',
       thumbsUp: obj.thumbsUp || '',
@@ -38,6 +45,12 @@ export class ChatAreaService {
     };
   }
 
+  /**
+   * Sets up a note channel object with the provided properties.
+   * @param {any} obj - The object containing channel details.
+   * @param {string} id - The unique identifier for the channel.
+   * @returns {Object} The structured note channel object.
+   */
   setNoteChannel(obj: any, id: string) {
     return {
       id: id,
@@ -50,6 +63,12 @@ export class ChatAreaService {
     };
   }
 
+  /**
+   * Sets up a note object for a user with the provided properties.
+   * @param {any} obj - The object containing user details.
+   * @param {string} id - The unique identifier for the user.
+   * @returns {Object} The structured user object for the note.
+   */
   setNoteObjectUser(obj: any, id: string) {
     return {
       email: obj.email || '',
@@ -59,6 +78,12 @@ export class ChatAreaService {
     };
   }
 
+  /**
+   * Retrieves the name of the month for a given month number.
+   * @param {number} monthNumber - The month number (1-12).
+   * @returns {string} The name of the month.
+   * @throws Will throw an error if the month number is invalid.
+   */
   getMonthName(monthNumber: number): string {
     const months: string[] = [
       'Januar',
@@ -84,12 +109,26 @@ export class ChatAreaService {
     return months[monthNumber - 1];
   }
 
+  /**
+   * Formats the given hour and minute into a readable time string.
+   * @param {any} hour - The hour to format.
+   * @param {any} minute - The minute to format.
+   * @returns {any} The formatted time string.
+   */
   getFormattedTime(hour: any, minute: any): any {
     const hours = hour.toString().padStart(2, '0');
     const minutes = minute.toString().padStart(2, '0');
     return `${hours}:${minutes} Uhr`;
   }
 
+  /**
+   * Updates a specified variable in a message document in Firestore.
+   * @param {any} messageId - The identifier of the message.
+   * @param {any} newValue - The new value to be updated.
+   * @param {any} variableName - The name of the variable to update.
+   * @param {any} src - The source path to the Firestore document.
+   * @returns {Promise<void>} A promise indicating the completion of the update.
+   */
   async updateMessageVariable(
     messageId: any,
     newValue: any,
@@ -135,6 +174,11 @@ export class ChatAreaService {
     }
   }
 
+  /**
+   * Gets a human-readable date string based on the provided timestamp.
+   * @param {number} timestamp - The timestamp to convert.
+   * @returns {string} A string indicating if the date is today or formatted date.
+   */
   getDate(timestamp: number) {
     const givenDate = new Date(timestamp);
     const today = new Date();
@@ -150,6 +194,11 @@ export class ChatAreaService {
     }
   }
 
+  /**
+   * Formats a timestamp into a string representation of the date.
+   * @param {number} timestamp - The timestamp to format.
+   * @returns {string} The formatted date string in 'DD.MM.YYYY' format.
+   */
   formatDate(timestamp: number): string {
     const givenDate = new Date(timestamp);
 
@@ -160,15 +209,33 @@ export class ChatAreaService {
     return `${day}.${month}.${year}`;
   }
 
+  /**
+   * Checks if the specified reaction exists in the message.
+   * @param {any} message - The message object to check.
+   * @param {string} reactionName - The name of the reaction to check for.
+   * @returns {boolean} True if the reaction exists, otherwise false.
+   */
   hasReaction(message: any, reactionName: string): boolean {
     return message[reactionName] && message[reactionName].length > 0;
   }
 
+  /**
+   * Checks if the current user has reacted to the message with the specified reaction.
+   * @param {any} message - The message object to check.
+   * @param {string} reactionName - The name of the reaction to check for.
+   * @returns {boolean} True if the user has reacted, otherwise false.
+   */
   hasUserReacted(message: any, reactionName: string): boolean {
     const userId = this.authService.currentUserSignal()?.uId;
     return message[reactionName]?.split(' ').includes(userId);
   }
 
+  /**
+   * Gets the count of reactions of a specified type on the message.
+   * @param {any} message - The message object to check.
+   * @param {string} reactionName - The name of the reaction to count.
+   * @returns {number} The count of reactions.
+   */
   getReactionCount(message: any, reactionName: string): number {
     const reactions = message[reactionName];
     if (reactions) {
@@ -177,6 +244,11 @@ export class ChatAreaService {
     return 0;
   }
 
+  /**
+   * Counts the number of words in a given input string.
+   * @param {string} input - The input string to analyze.
+   * @returns {number} The number of words in the input.
+   */
   splitWords(input: string) {
     if (input) {
       let words = input.trim().split(/\s+/).length;
@@ -186,6 +258,11 @@ export class ChatAreaService {
     }
   }
 
+  /**
+   * Checks if the message date is today.
+   * @param {any} message - The message object containing date details.
+   * @returns {boolean} True if the message date is not today, otherwise false.
+   */
   isItToday(message: any) {
     const now = new Date();
     if (

@@ -28,13 +28,20 @@
     </svg>
   </button>
 </div>
-<div class="content">
-  <textarea
-    placeholder="Nachricht an #Entwicklerteam"
+<div class="content" id="contentContainer">
+  <div
+    id="ThreadInput"
+    class="ThreadTextArea"
+    contenteditable="true"
     type="text"
-    [(ngModel)]="message.message"
-    #messageTextarea
-  ></textarea>
+    #ThreadTextArea
+    (keydown)="onKeyDown($event)"
+    (keydown.enter)="saveMessage($event)"
+    (focus)="removePlaceholder()"
+    (blur)="restorePlaceholder()"
+  >
+    <p *ngIf="showPlaceholder">Nachricht an #Entwicklerteam</p>
+  </div>
   <div class="inputButtons">
     <div>
       <label class="inputFile">
@@ -112,7 +119,7 @@
           </g>
         </svg>
       </div>
-      <div>
+      <div (click)="openTag()">
         <svg
           width="24"
           height="24"
@@ -144,44 +151,86 @@
       </div>
     </div>
 
-    <div (click)="this.saveMessage()" class="cursor-pointer">
-      <svg
-        width="40"
-        height="40"
-        viewBox="0 0 40 40"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g id="Send icon">
-          <g id="send">
-            <mask
-              id="mask0_65979_12990"
-              style="mask-type: alpha"
-              maskUnits="userSpaceOnUse"
-              x="5"
-              y="5"
-              width="30"
-              height="30"
-            >
-              <rect
-                id="Bounding box"
+    <div (click)="this.saveMessage($event)" class="cursor-pointer">
+      <p *ngIf="allowMessageSend">
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 40 40"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g id="Send icon">
+            <g id="send">
+              <mask
+                id="mask0_65979_12990"
+                style="mask-type: alpha"
+                maskUnits="userSpaceOnUse"
                 x="5"
                 y="5"
                 width="30"
                 height="30"
-                fill="#D9D9D9"
-              />
-            </mask>
-            <g mask="url(#mask0_65979_12990)">
-              <path
-                id="send_2"
-                d="M10.5 29.2812C10.0833 29.4479 9.6875 29.4112 9.3125 29.1712C8.9375 28.9321 8.75 28.5833 8.75 28.125V23.4687C8.75 23.1771 8.83333 22.9167 9 22.6875C9.16667 22.4583 9.39583 22.3125 9.6875 22.25L18.75 20L9.6875 17.75C9.39583 17.6875 9.16667 17.5417 9 17.3125C8.83333 17.0833 8.75 16.8229 8.75 16.5312V11.875C8.75 11.4167 8.9375 11.0675 9.3125 10.8275C9.6875 10.5883 10.0833 10.5521 10.5 10.7187L29.75 18.8437C30.2708 19.0729 30.5312 19.4583 30.5312 20C30.5312 20.5417 30.2708 20.9271 29.75 21.1562L10.5 29.2812Z"
-                fill="#444DF2"
-              />
+              >
+                <rect
+                  id="Bounding box"
+                  x="5"
+                  y="5"
+                  width="30"
+                  height="30"
+                  fill="#D9D9D9"
+                />
+              </mask>
+              <g mask="url(#mask0_65979_12990)">
+                <path
+                  id="send_2"
+                  d="M10.5 29.2812C10.0833 29.4479 9.6875 29.4112 9.3125 29.1712C8.9375 28.9321 8.75 28.5833 8.75 28.125V23.4687C8.75 23.1771 8.83333 22.9167 9 22.6875C9.16667 22.4583 9.39583 22.3125 9.6875 22.25L18.75 20L9.6875 17.75C9.39583 17.6875 9.16667 17.5417 9 17.3125C8.83333 17.0833 8.75 16.8229 8.75 16.5312V11.875C8.75 11.4167 8.9375 11.0675 9.3125 10.8275C9.6875 10.5883 10.0833 10.5521 10.5 10.7187L29.75 18.8437C30.2708 19.0729 30.5312 19.4583 30.5312 20C30.5312 20.5417 30.2708 20.9271 29.75 21.1562L10.5 29.2812Z"
+                  fill="#444DF2"
+                />
+              </g>
             </g>
           </g>
-        </g>
-      </svg>
+        </svg>
+      </p>
+
+      <p *ngIf="!allowMessageSend">
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 40 40"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g id="Send icon">
+            <g id="send">
+              <mask
+                id="mask0_65979_12990"
+                style="mask-type: alpha"
+                maskUnits="userSpaceOnUse"
+                x="5"
+                y="5"
+                width="30"
+                height="30"
+              >
+                <rect
+                  id="Bounding box"
+                  x="5"
+                  y="5"
+                  width="30"
+                  height="30"
+                  fill="#686868"
+                />
+              </mask>
+              <g mask="url(#mask0_65979_12990)">
+                <path
+                  id="send_2"
+                  d="M10.5 29.2812C10.0833 29.4479 9.6875 29.4112 9.3125 29.1712C8.9375 28.9321 8.75 28.5833 8.75 28.125V23.4687C8.75 23.1771 8.83333 22.9167 9 22.6875C9.16667 22.4583 9.39583 22.3125 9.6875 22.25L18.75 20L9.6875 17.75C9.39583 17.6875 9.16667 17.5417 9 17.3125C8.83333 17.0833 8.75 16.8229 8.75 16.5312V11.875C8.75 11.4167 8.9375 11.0675 9.3125 10.8275C9.6875 10.5883 10.0833 10.5521 10.5 10.7187L29.75 18.8437C30.2708 19.0729 30.5312 19.4583 30.5312 20C30.5312 20.5417 30.2708 20.9271 29.75 21.1562L10.5 29.2812Z"
+                  fill="#686868"
+                />
+              </g>
+            </g>
+          </g>
+        </svg>
+      </p>
     </div>
   </div>
 </div>
@@ -194,3 +243,45 @@
   set="twitter"
   [darkMode]="false"
 ></emoji-mart>
+
+<div *ngIf="currentChannel && allUser && tagUserSelector" class="tagContainer">
+  <div class="userListTitle">Mitglieder</div>
+  <div class="userListTitle" *ngIf="allUids < 1">Kein Benutzer gefunden</div>
+
+  <div class="tagUser" *ngFor="let content of allUids">
+    <div
+      class="user fs-18"
+      (click)="clearTagUser(); addTagUser(getUser(content).name, content)"
+    >
+      <img class="selected-img" src="{{ getUser(content).image }}" /><span>{{
+        getUser(content).name
+      }}</span>
+      @if(authService.currentUserSignal()?.uId == content){
+      <img class="online-icon" src="../../../assets/img/sidebar/Online.png" />
+      }@else {
+      <img class="online-icon" src="../../../assets/img/sidebar/Offline.png" />
+      }
+    </div>
+  </div>
+  <!-- <div *ngIf="this.userSearch">{{ this.userSearch }}</div> -->
+</div>
+
+<div
+  *ngIf="currentChannel && allChannelArray && tagChannelSelector"
+  class="tagContainer"
+>
+  <div class="userListTitle">Mitglieder</div>
+  <div class="userListTitle" *ngIf="allChannelArray < 1">
+    Kein Benutzer gefunden
+  </div>
+
+  <div class="tagUser" *ngFor="let channel of allChannelArray">
+    <div
+      class="user fs-18"
+      (click)="clearTagChannel(); addTagChannel(channel.name, channel.id)"
+    >
+      <span>{{ channel.name }}</span>
+    </div>
+    <!-- <div *ngIf="this.userSearch">{{ this.userSearch }}</div> -->
+  </div>
+</div>

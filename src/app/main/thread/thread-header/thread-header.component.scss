@@ -23,3 +23,32 @@
   align-items: center;
   gap: 10px;
 }
+
+.headerTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 5px;
+  p {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+    font-size: 24px;
+  }
+
+  span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #797ef3;
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
+@media (max-width: 1000px) {
+  .header {
+    border-radius: 0;
+  }
+}

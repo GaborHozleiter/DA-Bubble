@@ -9,6 +9,7 @@ import { SidebarService } from './sidebar.service';
 export class SearchService {
   hideOrShowSidebar = inject(SidebarService);
   isSearching: boolean = false;
+  searching: boolean = false;
   constructor(private firestore: Firestore) {}
 
   hideSearch() {

@@ -1,30 +1,40 @@
-<div class="channel-userlist-container" (click)="closeDialog()"
-    [ngClass]="{'display-flex': channelInfo.openUserList, 'display-none': !channelInfo.openUserList }">
-    <div class="channel-userlist-dialog" (click)="notCloseDialog($event)">
-        <div class="dialog-title-container">
-            <span class="fs-24 dialog-title">Mitglieder</span>
-            <div class="close-button" (click)="closeDialog()"></div>
-        </div>
-        <div class="userlist">
-            <div *ngFor=" let user of channelInfo.AllChannelsUsers[channelInfo.currentChannelNumber]; let i = index">
-                <div class="user fs-18" (click)="openUserProfil(i)">
-                    <img src="{{channelInfo.AllChannelsImages[channelInfo.currentChannelNumber][i]}}"
-                        class="selected-img">
-                    @if(channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i] == authService.currentUserSignal()?.uId){
-                        <span>{{ authService.currentUserSignal()?.name }}</span>
-                    }@else{
-                        <span>{{ user }}</span>
-                    }
-                    @if(authService.currentUserSignal()?.uId ==
-              channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i] || this.channelInfo.onlineUserUidList.includes(channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i])){
-                        <img class="online-icon" src="../../../assets/img/sidebar/Online.png" />
-                      }@else {
-                        <img class="online-icon" src="../../../assets/img/sidebar/Offline.png" />
-                      }
-                </div>
-            </div>
-        </div>
-        <div class="add-user-container" (click)="addUserToChannel()">
-        </div>
+<div
+  class="channel-userlist-container"
+  (click)="closeDialog()"
+  [ngClass]="{
+    'display-flex': channelInfo.openUserList,
+    'display-none': !channelInfo.openUserList
+  }"
+>
+  <div class="channel-userlist-dialog" (click)="notCloseDialog($event)">
+    <div class="dialog-title-container">
+      <span class="fs-24 dialog-title">Mitglieder</span>
+      <div class="close-button" (click)="closeDialog()"></div>
     </div>
+    <div class="userlist" *ngIf="currentChannel">
+      <div *ngFor="let userUid of currentChannel.uids; let i = index">
+        <div class="user fs-18" (click)="openUserProfil(i)">
+          <img src="{{ getUser(userUid).image }}" class="selected-img" />
+          @if(channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i]
+          == authService.currentUserSignal()?.uId){
+          <span>{{ authService.currentUserSignal()?.name }}</span>
+          }@else{
+          <span>{{ getUser(userUid).name }}</span>
+          } @if(authService.currentUserSignal()?.uId == userUid ||
+          this.channelInfo.onlineUserUidList.includes(userUid)){
+          <img
+            class="online-icon"
+            src="../../../assets/img/sidebar/Online.png"
+          />
+          }@else {
+          <img
+            class="online-icon"
+            src="../../../assets/img/sidebar/Offline.png"
+          />
+          }
+        </div>
+      </div>
+    </div>
+    <div class="add-user-container" (click)="addUserToChannel()"></div>
+  </div>
 </div>

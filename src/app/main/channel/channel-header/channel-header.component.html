@@ -8,8 +8,8 @@
   </div>
   <div class="header-right">
     <div class="channelUserContainer">
-      <div class="channelUser" *ngFor="let userImage of channelInfo.AllChannelsImages[channelInfo.currentChannelNumber]; let i = index">
-      @if(channelInfo.AllChannelsImages[channelInfo.currentChannelNumber].length > 0 && i > channelInfo.AllChannelsImages[channelInfo.currentChannelNumber].length -4){
+      <div class="channelUser" *ngFor="let userImage of this.currentChannel.images; let i = index">
+      @if(this.currentChannel.images.length > 0 && i > this.currentChannel.images.length -4){
           <img src="{{ userImage }}" class="profil-image" />
         }
       </div>
@@ -18,17 +18,17 @@
       'user-number-hover': divHover}">{{ userNumber }}</span>
       </div>
     </div>
-    @if(channelInfo.AllChannelsImages[channelInfo.currentChannelNumber].length == 2){
+    @if(this.currentChannel.images.length == 2){
       <div class="channelUser-background-two" [ngClass]="{
         'channelUser-background-hover': divHover}"></div>
       <div class ="channelUser-background-top-two" (mouseover)="hover()" (mouseout)="hoverOff()" (click)="openUserList()"></div>
     }
-    @if(channelInfo.AllChannelsImages[channelInfo.currentChannelNumber].length == 1){
+    @if(this.currentChannel.images.length == 1){
       <div class="channelUser-background-one" [ngClass]="{
         'channelUser-background-hover': divHover}"></div>
       <div class ="channelUser-background-top-one" (mouseover)="hover()" (mouseout)="hoverOff()" (click)="openUserList()"></div>
     }
-    @if(channelInfo.AllChannelsImages[channelInfo.currentChannelNumber].length > 2) {
+    @if(this.currentChannel.images.length > 2) {
       <div class="channelUser-background" [ngClass]="{
         'channelUser-background-hover': divHover}"></div>
       <div class ="channelUser-background-top" (mouseover)="hover()" (mouseout)="hoverOff()" (click)="openUserList()"></div>

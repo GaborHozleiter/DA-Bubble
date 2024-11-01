@@ -1,14 +1,25 @@
-@media(max-width: 1000px){
-    .contentContainer {
-      display: none;
-    }
-
-    .channel-display-flex {
-        display: flex !important;
-      }
-
-    .channel-display-none {
-      display: none !important;
-    }
+@media (max-width: 1000px) {
+  .contentContainer {
+    display: none;
+    margin-right: 0;
   }
-  
+
+  .channel-display-flex {
+    display: flex !important;
+  }
+
+  .channel-display-none {
+    display: none !important;
+  }
+  .slide-in-right {
+    width: 100%;
+  }
+
+  app-thread {
+    margin-left: 0;
+  }
+
+  .thread {
+    transition: none;
+  }
+}

@@ -15,20 +15,48 @@ export class EditProfilComponent {
   authService = inject(AuthService);
   userOnline = false;
 
-  closeDialog(){
+  /**
+ * Closes the profile edit dialog.
+ * 
+ * This method sets the `editProfilOpen` property to false, 
+ * effectively closing the profile editing pop-up dialog.
+ */
+  closeDialog() {
     this.hideOrShowPopUp.editProfilOpen = false;
   }
 
-  notCloseDialog(e : any){
-    e.stopPropagation(e);
+  /**
+  * Prevents the dialog from closing when an event occurs.
+  * 
+  * This method stops the propagation of the event `e`, which 
+  * prevents the dialog from being closed unintentionally 
+  * during specific user interactions.
+  * 
+  * @param {any} e - The event object from the user interaction.
+  */
+  notCloseDialog(e: any) {
+    e.stopPropagation();
   }
 
-  editUser(){
+  /**
+  * Opens the user contact form for editing.
+  * 
+  * This method sets the `editProfilContactformOpen` property 
+  * to true, allowing the user to edit their contact information 
+  * in the profile.
+  */
+  editUser() {
     this.hideOrShowPopUp.editProfilContactformOpen = true;
   }
 
-  sendMessage(){
-    alert('Message send');
+  /**
+  * Sends a message to the user.
+  * 
+  * This method triggers an alert to inform the user that the 
+  * message has been sent successfully.
+  */
+  sendMessage() {
+    alert('Message sent');
   }
 
 }

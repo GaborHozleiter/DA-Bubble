@@ -22,9 +22,9 @@
                     <span class="fs-18">Vollständiger Name</span>
                 </div>
                 @if (authService.currentUserSignal()?.name === 'Gast') {
-                <input disabled value="Guest"  type="text" class="disabled-input" name="name">
+                <input disabled value="Guest" type="text" class="disabled-input" name="name">
                 } @else {
-                <input value="{{authService.currentUserSignal()?.name}}" formControlName="name" type="text"
+                <input value="{{authService.currentUserSignal()?.name}}" maxlength="20" formControlName="name" type="text"
                     class="input-field" id="name" name="name">
                 }
             </div>

@@ -91,3 +91,9 @@
         color: black;
     }
 }
+
+@media(max-width: 500px) {
+    .scroll-container-users {
+        max-height: calc(100vh - 500px);
+    }
+}

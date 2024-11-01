@@ -1,6 +1,18 @@
 <div class="header">
-  <div>
+  <div *ngIf="messageUser && user != messageUser">
     <img class="profilePicture" src="{{ imageUrl }}" />
+    @if(authService.currentUserSignal()?.uId == userUid ||
+    this.channelInfo.onlineUserUidList.includes(userUid)){
+    <img class="online-icon" src="../../../assets/img/sidebar/Online.png" />
+    }@else {
+    <img class="online-icon" src="../../../assets/img/sidebar/Offline.png" />
+    }
     {{ userName }}
+  </div>
+
+  <div *ngIf="messageUser && user == messageUser">
+    <img class="profilePicture" src="{{ imageUrl }}" />
+    <img class="online-icon" src="../../../assets/img/sidebar/Online.png" />
+    {{ userName }} (Du)
   </div>
 </div>

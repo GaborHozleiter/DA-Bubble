@@ -8,8 +8,15 @@
 
 @media(max-width: 500px){
     .dialog {
-    width: calc(100vw - 60px);
+    width: calc(100vw - 100px);
     left: 0;
+    right: 0;
+    margin: 0 auto;
+    }
+
+    .profil-image {
+        width: 180px;
+        height: 180px;
     }
 
     .responsive-edit-icon {
@@ -30,8 +37,15 @@
 @media(max-width: 400px){
     .dialog {
         padding: 20px 15px 20px 15px;
-        width: calc(100vw - 30px);
-        top : calc(50vh - 250px);
-        left: 0;
+        width: calc(100vw - 80px);
+        }
+
+        .profil-image {
+            width: 150px;
+            height: 150px;
+        }
+
+        .user-name{
+            font-size: 25px;
         }
 }

@@ -32,21 +32,27 @@
     <div class="scroll-container">
       <div class="content-edit" *ngIf="this.editChannelNameOpen">
         <div class="nameHeader-edit">
-          <span>Channel-Name</span><button (click)="saveChannelName()"
-            class="edit-button"><span>Speichern</span></button>
-            <img src="../../../assets/img/edit-channel/check_circle.png"  class="edit-icon-responsive" (click)="saveChannelName()">
+          <span>Channel-Name</span>
+          @if(this.originalChannelData.name.length > 0){
+            <button (click)="saveChannelName()" class="edit-button">
+              <span>Speichern</span>
+            </button>
+            <img src="../../../assets/img/edit-channel/check_circle.png" class="edit-icon-responsive"
+            (click)="saveChannelName()" />
+          }
         </div>
         <div class="channel-name-container">
-          <input type="text" class="input-field" [(ngModel)]="channelName" id="channelName" name="channelName"
-            placeholder="{{ this.selectetChannelData.name }}">
-          <img src="../../../assets/img/header/tag.png" class="tag-icon">
+          <input type="text" class="input-field" [(ngModel)]="this.originalChannelData.name" id="channelName" name="channelName" />
+          <img src="../../../assets/img/header/tag.png" class="tag-icon" />
         </div>
       </div>
       <div class="content" *ngIf="!this.editChannelNameOpen">
         <div class="nameHeader">
-          <span>Channel-Name</span><button (click)="editChannelName()"
-            class="edit-button"><span>Bearbeiten</span></button>
-            <img src="../../../assets/img/edit-channel/edit (1).png" class="edit-icon-responsive" (click)="editChannelName()">
+          <span>Channel-Name</span><button (click)="editChannelName()" class="edit-button">
+            <span>Bearbeiten</span>
+          </button>
+          <img src="../../../assets/img/edit-channel/edit (1).png" class="edit-icon-responsive"
+            (click)="editChannelName()" />
         </div>
         <div class="channel-tag-name">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
@@ -65,16 +71,14 @@
       </div>
       <div class="content" *ngIf="!this.editChannelDescriptionOpen">
         <div class="nameHeader">
-          <span>Beschreibung</span><button (click)="editChannelDescription()"
-            class="edit-button"><span>Bearbeiten</span></button>
-            <img src="../../../assets/img/edit-channel/edit (1).png" class="edit-icon-responsive" (click)="editChannelDescription()">
+          <span>Beschreibung</span><button (click)="editChannelDescription()" class="edit-button">
+            <span>Bearbeiten</span>
+          </button>
+          <img src="../../../assets/img/edit-channel/edit (1).png" class="edit-icon-responsive"
+            (click)="editChannelDescription()" />
         </div>
         <div>
-          {{
-          this.channelInfo.AllChannelsDescriptions[
-          this.channelInfo.currentChannelNumber
-          ]
-          }}
+          {{ this.selectetChannelData.description }}
         </div>
         <div class="spacer"></div>
         <div class="nameHeader">
@@ -83,28 +87,31 @@
         <div>
           @if(this.authService.currentUserSignal()?.uId ==
           channelInfo.AllChannelsCreatorsUids[channelInfo.currentChannelNumber]){
-          <span class="creator-name">{{this.authService.currentUserSignal()?.name}}</span>
+          <span class="creator-name">{{
+            this.authService.currentUserSignal()?.name
+            }}</span>
           }@else {
           <span class="creator-name">
-            {{
-            this.channelInfo.AllChannelsCreatorsNames[
-            this.channelInfo.currentChannelNumber
-            ]
-            }}
+            {{ this.selectetChannelData.channelCreatorName }}
           </span>
           }
         </div>
       </div>
       <div class="content-edit" *ngIf="this.editChannelDescriptionOpen">
         <div class="nameHeader-edit">
-          <span>Beschreibung</span><button (click)="saveChannelDescription()"
-            class="edit-button"><span>Speichern</span></button>
-            <img src="../../../assets/img/edit-channel/check_circle.png" class="edit-icon-responsive" (click)="saveChannelDescription()">
+          <span>Beschreibung</span>
+          @if(this.originalChannelData.description.length > 0){
+            <button (click)="saveChannelDescription()" class="edit-button">
+              <span>Speichern</span>
+            </button>
+            <img src="../../../assets/img/edit-channel/check_circle.png" class="edit-icon-responsive"
+              (click)="saveChannelDescription()" />
+          }
         </div>
         <div class="channel-name-container">
-          <input type="text" class="input-field" [(ngModel)]="channelDescription" id="channelDescription"
-            name="channelDescription" placeholder="Dein Text hier">
-          <img src="../../../assets/img/header/tag.png" class="tag-icon">
+          <input type="text" class="input-field" [(ngModel)]="this.originalChannelData.description" id="channelDescription"
+            name="channelDescription" />
+          <img src="../../../assets/img/header/tag.png" class="tag-icon" />
         </div>
         <div class="spacer-edit"></div>
         <div class="nameHeader edit-description">
@@ -113,7 +120,9 @@
         <div>
           @if(this.authService.currentUserSignal()?.uId ==
           channelInfo.AllChannelsCreatorsUids[channelInfo.currentChannelNumber]){
-          <span class="creator-name">{{this.authService.currentUserSignal()?.name}}</span>
+          <span class="creator-name">{{
+            this.authService.currentUserSignal()?.name
+            }}</span>
           }@else {
           <span class="creator-name">
             {{
@@ -127,17 +136,27 @@
       </div>
       <div class="responsive-userlist-container">
         <div class="userlist">
-          <div *ngFor=" let user of channelInfo.AllChannelsUsers[channelInfo.currentChannelNumber]; let i = index">
+          <div *ngFor="
+              let user of channelInfo.AllChannelsUsers[
+                channelInfo.currentChannelNumber
+              ];
+              let i = index
+            ">
             <div class="user fs-18" (click)="openUserProfil(i)">
-              <img src="{{channelInfo.AllChannelsImages[channelInfo.currentChannelNumber][i]}}" class="selected-img">
-              @if(channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i] ==
-              authService.currentUserSignal()?.uId){
+              <img src="{{
+                  channelInfo.AllChannelsImages[
+                    channelInfo.currentChannelNumber
+                  ][i]
+                }}" class="selected-img" />
+              @if(channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i]
+              == authService.currentUserSignal()?.uId){
               <span>{{ authService.currentUserSignal()?.name }}</span>
               }@else{
               <span>{{ user }}</span>
-              }
-              @if(authService.currentUserSignal()?.uId ==
-              channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i] || this.channelInfo.onlineUserUidList.includes(channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i])){
+              } @if(authService.currentUserSignal()?.uId ==
+              channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i]
+              ||
+              this.channelInfo.onlineUserUidList.includes(channelInfo.GlobalChannelUids[channelInfo.currentChannelNumber][i])){
               <img class="online-icon" src="../../../assets/img/sidebar/Online.png" />
               }@else {
               <img class="online-icon" src="../../../assets/img/sidebar/Offline.png" />
@@ -147,8 +166,11 @@
         </div>
       </div>
       <div class="button-container">
-        <button type="submit" class="abandon" (click)="abandon()"><span class="fs-18 button-text">Channel
-            verlassen</span></button>
+        @if(this.currentChannel != 'wXzgNEb34DReQq3fEsAo7VTcXXNA'){
+          <button type="submit" class="abandon" (click)="abandon()">
+            <span class="fs-18 button-text">Channel verlassen</span>
+          </button>
+        }
       </div>
     </div>
   </div>

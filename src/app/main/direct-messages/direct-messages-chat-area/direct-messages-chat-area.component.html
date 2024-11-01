@@ -5,25 +5,44 @@
   [ngClass]="containerClasses"
 >
   <div class="noMessagesContainer" *ngIf="allMessagesSortedDate.length < 1">
-    <div>
-      <p class="noMessagesTitle">
-        <img
-          class="noMessagesUserImg"
-          src="{{ getProfileImg(this.messageUser) }}"
-        />
-        {{ this.getUsername(this.messageUser) }}
-      </p>
-      <p>
+    <div *ngIf="this.currentChannel && messageUser != user" class="noMessages">
+      <div class="noMessagesTitleContainer">
+        <img src="{{ getUser(messageUser).image }}" alt="" />
+        <p class="noMessagesTitle">
+          {{ getUser(messageUser).name }}
+        </p>
+      </div>
+      <p class="noMessageDescription">
         Diese Unterhaltung findet nur zwischen
-        <span> &#64;{{ this.getUsername(this.messageUser) }} </span>und dir
-        statt.
+        <span
+          class="cursor-pointer userTag"
+          (click)="openUserProfil(messageUser)"
+          >&#64;{{ getUser(messageUser).name }}</span
+        >
+        und dir statt.
+      </p>
+    </div>
+
+    <div *ngIf="this.currentChannel && messageUser == user" class="noMessages">
+      <div class="noMessagesTitleContainer">
+        <img src="{{ getUser(messageUser).image }}" alt="" />
+        <p class="noMessagesTitle">{{ getUser(messageUser).name }} (Du)</p>
+      </div>
+      <p class="noMessageDescription">
+        <span class="yourRoom">Dieser Raum ist nur für dich da.</span> Mache dir
+        Notizen, liste deine To-dos auf oder bewahre Links und Dateien
+        griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst
+        besprechen.
       </p>
     </div>
   </div>
 
   <div class="content" #myDiv>
-    <div *ngFor="let message of allMessagesSortedDate" #messageList ng>
-      <div *ngIf="message.date && isItToday(message)" class="date">
+    <div *ngFor="let message of allMessagesSortedDate" #messageList>
+      <div
+        *ngIf="message.date && chatAreaService.isItToday(message)"
+        class="date"
+      >
         <span class="spacer"></span>
         <p class="fs-18">
           {{
@@ -32,364 +51,231 @@
               " " +
               message.day +
               " " +
-              getMonthName(message.month)
+              chatAreaService.getMonthName(message.month)
           }}
         </p>
         <span class="spacer"></span>
       </div>
 
-      <div *ngIf="message.date && !isItToday(message)" class="date">
+      <div
+        *ngIf="message.date && !chatAreaService.isItToday(message)"
+        class="date"
+      >
         <span class="spacer"></span>
         <p class="fs-18">Heute</p>
         <span class="spacer"></span>
       </div>
 
+      <!-- message send -->
       <div
         (mouseleave)="closeEmojiSelector()"
-        *ngIf="message.communicationType == 'resive'"
+        *ngIf="this.openEditMessage !== message.id"
       >
-        <div class="messageResiveContainer">
-          <div class="messagecontentContainer">
-            <div class="messageResive">
-              <div>
-                <img
-                  class="profilePicture"
-                  src="{{ getProfileImg(message.uid) }}"
-                />
-              </div>
-              <div class="messageInfo">
-                <div class="messageTitle">
-                  <div class="messageUserName">
-                    <p class="userName">{{ getUsername(message.uid) }}</p>
-                    <p class="smallGray">
-                      {{ message.hour }}:{{ message.minute }} Uhr
-                    </p>
-                  </div>
-
-                  <div></div>
-                </div>
-                <span *ngIf="message.message.length > 0">{{
-                  message.message
-                }}</span>
-                <img
-                  *ngIf="message.fileUrl.length > 0"
-                  class="picture"
-                  src="{{ message.fileUrl }}"
-                />
-              </div>
-            </div>
-            <div class="hoverResive d-none">
-              <div *ngIf="!emojiselectior" class="hoverContent">
-                <p (click)="addReaction('checkMark', message)">
-                  <img src="./../../../../assets/reactions/check-mark.png" />
-                </p>
-                <p (click)="addReaction('handshake', message)">
-                  <img src="./../../../../assets/reactions/handshake.png" />
-                </p>
-                <p (click)="openEmojiSelection()" class="cursor-pointer">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="25"
-                    height="24"
-                    viewBox="0 0 25 24"
-                    fill="none"
-                  >
-                    <mask
-                      id="mask0_65979_17710"
-                      style="mask-type: alpha"
-                      maskUnits="userSpaceOnUse"
-                      x="0"
-                      y="0"
-                      width="25"
-                      height="24"
-                    >
-                      <rect
-                        x="0.936523"
-                        width="24"
-                        height="24"
-                        fill="#D9D9D9"
-                      />
-                    </mask>
-                    <g mask="url(#mask0_65979_17710)">
-                      <path
-                        d="M12.9365 22C11.5532 22 10.2532 21.7375 9.03652 21.2125C7.81986 20.6875 6.76152 19.975 5.86152 19.075C4.96152 18.175 4.24902 17.1167 3.72402 15.9C3.19902 14.6833 2.93652 13.3833 2.93652 12C2.93652 10.6167 3.19902 9.31667 3.72402 8.1C4.24902 6.88333 4.96152 5.825 5.86152 4.925C6.76152 4.025 7.81986 3.3125 9.03652 2.7875C10.2532 2.2625 11.5532 2 12.9365 2C13.6865 2 14.4157 2.07917 15.124 2.2375C15.8324 2.39583 16.5032 2.625 17.1365 2.925C17.0699 3.09167 17.0199 3.26667 16.9865 3.45C16.9532 3.63333 16.9365 3.81667 16.9365 4C16.9365 4.23333 16.9615 4.45417 17.0115 4.6625C17.0615 4.87083 17.1282 5.06667 17.2115 5.25C16.5949 4.86667 15.9282 4.5625 15.2115 4.3375C14.4949 4.1125 13.7365 4 12.9365 4C10.7199 4 8.83236 4.77917 7.27402 6.3375C5.71569 7.89583 4.93652 9.78333 4.93652 12C4.93652 14.2167 5.71569 16.1042 7.27402 17.6625C8.83236 19.2208 10.7199 20 12.9365 20C15.1532 20 17.0407 19.2208 18.599 17.6625C20.1574 16.1042 20.9365 14.2167 20.9365 12C20.9365 11.3333 20.8574 10.6917 20.699 10.075C20.5407 9.45833 20.3199 8.875 20.0365 8.325C20.3032 8.54167 20.5949 8.70833 20.9115 8.825C21.2282 8.94167 21.5699 9 21.9365 9C22.0199 9 22.1074 8.99583 22.199 8.9875C22.2907 8.97917 22.3782 8.96667 22.4615 8.95C22.6115 9.43333 22.7282 9.92917 22.8115 10.4375C22.8949 10.9458 22.9365 11.4667 22.9365 12C22.9365 13.3833 22.674 14.6833 22.149 15.9C21.624 17.1167 20.9115 18.175 20.0115 19.075C19.1115 19.975 18.0532 20.6875 16.8365 21.2125C15.6199 21.7375 14.3199 22 12.9365 22ZM16.4365 11C16.8699 11 17.2282 10.8583 17.5115 10.575C17.7949 10.2917 17.9365 9.93333 17.9365 9.5C17.9365 9.06667 17.7949 8.70833 17.5115 8.425C17.2282 8.14167 16.8699 8 16.4365 8C16.0032 8 15.6449 8.14167 15.3615 8.425C15.0782 8.70833 14.9365 9.06667 14.9365 9.5C14.9365 9.93333 15.0782 10.2917 15.3615 10.575C15.6449 10.8583 16.0032 11 16.4365 11ZM9.43652 11C9.86986 11 10.2282 10.8583 10.5115 10.575C10.7949 10.2917 10.9365 9.93333 10.9365 9.5C10.9365 9.06667 10.7949 8.70833 10.5115 8.425C10.2282 8.14167 9.86986 8 9.43652 8C9.00319 8 8.64486 8.14167 8.36152 8.425C8.07819 8.70833 7.93652 9.06667 7.93652 9.5C7.93652 9.93333 8.07819 10.2917 8.36152 10.575C8.64486 10.8583 9.00319 11 9.43652 11ZM12.9365 17.5C14.1199 17.5 15.1657 17.175 16.074 16.525C16.9824 15.875 17.6365 15.0333 18.0365 14H7.83652C8.23652 15.0333 8.89069 15.875 9.79902 16.525C10.7074 17.175 11.7532 17.5 12.9365 17.5ZM20.9365 5H19.9365C19.6532 5 19.4157 4.90417 19.224 4.7125C19.0324 4.52083 18.9365 4.28333 18.9365 4C18.9365 3.71667 19.0324 3.47917 19.224 3.2875C19.4157 3.09583 19.6532 3 19.9365 3H20.9365V2C20.9365 1.71667 21.0324 1.47917 21.224 1.2875C21.4157 1.09583 21.6532 1 21.9365 1C22.2199 1 22.4574 1.09583 22.649 1.2875C22.8407 1.47917 22.9365 1.71667 22.9365 2V3H23.9365C24.2199 3 24.4574 3.09583 24.649 3.2875C24.8407 3.47917 24.9365 3.71667 24.9365 4C24.9365 4.28333 24.8407 4.52083 24.649 4.7125C24.4574 4.90417 24.2199 5 23.9365 5H22.9365V6C22.9365 6.28333 22.8407 6.52083 22.649 6.7125C22.4574 6.90417 22.2199 7 21.9365 7C21.6532 7 21.4157 6.90417 21.224 6.7125C21.0324 6.52083 20.9365 6.28333 20.9365 6V5Z"
-                        fill="black"
-                      />
-                    </g>
-                  </svg>
-                </p>
-              </div>
-              <div *ngIf="emojiselectior" class="emojiSelectior">
-                <p (click)="addReaction('thumbsUp', message)">
-                  <img src="./../../../../assets/reactions/thumbs-up.png" />
-                </p>
-                <p (click)="addReaction('thumbsDown', message)">
-                  <img src="./../../../../assets/reactions/thumbs-down.png" />
-                </p>
-                <p (click)="addReaction('rocket', message)">
-                  <img src="./../../../../assets/reactions/rocket.png" />
-                </p>
-                <p (click)="addReaction('nerdFace', message)">
-                  <img src="./../../../../assets/reactions/nerd-face.png" />
-                </p>
-                <p (click)="addReaction('noted', message)">
-                  <img src="./../../../../assets/reactions/noted.png" />
-                </p>
-                <p (click)="addReaction('shushingFace', message)">
-                  <img src="./../../../../assets/reactions/shushing-face.png" />
-                </p>
-
-                <p (click)="closeEmojiSelector()">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <mask
-                      id="mask0_65979_13637"
-                      style="mask-type: alpha"
-                      maskUnits="userSpaceOnUse"
-                      x="0"
-                      y="0"
-                      width="24"
-                      height="24"
-                    >
-                      <rect width="24" height="24" fill="#D9D9D9" />
-                    </mask>
-                    <g mask="url(#mask0_65979_13637)">
-                      <path
-                        d="M11.9998 13.4L7.0998 18.3C6.91647 18.4833 6.68314 18.575 6.3998 18.575C6.11647 18.575 5.88314 18.4833 5.6998 18.3C5.51647 18.1167 5.4248 17.8833 5.4248 17.6C5.4248 17.3167 5.51647 17.0833 5.6998 16.9L10.5998 12L5.6998 7.09999C5.51647 6.91665 5.4248 6.68332 5.4248 6.39999C5.4248 6.11665 5.51647 5.88332 5.6998 5.69999C5.88314 5.51665 6.11647 5.42499 6.3998 5.42499C6.68314 5.42499 6.91647 5.51665 7.0998 5.69999L11.9998 10.6L16.8998 5.69999C17.0831 5.51665 17.3165 5.42499 17.5998 5.42499C17.8831 5.42499 18.1165 5.51665 18.2998 5.69999C18.4831 5.88332 18.5748 6.11665 18.5748 6.39999C18.5748 6.68332 18.4831 6.91665 18.2998 7.09999L13.3998 12L18.2998 16.9C18.4831 17.0833 18.5748 17.3167 18.5748 17.6C18.5748 17.8833 18.4831 18.1167 18.2998 18.3C18.1165 18.4833 17.8831 18.575 17.5998 18.575C17.3165 18.575 17.0831 18.4833 16.8998 18.3L11.9998 13.4Z"
-                        fill="black"
-                      />
-                    </g>
-                  </svg>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="reactionContainer">
-            <div
-              *ngIf="splitWords(message.checkMark) > 0"
-              class="reaction"
-              (click)="addReaction('checkMark', message)"
-              [ngClass]="{ userReacted: reacted(message.checkMark) }"
-            >
-              <div>{{ splitWords(message.checkMark) }}</div>
-              <img src="./../../../../assets/reactions/check-mark.png" />
-            </div>
-
-            <div
-              *ngIf="splitWords(message.handshake) > 0"
-              class="reaction"
-              (click)="addReaction('handshake', message)"
-              [ngClass]="{ userReacted: reacted(message.handshake) }"
-            >
-              <div>{{ splitWords(message.handshake) }}</div>
-              <img src="./../../../../assets/reactions/handshake.png" />
-            </div>
-            <div
-              *ngIf="splitWords(message.thumbsUp) > 0"
-              class="reaction"
-              (click)="addReaction('thumbsUp', message)"
-              [ngClass]="{ userReacted: reacted(message.thumbsUp) }"
-            >
-              <div>{{ splitWords(message.thumbsUp) }}</div>
-              <img src="./../../../../assets/reactions/thumbs-up.png" />
-            </div>
-
-            <div
-              *ngIf="splitWords(message.thumbsDown) > 0"
-              class="reaction"
-              (click)="addReaction('thumbsDown', message)"
-              [ngClass]="{ userReacted: reacted(message.thumbsDown) }"
-            >
-              <div>{{ splitWords(message.thumbsDown) }}</div>
-              <img src="./../../../../assets/reactions/thumbs-down.png" />
-            </div>
-
-            <div
-              *ngIf="splitWords(message.rocket) > 0"
-              class="reaction"
-              (click)="addReaction('rocket', message)"
-              [ngClass]="{ userReacted: reacted(message.rocket) }"
-            >
-              <div>{{ splitWords(message.rocket) }}</div>
-              <img src="./../../../../assets/reactions/rocket.png" />
-            </div>
-
-            <div
-              *ngIf="splitWords(message.nerdFace) > 0"
-              class="reaction"
-              (click)="addReaction('nerdFace', message)"
-              [ngClass]="{ userReacted: reacted(message.nerdFace) }"
-            >
-              <div>{{ splitWords(message.nerdFace) }}</div>
-              <img src="./../../../../assets/reactions/nerd-face.png" />
-            </div>
-
-            <div
-              *ngIf="splitWords(message.noted) > 0"
-              class="reaction"
-              (click)="addReaction('noted', message)"
-              [ngClass]="{ userReacted: reacted(message.noted) }"
-            >
-              <div>{{ splitWords(message.noted) }}</div>
-              <img src="./../../../../assets/reactions/noted.png" />
-            </div>
-
-            <div
-              *ngIf="splitWords(message.shushingFace) > 0"
-              class="reaction"
-              (click)="addReaction('shushingFace', message)"
-              [ngClass]="{ userReacted: reacted(message.shushingFace) }"
-            >
-              <div>{{ splitWords(message.shushingFace) }}</div>
-              <img src="./../../../../assets/reactions/shushing-face.png" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        (mouseleave)="closeEmojiSelector()"
-        *ngIf="
-          message.communicationType == 'send' &&
-          this.openEditMessage !== message.id
-        "
-      >
-        <div class="messageSendContainer">
-          <div class="messagecontentContainerSend">
-            <div class="hoverSend d-none">
-              <div *ngIf="!emojiselectior" class="hoverContent">
-                <p (click)="addReaction('checkMark', message)">
-                  <img src="./../../../../assets/reactions/check-mark.png" />
-                </p>
-                <p (click)="addReaction('handshake', message)">
-                  <img src="./../../../../assets/reactions/handshake.png" />
-                </p>
-                <p (click)="openEmojiSelection()" class="cursor-pointer">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="25"
-                    height="24"
-                    viewBox="0 0 25 24"
-                    fill="none"
-                  >
-                    <mask
-                      id="mask0_65979_17710"
-                      style="mask-type: alpha"
-                      maskUnits="userSpaceOnUse"
-                      x="0"
-                      y="0"
-                      width="25"
-                      height="24"
-                    >
-                      <rect
-                        x="0.936523"
-                        width="24"
-                        height="24"
-                        fill="#D9D9D9"
-                      />
-                    </mask>
-                    <g mask="url(#mask0_65979_17710)">
-                      <path
-                        d="M12.9365 22C11.5532 22 10.2532 21.7375 9.03652 21.2125C7.81986 20.6875 6.76152 19.975 5.86152 19.075C4.96152 18.175 4.24902 17.1167 3.72402 15.9C3.19902 14.6833 2.93652 13.3833 2.93652 12C2.93652 10.6167 3.19902 9.31667 3.72402 8.1C4.24902 6.88333 4.96152 5.825 5.86152 4.925C6.76152 4.025 7.81986 3.3125 9.03652 2.7875C10.2532 2.2625 11.5532 2 12.9365 2C13.6865 2 14.4157 2.07917 15.124 2.2375C15.8324 2.39583 16.5032 2.625 17.1365 2.925C17.0699 3.09167 17.0199 3.26667 16.9865 3.45C16.9532 3.63333 16.9365 3.81667 16.9365 4C16.9365 4.23333 16.9615 4.45417 17.0115 4.6625C17.0615 4.87083 17.1282 5.06667 17.2115 5.25C16.5949 4.86667 15.9282 4.5625 15.2115 4.3375C14.4949 4.1125 13.7365 4 12.9365 4C10.7199 4 8.83236 4.77917 7.27402 6.3375C5.71569 7.89583 4.93652 9.78333 4.93652 12C4.93652 14.2167 5.71569 16.1042 7.27402 17.6625C8.83236 19.2208 10.7199 20 12.9365 20C15.1532 20 17.0407 19.2208 18.599 17.6625C20.1574 16.1042 20.9365 14.2167 20.9365 12C20.9365 11.3333 20.8574 10.6917 20.699 10.075C20.5407 9.45833 20.3199 8.875 20.0365 8.325C20.3032 8.54167 20.5949 8.70833 20.9115 8.825C21.2282 8.94167 21.5699 9 21.9365 9C22.0199 9 22.1074 8.99583 22.199 8.9875C22.2907 8.97917 22.3782 8.96667 22.4615 8.95C22.6115 9.43333 22.7282 9.92917 22.8115 10.4375C22.8949 10.9458 22.9365 11.4667 22.9365 12C22.9365 13.3833 22.674 14.6833 22.149 15.9C21.624 17.1167 20.9115 18.175 20.0115 19.075C19.1115 19.975 18.0532 20.6875 16.8365 21.2125C15.6199 21.7375 14.3199 22 12.9365 22ZM16.4365 11C16.8699 11 17.2282 10.8583 17.5115 10.575C17.7949 10.2917 17.9365 9.93333 17.9365 9.5C17.9365 9.06667 17.7949 8.70833 17.5115 8.425C17.2282 8.14167 16.8699 8 16.4365 8C16.0032 8 15.6449 8.14167 15.3615 8.425C15.0782 8.70833 14.9365 9.06667 14.9365 9.5C14.9365 9.93333 15.0782 10.2917 15.3615 10.575C15.6449 10.8583 16.0032 11 16.4365 11ZM9.43652 11C9.86986 11 10.2282 10.8583 10.5115 10.575C10.7949 10.2917 10.9365 9.93333 10.9365 9.5C10.9365 9.06667 10.7949 8.70833 10.5115 8.425C10.2282 8.14167 9.86986 8 9.43652 8C9.00319 8 8.64486 8.14167 8.36152 8.425C8.07819 8.70833 7.93652 9.06667 7.93652 9.5C7.93652 9.93333 8.07819 10.2917 8.36152 10.575C8.64486 10.8583 9.00319 11 9.43652 11ZM12.9365 17.5C14.1199 17.5 15.1657 17.175 16.074 16.525C16.9824 15.875 17.6365 15.0333 18.0365 14H7.83652C8.23652 15.0333 8.89069 15.875 9.79902 16.525C10.7074 17.175 11.7532 17.5 12.9365 17.5ZM20.9365 5H19.9365C19.6532 5 19.4157 4.90417 19.224 4.7125C19.0324 4.52083 18.9365 4.28333 18.9365 4C18.9365 3.71667 19.0324 3.47917 19.224 3.2875C19.4157 3.09583 19.6532 3 19.9365 3H20.9365V2C20.9365 1.71667 21.0324 1.47917 21.224 1.2875C21.4157 1.09583 21.6532 1 21.9365 1C22.2199 1 22.4574 1.09583 22.649 1.2875C22.8407 1.47917 22.9365 1.71667 22.9365 2V3H23.9365C24.2199 3 24.4574 3.09583 24.649 3.2875C24.8407 3.47917 24.9365 3.71667 24.9365 4C24.9365 4.28333 24.8407 4.52083 24.649 4.7125C24.4574 4.90417 24.2199 5 23.9365 5H22.9365V6C22.9365 6.28333 22.8407 6.52083 22.649 6.7125C22.4574 6.90417 22.2199 7 21.9365 7C21.6532 7 21.4157 6.90417 21.224 6.7125C21.0324 6.52083 20.9365 6.28333 20.9365 6V5Z"
-                        fill="black"
-                      />
-                    </g>
-                  </svg>
-                </p>
-                <p (click)="editMessage(message)">
-                  <svg
-                    width="24px"
-                    height="24px"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g id="SVGRepo_iconCarrier">
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z"
-                        fill="#000000"
-                      ></path>
-                    </g>
-                  </svg>
-                </p>
-              </div>
-              <div *ngIf="emojiselectior" class="emojiSelectior">
-                <p (click)="addReaction('thumbsUp', message)">
-                  <img src="./../../../../assets/reactions/thumbs-up.png" />
-                </p>
-                <p (click)="addReaction('thumbsDown', message)">
-                  <img src="./../../../../assets/reactions/thumbs-down.png" />
-                </p>
-                <p (click)="addReaction('rocket', message)">
-                  <img src="./../../../../assets/reactions/rocket.png" />
-                </p>
-                <p (click)="addReaction('nerdFace', message)">
-                  <img src="./../../../../assets/reactions/nerd-face.png" />
-                </p>
-                <p (click)="addReaction('noted', message)">
-                  <img src="./../../../../assets/reactions/noted.png" />
-                </p>
-                <p (click)="addReaction('shushingFace', message)">
-                  <img src="./../../../../assets/reactions/shushing-face.png" />
-                </p>
-
-                <p (click)="closeEmojiSelector()">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <mask
-                      id="mask0_65979_13637"
-                      style="mask-type: alpha"
-                      maskUnits="userSpaceOnUse"
-                      x="0"
-                      y="0"
-                      width="24"
-                      height="24"
-                    >
-                      <rect width="24" height="24" fill="#D9D9D9" />
-                    </mask>
-                    <g mask="url(#mask0_65979_13637)">
-                      <path
-                        d="M11.9998 13.4L7.0998 18.3C6.91647 18.4833 6.68314 18.575 6.3998 18.575C6.11647 18.575 5.88314 18.4833 5.6998 18.3C5.51647 18.1167 5.4248 17.8833 5.4248 17.6C5.4248 17.3167 5.51647 17.0833 5.6998 16.9L10.5998 12L5.6998 7.09999C5.51647 6.91665 5.4248 6.68332 5.4248 6.39999C5.4248 6.11665 5.51647 5.88332 5.6998 5.69999C5.88314 5.51665 6.11647 5.42499 6.3998 5.42499C6.68314 5.42499 6.91647 5.51665 7.0998 5.69999L11.9998 10.6L16.8998 5.69999C17.0831 5.51665 17.3165 5.42499 17.5998 5.42499C17.8831 5.42499 18.1165 5.51665 18.2998 5.69999C18.4831 5.88332 18.5748 6.11665 18.5748 6.39999C18.5748 6.68332 18.4831 6.91665 18.2998 7.09999L13.3998 12L18.2998 16.9C18.4831 17.0833 18.5748 17.3167 18.5748 17.6C18.5748 17.8833 18.4831 18.1167 18.2998 18.3C18.1165 18.4833 17.8831 18.575 17.5998 18.575C17.3165 18.575 17.0831 18.4833 16.8998 18.3L11.9998 13.4Z"
-                        fill="black"
-                      />
-                    </g>
-                  </svg>
-                </p>
-              </div>
-            </div>
+        <div
+          id="{{ message.id }}"
+          [ngClass]="{
+            messageResiveContainer:
+              message.uid !== authService.currentUserSignal()?.uId,
+            messageSendContainer:
+              message.uid === authService.currentUserSignal()?.uId
+          }"
+        >
+          <div
+            [ngClass]="{
+              messagecontentContainer:
+                message.uid !== authService.currentUserSignal()?.uId,
+              messagecontentContainerSend:
+                message.uid === authService.currentUserSignal()?.uId
+            }"
+          >
             <div></div>
-            <div class="messageSend">
+            <div
+              [ngClass]="{
+                messageResive:
+                  message.uid !== authService.currentUserSignal()?.uId,
+                messageSend:
+                  message.uid === authService.currentUserSignal()?.uId
+              }"
+            >
               <div class="messageInfo">
-                <div class="messageTitle">
-                  <div></div>
-                  <div class="messageUserName">
-                    <p class="userName">{{ getUsername(message.uid) }}</p>
+                <div
+                  [ngClass]="{
+                    messageTitleResive:
+                      message.uid !== authService.currentUserSignal()?.uId,
+                    messageTitle:
+                      message.uid === authService.currentUserSignal()?.uId
+                  }"
+                >
+                  <div
+                    [ngClass]="{
+                      messageUserNameResive:
+                        message.uid !== authService.currentUserSignal()?.uId,
+                      messageUserName:
+                        message.uid === authService.currentUserSignal()?.uId
+                    }"
+                  >
+                    <p (click)="openUserProfil(message.uid)" class="userName">
+                      {{ getUser(message.uid).name }}
+                    </p>
                     <p class="smallGray">
-                      {{ getFormattedTime(message.hour, message.minute) }}
+                      {{
+                        chatAreaService.getFormattedTime(
+                          message.hour,
+                          message.minute
+                        )
+                      }}
                     </p>
                   </div>
-                </div>
-                <span *ngIf="message.message.length > 0">{{
-                  message.message
-                }}</span>
+                  <div
+                    [ngClass]="{
+                      hoverResiveMobile:
+                        message.uid !== authService.currentUserSignal()?.uId,
+                      hoverSendMobile:
+                        message.uid === authService.currentUserSignal()?.uId
+                    }"
+                  >
+                    <div *ngIf="!emojiselectior" class="hoverContent">
+                      <p (click)="addReaction('checkMark', message)">
+                        <img
+                          src="./../../../../assets/reactions/check-mark.png"
+                        />
+                      </p>
+                      <p (click)="addReaction('handshake', message)">
+                        <img
+                          src="./../../../../assets/reactions/handshake.png"
+                        />
+                      </p>
+                      <p (click)="openEmojiSelection()" class="cursor-pointer">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="25"
+                          height="24"
+                          viewBox="0 0 25 24"
+                          fill="none"
+                        >
+                          <mask
+                            id="mask0_65979_17710"
+                            style="mask-type: alpha"
+                            maskUnits="userSpaceOnUse"
+                            x="0"
+                            y="0"
+                            width="25"
+                            height="24"
+                          >
+                            <rect
+                              x="0.936523"
+                              width="24"
+                              height="24"
+                              fill="#D9D9D9"
+                            />
+                          </mask>
+                          <g mask="url(#mask0_65979_17710)">
+                            <path
+                              d="M12.9365 22C11.5532 22 10.2532 21.7375 9.03652 21.2125C7.81986 20.6875 6.76152 19.975 5.86152 19.075C4.96152 18.175 4.24902 17.1167 3.72402 15.9C3.19902 14.6833 2.93652 13.3833 2.93652 12C2.93652 10.6167 3.19902 9.31667 3.72402 8.1C4.24902 6.88333 4.96152 5.825 5.86152 4.925C6.76152 4.025 7.81986 3.3125 9.03652 2.7875C10.2532 2.2625 11.5532 2 12.9365 2C13.6865 2 14.4157 2.07917 15.124 2.2375C15.8324 2.39583 16.5032 2.625 17.1365 2.925C17.0699 3.09167 17.0199 3.26667 16.9865 3.45C16.9532 3.63333 16.9365 3.81667 16.9365 4C16.9365 4.23333 16.9615 4.45417 17.0115 4.6625C17.0615 4.87083 17.1282 5.06667 17.2115 5.25C16.5949 4.86667 15.9282 4.5625 15.2115 4.3375C14.4949 4.1125 13.7365 4 12.9365 4C10.7199 4 8.83236 4.77917 7.27402 6.3375C5.71569 7.89583 4.93652 9.78333 4.93652 12C4.93652 14.2167 5.71569 16.1042 7.27402 17.6625C8.83236 19.2208 10.7199 20 12.9365 20C15.1532 20 17.0407 19.2208 18.599 17.6625C20.1574 16.1042 20.9365 14.2167 20.9365 12C20.9365 11.3333 20.8574 10.6917 20.699 10.075C20.5407 9.45833 20.3199 8.875 20.0365 8.325C20.3032 8.54167 20.5949 8.70833 20.9115 8.825C21.2282 8.94167 21.5699 9 21.9365 9C22.0199 9 22.1074 8.99583 22.199 8.9875C22.2907 8.97917 22.3782 8.96667 22.4615 8.95C22.6115 9.43333 22.7282 9.92917 22.8115 10.4375C22.8949 10.9458 22.9365 11.4667 22.9365 12C22.9365 13.3833 22.674 14.6833 22.149 15.9C21.624 17.1167 20.9115 18.175 20.0115 19.075C19.1115 19.975 18.0532 20.6875 16.8365 21.2125C15.6199 21.7375 14.3199 22 12.9365 22ZM16.4365 11C16.8699 11 17.2282 10.8583 17.5115 10.575C17.7949 10.2917 17.9365 9.93333 17.9365 9.5C17.9365 9.06667 17.7949 8.70833 17.5115 8.425C17.2282 8.14167 16.8699 8 16.4365 8C16.0032 8 15.6449 8.14167 15.3615 8.425C15.0782 8.70833 14.9365 9.06667 14.9365 9.5C14.9365 9.93333 15.0782 10.2917 15.3615 10.575C15.6449 10.8583 16.0032 11 16.4365 11ZM9.43652 11C9.86986 11 10.2282 10.8583 10.5115 10.575C10.7949 10.2917 10.9365 9.93333 10.9365 9.5C10.9365 9.06667 10.7949 8.70833 10.5115 8.425C10.2282 8.14167 9.86986 8 9.43652 8C9.00319 8 8.64486 8.14167 8.36152 8.425C8.07819 8.70833 7.93652 9.06667 7.93652 9.5C7.93652 9.93333 8.07819 10.2917 8.36152 10.575C8.64486 10.8583 9.00319 11 9.43652 11ZM12.9365 17.5C14.1199 17.5 15.1657 17.175 16.074 16.525C16.9824 15.875 17.6365 15.0333 18.0365 14H7.83652C8.23652 15.0333 8.89069 15.875 9.79902 16.525C10.7074 17.175 11.7532 17.5 12.9365 17.5ZM20.9365 5H19.9365C19.6532 5 19.4157 4.90417 19.224 4.7125C19.0324 4.52083 18.9365 4.28333 18.9365 4C18.9365 3.71667 19.0324 3.47917 19.224 3.2875C19.4157 3.09583 19.6532 3 19.9365 3H20.9365V2C20.9365 1.71667 21.0324 1.47917 21.224 1.2875C21.4157 1.09583 21.6532 1 21.9365 1C22.2199 1 22.4574 1.09583 22.649 1.2875C22.8407 1.47917 22.9365 1.71667 22.9365 2V3H23.9365C24.2199 3 24.4574 3.09583 24.649 3.2875C24.8407 3.47917 24.9365 3.71667 24.9365 4C24.9365 4.28333 24.8407 4.52083 24.649 4.7125C24.4574 4.90417 24.2199 5 23.9365 5H22.9365V6C22.9365 6.28333 22.8407 6.52083 22.649 6.7125C22.4574 6.90417 22.2199 7 21.9365 7C21.6532 7 21.4157 6.90417 21.224 6.7125C21.0324 6.52083 20.9365 6.28333 20.9365 6V5Z"
+                              fill="black"
+                            />
+                          </g>
+                        </svg>
+                      </p>
 
-                <img
+                      <p
+                        *ngIf="
+                          message.uid === authService.currentUserSignal()?.uId
+                        "
+                        (click)="editMessage(message)"
+                      >
+                        <svg
+                          width="24px"
+                          height="24px"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g id="SVGRepo_iconCarrier">
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z"
+                              fill="#000000"
+                            ></path>
+                          </g>
+                        </svg>
+                      </p>
+                    </div>
+                    <div *ngIf="emojiselectior" class="emojiSelectior">
+                      <p (click)="addReaction('thumbsUp', message)">
+                        <img
+                          src="./../../../../assets/reactions/thumbs-up.png"
+                        />
+                      </p>
+                      <p (click)="addReaction('thumbsDown', message)">
+                        <img
+                          src="./../../../../assets/reactions/thumbs-down.png"
+                        />
+                      </p>
+                      <p (click)="addReaction('rocket', message)">
+                        <img src="./../../../../assets/reactions/rocket.png" />
+                      </p>
+                      <p (click)="addReaction('nerdFace', message)">
+                        <img
+                          src="./../../../../assets/reactions/nerd-face.png"
+                        />
+                      </p>
+                      <p (click)="addReaction('noted', message)">
+                        <img src="./../../../../assets/reactions/noted.png" />
+                      </p>
+                      <p (click)="addReaction('shushingFace', message)">
+                        <img
+                          src="./../../../../assets/reactions/shushing-face.png"
+                        />
+                      </p>
+
+                      <p (click)="closeEmojiSelector()">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <mask
+                            id="mask0_65979_13637"
+                            style="mask-type: alpha"
+                            maskUnits="userSpaceOnUse"
+                            x="0"
+                            y="0"
+                            width="24"
+                            height="24"
+                          >
+                            <rect width="24" height="24" fill="#D9D9D9" />
+                          </mask>
+                          <g mask="url(#mask0_65979_13637)">
+                            <path
+                              d="M11.9998 13.4L7.0998 18.3C6.91647 18.4833 6.68314 18.575 6.3998 18.575C6.11647 18.575 5.88314 18.4833 5.6998 18.3C5.51647 18.1167 5.4248 17.8833 5.4248 17.6C5.4248 17.3167 5.51647 17.0833 5.6998 16.9L10.5998 12L5.6998 7.09999C5.51647 6.91665 5.4248 6.68332 5.4248 6.39999C5.4248 6.11665 5.51647 5.88332 5.6998 5.69999C5.88314 5.51665 6.11647 5.42499 6.3998 5.42499C6.68314 5.42499 6.91647 5.51665 7.0998 5.69999L11.9998 10.6L16.8998 5.69999C17.0831 5.51665 17.3165 5.42499 17.5998 5.42499C17.8831 5.42499 18.1165 5.51665 18.2998 5.69999C18.4831 5.88332 18.5748 6.11665 18.5748 6.39999C18.5748 6.68332 18.4831 6.91665 18.2998 7.09999L13.3998 12L18.2998 16.9C18.4831 17.0833 18.5748 17.3167 18.5748 17.6C18.5748 17.8833 18.4831 18.1167 18.2998 18.3C18.1165 18.4833 17.8831 18.575 17.5998 18.575C17.3165 18.575 17.0831 18.4833 16.8998 18.3L11.9998 13.4Z"
+                              fill="black"
+                            />
+                          </g>
+                        </svg>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  class="messageMessage"
+                  *ngIf="message.message.length > 0"
+                  [innerHTML]="getMessage(message)"
+                ></span>
+
+                <div
                   *ngIf="message.fileUrl.length > 0"
-                  class="picture"
-                  src="{{ message.fileUrl }}"
-                />
+                  class="pictureContainer"
+                >
+                  <img
+                    class="picture cursor-pointer"
+                    src="{{ message.fileUrl }}"
+                    (click)="setImg(message.fileUrl)"
+                  />
+                </div>
               </div>
               <div class="profileImg">
                 <img
@@ -399,84 +285,147 @@
               </div>
             </div>
           </div>
-          <div class="reactionContainerSend">
-            <div
-              *ngIf="splitWords(message.checkMark) > 0"
-              class="reaction"
-              (click)="addReaction('checkMark', message)"
-              [ngClass]="{ userReacted: reacted(message.checkMark) }"
-            >
-              <div>{{ splitWords(message.checkMark) }}</div>
-              <img src="./../../../../assets/reactions/check-mark.png" />
-            </div>
 
+          <div
+            [ngClass]="{
+              reactionContainer:
+                message.uid !== authService.currentUserSignal()?.uId,
+              reactionContainerSend:
+                message.uid === authService.currentUserSignal()?.uId
+            }"
+          >
             <div
-              *ngIf="splitWords(message.handshake) > 0"
-              class="reaction"
-              (click)="addReaction('handshake', message)"
-              [ngClass]="{ userReacted: reacted(message.handshake) }"
+              *ngFor="let reaction of reactions"
+              [ngClass]="{
+                hidden: !chatAreaService.hasReaction(message, reaction.name)
+              }"
             >
-              <div>{{ splitWords(message.handshake) }}</div>
-              <img src="./../../../../assets/reactions/handshake.png" />
-            </div>
-            <div
-              *ngIf="splitWords(message.thumbsUp) > 0"
-              class="reaction"
-              (click)="addReaction('thumbsUp', message)"
-              [ngClass]="{ userReacted: reacted(message.thumbsUp) }"
-            >
-              <div>{{ splitWords(message.thumbsUp) }}</div>
-              <img src="./../../../../assets/reactions/thumbs-up.png" />
-            </div>
+              <div
+                class="reaction"
+                [ngClass]="{
+                  userReacted: chatAreaService.hasUserReacted(
+                    message,
+                    reaction.name
+                  )
+                }"
+                (click)="addReaction(reaction.name, message)"
+              >
+                <div
+                  [ngClass]="{
+                    reactionHover:
+                      message.uid !== authService.currentUserSignal()?.uId,
+                    reactionHoverSend:
+                      message.uid === authService.currentUserSignal()?.uId
+                  }"
+                >
+                  <p>
+                    <span
+                      *ngFor="
+                        let user of splitStringBySpace(message[reaction.name]);
+                        let i = index
+                      "
+                    >
+                      <!-- Zeige die Namen an, wenn es 3 oder weniger gibt -->
+                      <span
+                        *ngIf="
+                          splitStringBySpace(message[reaction.name]).length <= 3
+                        "
+                      >
+                        {{ getUser(user).name }}
+                      </span>
 
-            <div
-              *ngIf="splitWords(message.thumbsDown) > 0"
-              class="reaction"
-              (click)="addReaction('thumbsDown', message)"
-              [ngClass]="{ userReacted: reacted(message.thumbsDown) }"
-            >
-              <div>{{ splitWords(message.thumbsDown) }}</div>
-              <img src="./../../../../assets/reactions/thumbs-down.png" />
-            </div>
+                      <!-- Füge Komma nur hinzu, wenn es nicht der letzte Name ist -->
+                      <span
+                        *ngIf="
+                          splitStringBySpace(message[reaction.name]).length <=
+                            3 &&
+                          i <
+                            splitStringBySpace(message[reaction.name]).length -
+                              2
+                        "
+                        >,</span
+                      >
 
-            <div
-              *ngIf="splitWords(message.rocket) > 0"
-              class="reaction"
-              (click)="addReaction('rocket', message)"
-              [ngClass]="{ userReacted: reacted(message.rocket) }"
-            >
-              <div>{{ splitWords(message.rocket) }}</div>
-              <img src="./../../../../assets/reactions/rocket.png" />
-            </div>
+                      <!-- Füge "und" nur vor dem letzten Namen hinzu -->
+                      <span
+                        *ngIf="
+                          splitStringBySpace(message[reaction.name]).length <=
+                            3 &&
+                          i ===
+                            splitStringBySpace(message[reaction.name]).length -
+                              2
+                        "
+                      >
+                        und
+                      </span>
 
-            <div
-              *ngIf="splitWords(message.nerdFace) > 0"
-              class="reaction"
-              (click)="addReaction('nerdFace', message)"
-              [ngClass]="{ userReacted: reacted(message.nerdFace) }"
-            >
-              <div>{{ splitWords(message.nerdFace) }}</div>
-              <img src="./../../../../assets/reactions/nerd-face.png" />
-            </div>
+                      <!-- Zeige nur zwei Namen an und dann "und X weitere", wenn es mehr als 3 Namen gibt -->
+                      <span
+                        *ngIf="
+                          splitStringBySpace(message[reaction.name]).length >
+                            3 && i < 2
+                        "
+                      >
+                        {{ getUser(user).name }},
+                      </span>
+                    </span>
+                    <a
+                      class="openAllReactions"
+                      *ngIf="
+                        chatAreaService.splitWords(message[reaction.name]) > 3
+                      "
+                      (click)="
+                        channelSelectionService.setselectedReaction(
+                          message[reaction.name]
+                        );
+                        $event.stopPropagation()
+                      "
+                    >
+                      <p>
+                        und
+                        {{
+                          chatAreaService.splitWords(message[reaction.name]) -
+                            2 +
+                            " "
+                        }}
+                      </p>
+                      <p
+                        *ngIf="
+                          chatAreaService.splitWords(message[reaction.name]) ===
+                          3
+                        "
+                      >
+                        weiter
+                      </p>
+                      <p
+                        *ngIf="
+                          chatAreaService.splitWords(message[reaction.name]) > 3
+                        "
+                      >
+                        weitere
+                      </p>
+                    </a>
+                  </p>
 
-            <div
-              *ngIf="splitWords(message.noted) > 0"
-              class="reaction"
-              (click)="addReaction('noted', message)"
-              [ngClass]="{ userReacted: reacted(message.noted) }"
-            >
-              <div>{{ splitWords(message.noted) }}</div>
-              <img src="./../../../../assets/reactions/noted.png" />
-            </div>
+                  <span
+                    *ngIf="
+                      chatAreaService.splitWords(message[reaction.name]) > 1
+                    "
+                    >haben reagiert</span
+                  >
+                  <span
+                    *ngIf="
+                      chatAreaService.splitWords(message[reaction.name]) === 1
+                    "
+                    >hat reagiert</span
+                  >
+                </div>
 
-            <div
-              *ngIf="splitWords(message.shushingFace) > 0"
-              class="reaction"
-              (click)="addReaction('shushingFace', message)"
-              [ngClass]="{ userReacted: reacted(message.shushingFace) }"
-            >
-              <div>{{ splitWords(message.shushingFace) }}</div>
-              <img src="./../../../../assets/reactions/shushing-face.png" />
+                <div>
+                  {{ chatAreaService.splitWords(message[reaction.name]) }}
+                </div>
+                <img [src]="reaction.icon" [alt]="reaction.name" />
+              </div>
             </div>
           </div>
         </div>
@@ -490,57 +439,27 @@
         set="twitter"
         [darkMode]="false"
       ></emoji-mart>
+
       <div *ngIf="this.openEditMessage == message.id">
         <div class="messageEditContainer">
           <div class="textareaContainer">
-            <textarea
-              #messageTextarea
-              value="{{ this.editedMessage }}"
-              (input)="onMessageInput($event)"
-            ></textarea>
+            <div
+              id="inputChatArea"
+              class="textAreaChatArea"
+              contenteditable="true"
+              type="text"
+              #inputChatArea
+              (input)="onInputChange(message)"
+            ></div>
+
             <div class="messageEditContainerFooter">
-              <!-- <div (click)="openEmojiSelector()" class="cursor-pointer">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g id="sentiment_satisfied">
-                    <mask
-                      id="mask0_65979_12983"
-                      style="mask-type: alpha"
-                      maskUnits="userSpaceOnUse"
-                      x="0"
-                      y="0"
-                      width="24"
-                      height="24"
-                    >
-                      <rect
-                        id="Bounding box"
-                        width="24"
-                        height="24"
-                        fill="#D9D9D9"
-                      />
-                    </mask>
-                    <g mask="url(#mask0_65979_12983)">
-                      <path
-                        id="sentiment_satisfied_2"
-                        d="M15.5 11C15.9333 11 16.2917 10.8583 16.575 10.575C16.8583 10.2917 17 9.93333 17 9.5C17 9.06667 16.8583 8.70833 16.575 8.425C16.2917 8.14167 15.9333 8 15.5 8C15.0667 8 14.7083 8.14167 14.425 8.425C14.1417 8.70833 14 9.06667 14 9.5C14 9.93333 14.1417 10.2917 14.425 10.575C14.7083 10.8583 15.0667 11 15.5 11ZM8.5 11C8.93333 11 9.29167 10.8583 9.575 10.575C9.85833 10.2917 10 9.93333 10 9.5C10 9.06667 9.85833 8.70833 9.575 8.425C9.29167 8.14167 8.93333 8 8.5 8C8.06667 8 7.70833 8.14167 7.425 8.425C7.14167 8.70833 7 9.06667 7 9.5C7 9.93333 7.14167 10.2917 7.425 10.575C7.70833 10.8583 8.06667 11 8.5 11ZM12 17.5C12.95 17.5 13.8167 17.2877 14.6 16.863C15.3833 16.4377 15.9917 15.9 16.425 15.25C16.625 14.95 16.6543 14.6667 16.513 14.4C16.371 14.1333 16.15 14 15.85 14C15.7333 14 15.6167 14.0333 15.5 14.1C15.3833 14.1667 15.2917 14.25 15.225 14.35C14.8583 14.85 14.4 15.25 13.85 15.55C13.3 15.85 12.6833 16 12 16C11.3167 16 10.7 15.85 10.15 15.55C9.6 15.25 9.14167 14.85 8.775 14.35C8.70833 14.25 8.61267 14.1667 8.488 14.1C8.36267 14.0333 8.24167 14 8.125 14C7.84167 14 7.62933 14.129 7.488 14.387C7.346 14.6457 7.36667 14.9167 7.55 15.2C8 15.8833 8.61667 16.4377 9.4 16.863C10.1833 17.2877 11.05 17.5 12 17.5ZM12 22C10.6167 22 9.31667 21.7373 8.1 21.212C6.88333 20.6873 5.825 19.975 4.925 19.075C4.025 18.175 3.31267 17.1167 2.788 15.9C2.26267 14.6833 2 13.3833 2 12C2 10.6167 2.26267 9.31667 2.788 8.1C3.31267 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.31233 8.1 2.787C9.31667 2.26233 10.6167 2 12 2C13.3833 2 14.6833 2.26233 15.9 2.787C17.1167 3.31233 18.175 4.025 19.075 4.925C19.975 5.825 20.6873 6.88333 21.212 8.1C21.7373 9.31667 22 10.6167 22 12C22 13.3833 21.7373 14.6833 21.212 15.9C20.6873 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6873 15.9 21.212C14.6833 21.7373 13.3833 22 12 22ZM12 20C14.2167 20 16.1043 19.221 17.663 17.663C19.221 16.1043 20 14.2167 20 12C20 9.78333 19.221 7.89567 17.663 6.337C16.1043 4.779 14.2167 4 12 4C9.78333 4 7.896 4.779 6.338 6.337C4.77933 7.89567 4 9.78333 4 12C4 14.2167 4.77933 16.1043 6.338 17.663C7.896 19.221 9.78333 20 12 20Z"
-                        fill="#686868"
-                      />
-                    </g>
-                  </g>
-                </svg>
-              </div> -->
               <div></div>
               <div>
                 <button class="cancelEdit" (click)="editMessage(message)">
                   Abbrechen
                 </button>
-                <button class="saveEdit" (click)="saveEdit(message)">
-                  Speichern
+                <button class="saveEdit" (click)="saveEdit($event, message)">
+                  {{ returnEditMessageLengh(message) }}
                 </button>
               </div>
             </div>

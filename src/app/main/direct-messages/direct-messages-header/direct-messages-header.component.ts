@@ -33,20 +33,24 @@ import { AuthService } from '../../../services/auth.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { DirectMessageSelectionService } from '../../../services/direct-message-selection.service';
 import { DirectMessage } from '../../../../models/direct-message.class';
+import { SidebarService } from '../../../services/sidebar.service';
 
 @Component({
   selector: 'app-direct-messages-header',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './direct-messages-header.component.html',
   styleUrl: './direct-messages-header.component.scss',
 })
 export class DirectMessagesHeaderComponent implements OnInit {
   authService = inject(AuthService);
+  channelInfo = inject(SidebarService);
   allUser: any = [];
   messageUser: any;
   imageUrl: any;
   userName: any;
+  userUid: any;
+  user: any;
   constructor(
     private firestore: Firestore,
     public directMessageSelectionService: DirectMessageSelectionService
@@ -54,8 +58,21 @@ export class DirectMessagesHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.subUser();
+    this.setOpenUser();
   }
 
+  /**
+   * Sets the current user ID from the authentication service.
+   */
+  setOpenUser() {
+    this.user = this.authService.currentUserSignal()?.uId;
+  }
+
+  /**
+   * Subscribes to user updates from the Firestore database.
+   * Fetches a list of users and updates the local user list.
+   * The list is limited to 1000 users.
+   */
   subUser() {
     const q = query(collection(this.firestore, 'Users'), limit(1000));
     onSnapshot(q, (list) => {
@@ -67,6 +84,10 @@ export class DirectMessagesHeaderComponent implements OnInit {
     });
   }
 
+  /**
+   * Subscribes to the selected channel for direct messages.
+   * Updates the current message user and retrieves the user's profile.
+   */
   setUser() {
     this.directMessageSelectionService
       .getSelectedChannel()
@@ -76,17 +97,29 @@ export class DirectMessagesHeaderComponent implements OnInit {
       });
   }
 
+  /**
+   * Retrieves the profile of the currently selected user.
+   * Updates the image URL, username, and user UID based on the selected user.
+   */
   getProfile() {
     for (let i = 0; i < this.allUser.length; i++) {
       const element = this.allUser[i];
       if (element.uid === this.messageUser) {
         this.imageUrl = element.image;
         this.userName = element.name;
+        this.userUid = element.uid;
       }
     }
   }
 
-  setNoteObjectUser(obj: any, id: string) {
+  /**
+   * Creates a user object from the provided data.
+   *
+   * @param {Object} obj - The user data object.
+   * @param {string} id - The ID of the user.
+   * @returns {Object} - The structured user object with email, image, name, and uid.
+   */
+  setNoteObjectUser(obj: any, id: string): object {
     return {
       email: obj.email || '',
       image: obj.image || '',

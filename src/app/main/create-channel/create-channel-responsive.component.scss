@@ -60,3 +60,13 @@
         overflow-y: auto;
     }
 }
+
+@media(max-width:500px) {
+    .create-channel-dialog {
+        justify-content: flex-start;
+    }
+
+    .description, .dialog-title-container, .channel-name-container {
+        max-width: calc(100vw - 25px);
+    }
+}

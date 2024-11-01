@@ -17,10 +17,23 @@ export class HeaderComponent {
   hideOrShowPopUp = inject(SidebarService);
   responsiveService = inject(ResponsiveService);
 
+  /**
+ * Opens the pop-up dialog.
+ * 
+ * This method sets the `popUpOpen` property to true, 
+ * allowing the user to view and interact with the pop-up dialog.
+ */
   openDialog(){
    this.hideOrShowPopUp.popUpOpen = true;
   }
 
+  /**
+ * Resets the view to the sidebar.
+ * 
+ * This method closes any open channels, direct messages, and threads, 
+ * and checks the window width. If the window width is less than 
+ * 1000 pixels, it sets the sidebar to open.
+ */
   backToSidebar() {
     this.responsiveService.isChannelOpen = false;
     this.responsiveService.isDirectMessageOpen = false;

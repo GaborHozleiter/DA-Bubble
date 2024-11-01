@@ -97,7 +97,11 @@
                       </div>
                 </div>
             }
-            <button type="submit" class="save" (click)="saveChannel()"><span class="fs-18">Erstellen</span></button>
+            @if(this.hideOrShowSidebar.selectedUsers.length > 0 || this.hideOrShowSidebar.addAllUsersToChannel){
+                <button type="submit" class="save" (click)="saveChannel()"><span class="fs-18">Erstellen</span></button>
+            }@else{
+                <button type="submit" class="save-empty"><span class="fs-18 white">Erstellen</span></button>
+            } 
         </div> 
         @if(this.hideOrShowSidebar.addSelectedUsersToChannel){
             <div class="responsive-white-container"></div>

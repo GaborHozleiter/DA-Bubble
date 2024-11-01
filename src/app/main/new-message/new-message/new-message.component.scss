@@ -18,3 +18,11 @@ app-new-message-header {
   display: block;
   height: 154px;
 }
+
+@media (max-width: 500px) {
+  .contentThreadClosed {
+    margin-right: 0;
+}
+
+
+}

@@ -27,7 +27,10 @@ import { SidebarService } from '../../../services/sidebar.service';
   standalone: true,
   imports: [CommonModule, FormsModule, PickerComponent],
   templateUrl: './channel-message-input.component.html',
-  styleUrl: './channel-message-input.component.scss',
+  styleUrls: [
+    './channel-message-input.component.scss',
+    './channel-message-input.component.responsive.scss',
+  ],
 })
 export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
   message = new Message();
@@ -59,9 +62,10 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
   tagedUser: any = [];
   tagedChannel: any = [];
   lastAtPosition: number | null = null;
-  showPlaceholder: boolean = true;
-
+  showPlaceholder: boolean = false;
+  currentUserId: any;
   allowMessageSend: boolean = false;
+
   @ViewChild('messageTextarea') messageTextarea: any;
   channelInfo = inject(SidebarService);
   sidebarService = inject(SidebarService);
@@ -72,36 +76,51 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     private fileUploadeService: FileUploadeService
   ) {}
 
-  //speichert wercher channel gerade ausgewählt ist
+  /**
+   * Initializes the component and subscribes to the selected channel updates.
+   */
   ngOnInit(): void {
     this.channelSelectionService.getSelectedChannel().subscribe((channel) => {
-      this.currentChannelId = channel;
-      this.subUser();
-      this.subChannels();
+      if (channel != this.currentChannelId) {
+        this.currentChannelId = channel;
+        this.subUser();
+        this.subChannels();
+        this.clearInput();
+        // this.setFokus();
+      }
     });
   }
 
-  ngAfterViewInit(): void {
-    this.channelSelectionService.getSelectedChannel().subscribe((channel) => {
-      this.clearInput();
-    });
+  /**
+   * After the view has been initialized, clears the input when the selected channel changes
+   */
+  ngAfterViewInit(): void {}
+
+  setFokus() {
+    console.log('set fokus');
+    setTimeout(() => {
+      this.messageTextarea.nativeElement.focus();
+    }, 100);
   }
 
+  /**
+   * Clears the input field by removing all child nodes and blurring the input element.
+   */
   clearInput() {
     if (typeof document !== 'undefined') {
       const div = document.getElementById('input');
 
       if (div) {
-        const childNodes = Array.from(div.childNodes); // Erstelle eine Kopie der Knoten
+        const childNodes = Array.from(div.childNodes); // Create a copy of the nodes
         for (const node of childNodes) {
           if (node.nodeType === Node.TEXT_NODE) {
-            node.nodeValue = ''; // Textknoten leeren
+            node.nodeValue = ''; // Clear text node
           } else if (node.nodeName === 'SPAN') {
-            node.remove(); // Entferne span-Element
+            node.remove(); // Remove span element
           }
         }
 
-        // Entferne den Fokus vom input-div
+        // Remove focus from the input div
         (div as HTMLElement).blur();
 
         this.showPlaceholder = true;
@@ -109,18 +128,28 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Hides the placeholder in the input area.
+   */
   removePlaceholder() {
     this.showPlaceholder = false;
   }
 
+  /**
+   * Restores the placeholder if the message textarea is empty.
+   */
   restorePlaceholder() {
     if (this.messageTextarea.nativeElement.innerText.trim() !== '') {
+      // Do nothing if the textarea is not empty
     } else {
       this.showPlaceholder = true;
     }
   }
 
-  //speichert die bilder in den cache
+  /**
+   * Saves the selected file to the cache.
+   * If no file is selected, logs an error to the console.
+   */
   async saveFileToCache() {
     if (this.selectedFile) {
       this.allowMessageSend = true;
@@ -134,7 +163,9 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     }
   }
 
-  //löscht die bilder aus den cache
+  /**
+   * Deletes the selected file from the cache.
+   */
   deleteFile() {
     let name = this.selectedFile!.name;
     this.fileUploadeService.deleteFile(name!, 'messangeCache');
@@ -143,7 +174,12 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     this.allowMessageSend = false;
   }
 
-  //läd die bilder in den cache wenn sie ausgewählt wurde
+  /**
+   * Handles the event when a file is selected.
+   * Deletes the previously selected file and saves the new file to cache.
+   *
+   * @param {any} event - The event triggered by file selection.
+   */
   onFileSelected(event: any) {
     if (this.FileUrl) {
       this.deleteFile();
@@ -152,10 +188,18 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     this.saveFileToCache();
   }
 
+  /**
+   * Saves the message to the Firestore database.
+   *
+   * @param {any} event - The event triggered by the form submission.
+   * @returns {Promise<void>} - A promise that resolves when the message is saved.
+   */
   async saveMessage(event: any) {
+    let messageId = '';
     event?.preventDefault();
     this.tagUserSelector = false;
-    // Finde das 'contenteditable' Div Element
+
+    // Find the 'contenteditable' div element
     const messageTextarea = document.querySelector('.textArea') as HTMLElement;
 
     if (messageTextarea) {
@@ -167,58 +211,79 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
           child.nodeType === Node.ELEMENT_NODE &&
           (child as HTMLElement).tagName === 'SPAN'
         ) {
-          // Es ist ein span-Element, extrahiere das data-uid
+          // It's a span element, extract the data-uid
           const uid = (child as HTMLElement).getAttribute('data-uid');
           if (uid) {
-            // Überprüfe das erste Zeichen des data-uid
+            // Check the first character of the data-uid
             const firstChar = (child as HTMLElement).innerHTML.charAt(0);
             if (firstChar === '@') {
               result += `₿ЯæŶ∆Ωг${uid} `;
             } else if (firstChar === '#') {
               result += `₣Ж◊ŦΨø℧${uid} `;
             } else {
-              // Standardfall, falls das erste Zeichen weder @ noch # ist
+              // Default case if the first character is neither @ nor #
               result += `${uid} `;
             }
           }
         } else if (child.nodeType === Node.TEXT_NODE) {
-          // Es ist ein Textknoten, füge den Textinhalt hinzu
+          // It's a text node, add the text content
           result += child.textContent;
         }
       });
 
-      // Speichere das Ergebnis in der message.message Variable
-      this.message.message = result.trim(); // Ergebnis z.B.: "asddasd @zqk0MWq9TcWYUdYtXpTTKsnFro12 sdasad @7gMhlfm1xsVsPe7Hq7kdIPzLMQJ2"
+      // Save the result in the message.message variable
+      this.message.message = result.trim(); // Result example: "asddasd @zqk0MWq9TcWYUdYtXpTTKsnFro12 sdasad @7gMhlfm1xsVsPe7Hq7kdIPzLMQJ2"
     }
 
     if (this.message.message.length < 1 && !this.selectedFile) {
-      return;
+      return; // Exit if there is no message and no file
     }
-    // Überprüfe, ob eine Datei ausgewählt ist und speichere sie
+
+    // Check if a file is selected and save it
     if (this.selectedFile) {
       await this.saveFile();
       this.addIMG();
       this.deleteFile();
     }
 
-    // Aktualisiere die Zeit
+    // Update the time
     this.updateDateTime();
 
-    // Speichere die Nachricht in der Firestore-Datenbank
+    // Save the message in the Firestore database
     await addDoc(
       collection(this.firestore, 'Channels', this.currentChannelId, 'messages'),
+      this.toJSON()
+    )
+      .then((docRef) => {
+        messageId = docRef.id; // Save the message ID
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    await addDoc(
+      collection(
+        this.firestore,
+        'Channels',
+        this.currentChannelId,
+        'messages',
+        messageId,
+        'thread'
+      ),
       this.toJSON()
     ).catch((err) => {
       console.error(err);
     });
 
-    //input leeren
+    // Clear the input
     this.clearInput();
     this.tagUserSelector = false;
     this.tagChannelSelector = false;
   }
 
-  //wenn ein bild ausgewählt ist wird diese ins storage hochgeladen und dessen url in der variable FileUrl gespeichert
+  /**
+   * Uploads the selected file to storage and saves its URL in the FileUrl variable.
+   */
   async saveFile() {
     if (this.selectedFile) {
       const imageUrl = await this.fileUploadeService.uploadFile(
@@ -229,7 +294,11 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     }
   }
 
-  //gibt die vorhandenen informationen als JSON zurück
+  /**
+   * Returns the existing message information as a JSON object.
+   *
+   * @returns {Object} - The message data in JSON format.
+   */
   toJSON() {
     return {
       id: this.message.id,
@@ -255,87 +324,107 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     };
   }
 
-  //erstellt die daten der aktuellen zeit
+  /**
+   * Updates the current date and time information in the message object.
+   */
   updateDateTime(): void {
     const now = new Date();
     this.message.weekday = now.toLocaleDateString('de-DE', { weekday: 'long' });
     this.message.year = now.getFullYear();
-    this.message.month = now.getMonth() + 1; // Monate sind nullbasiert
+    this.message.month = now.getMonth() + 1; // Months are zero-based
     this.message.day = now.getDate();
     this.message.hour = now.getHours();
     this.message.minute = now.getMinutes();
     this.message.seconds = now.getSeconds();
-    this.message.milliseconds = now.getMilliseconds(); // Millisekunden hinzufügen
+    this.message.milliseconds = now.getMilliseconds(); // Add milliseconds
     this.message.uid = this.authService.currentUserSignal()?.uId;
   }
 
-  //fügt die restlichen variablen ins model
+  /**
+   * Adds the file URL to the message object.
+   */
   addIMG() {
     this.message.fileUrl = this.FileUrl;
   }
 
+  /**
+   * Inserts an emoji into the message textarea at the current cursor position.
+   *
+   * @param {any} emoji - The emoji to insert.
+   */
   insertEmoji(emoji: any) {
-    // Holen Sie sich das referenzierte `div`-Element
+    // Get the referenced `div` element
     const textarea = this.messageTextarea.nativeElement;
 
-    // Stellen Sie sicher, dass das `div` den Fokus hat
+    // Ensure the `div` is focused
     textarea.focus();
 
-    // Aktuelle Selektion erhalten
+    // Get the current selection
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) {
-      console.error('Keine gültige Selektion gefunden.');
+      console.error('No valid selection found.');
       return;
     }
 
-    // Den aktuellen Range (Bereich) erhalten
+    // Get the current range
     const range = selection.getRangeAt(0);
 
-    // Sicherstellen, dass der Range im `textarea` liegt
+    // Ensure the range is within the `textarea`
     const commonAncestor = range.commonAncestorContainer;
     if (!textarea.contains(commonAncestor)) {
-      console.error('Selektion liegt außerhalb des `textarea`.');
+      console.error('Selection is outside of the `textarea`.');
       return;
     }
 
-    // Emoji Text extrahieren
+    // Extract the emoji text
     const emojiText = emoji.native || emoji.emoji || emoji;
     if (!emojiText) {
-      console.error('Kein gültiger Emoji-Text gefunden.');
+      console.error('No valid emoji text found.');
       return;
     }
 
-    // Emoji als Textnode erstellen
+    // Create a text node for the emoji
     const textNode = document.createTextNode(emojiText);
 
-    // Range auf das Ende des Inhalts setzen
-    range.selectNodeContents(textarea); // Wählt den gesamten Inhalt des `div`
-    range.collapse(false); // Verschiebt den Cursor ans Ende
+    // Set the range to the end of the content
+    range.selectNodeContents(textarea); // Selects the entire content of the `div`
+    range.collapse(false); // Moves the cursor to the end
 
-    // Textnode am Ende des Inhalts einfügen
+    // Insert the text node at the end of the content
     range.insertNode(textNode);
 
-    // Den Cursor direkt nach dem eingefügten Emoji setzen
+    // Move the cursor directly after the inserted emoji
     range.setStartAfter(textNode);
     range.setEndAfter(textNode);
 
-    // Selektion aktualisieren
+    // Update the selection
     selection.removeAllRanges();
     selection.addRange(range);
 
-    // Scroll position anpassen (optional, falls benötigt)
+    // Adjust scroll position (optional, if needed)
     textarea.scrollTop = textarea.scrollHeight;
   }
 
+  /**
+   * Adds the selected emoji to the message textarea.
+   *
+   * @param {any} $event - The event triggered by the emoji selection.
+   */
   addEmoji($event: any) {
     let element = $event;
     this.insertEmoji(element['emoji'].native);
   }
 
+  /**
+   * Toggles the visibility of the emoji selector.
+   */
   openEmojiSelector() {
     this.emojiSelector = !this.emojiSelector;
   }
 
+  /**
+   * Subscribes to user updates from Firestore and stores them in the allUser array.
+   */
   subUser() {
     const q = query(collection(this.firestore, 'Users'), limit(1000));
     onSnapshot(q, (list) => {
@@ -344,8 +433,16 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
         this.allUser.push(this.setNoteObjectUser(element.data(), element.id));
       });
     });
+    this.currentUserId = this.authService.currentUserSignal()?.uId;
   }
 
+  /**
+   * Creates a user object from the Firestore data.
+   *
+   * @param {any} obj - The user data from Firestore.
+   * @param {string} id - The user ID.
+   * @returns {Object} - The formatted user object.
+   */
   setNoteObjectUser(obj: any, id: string) {
     return {
       email: obj.email || '',
@@ -355,6 +452,9 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     };
   }
 
+  /**
+   * Subscribes to channel updates from Firestore and stores them in the allChannel array.
+   */
   subChannels() {
     const q = query(collection(this.firestore, 'Channels'), limit(1000));
     onSnapshot(q, (list) => {
@@ -372,6 +472,13 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * Creates a channel object from the Firestore data.
+   *
+   * @param {any} obj - The channel data from Firestore.
+   * @param {string} id - The channel ID.
+   * @returns {Object} - The formatted channel object.
+   */
   setNoteChannel(obj: any, id: string) {
     return {
       id: id,
@@ -383,6 +490,12 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     };
   }
 
+  /**
+   * Retrieves a user object by its UID from the allUser array.
+   *
+   * @param {any} uid - The user ID to search for.
+   * @returns {Object|undefined} - The user object if found, otherwise undefined.
+   */
   getUser(uid: any) {
     for (let i = 0; i < this.allUser.length; i++) {
       const element = this.allUser[i];
@@ -392,27 +505,50 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Clears the tagging of users.
+   */
   clearTagUser() {
     this.clearTag('@');
   }
 
+  /**
+   * Adds a tag for a user in the message textarea.
+   *
+   * @param {string} userName - The name of the user to tag.
+   * @param {any} uid - The user ID.
+   */
   addTagUser(userName: string, uid: any) {
     this.addTag('@', userName, uid, this.openUserProfil);
   }
 
+  /**
+   * Clears the tagging of channels.
+   */
   clearTagChannel() {
     this.clearTag('#');
   }
 
+  /**
+   * Adds a tag for a channel in the message textarea.
+   *
+   * @param {string} channelName - The name of the channel to tag.
+   * @param {any} uid - The channel ID.
+   */
   addTagChannel(channelName: string, uid: any) {
     this.addTag('#', channelName, uid, this.openChannel);
   }
 
+  /**
+   * Clears the specified tag from the input.
+   *
+   * @param {string} tagSymbol - The tag symbol to clear (e.g., '@' or '#').
+   */
   clearTag(tagSymbol: string) {
     const inputElement = document.getElementById('input') as HTMLElement;
 
     if (!inputElement) {
-      console.error('Das Eingabeelement wurde nicht gefunden.');
+      console.error('Input element not found.');
       return;
     }
 
@@ -475,11 +611,17 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
       } else {
         this.tagUserSelector = false;
       }
-    } else {
-      console.log(`Kein ${tagSymbol}-Zeichen gefunden.`);
     }
   }
 
+  /**
+   * Adds a tag to the input element at the specified position.
+   *
+   * @param {string} tagSymbol - The symbol associated with the tag (e.g., '@' or '#').
+   * @param {string} tag - The text of the tag.
+   * @param {any} uid - The unique identifier associated with the tag.
+   * @param {function} openFunction - The function to call when the tag is clicked, receiving the uid as a parameter.
+   */
   addTag(
     tagSymbol: string,
     tag: string,
@@ -573,6 +715,11 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     this.tagUserSelector = false;
   }
 
+  /**
+   * Handles keydown events to determine the cursor position and process tags.
+   *
+   * @param {KeyboardEvent} event - The keyboard event triggered by the user.
+   */
   onKeyDown(event: KeyboardEvent) {
     const inputElement = event.target as HTMLElement;
 
@@ -580,7 +727,7 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
       const selection = window.getSelection();
       const range = selection?.getRangeAt(0);
 
-      // Berechne die tatsächliche Cursor-Position über den gesamten Textinhalt
+      // Calculate the actual cursor position based on the entire text content
       let cursorPosition = 0;
       const iterator = document.createNodeIterator(
         inputElement,
@@ -599,7 +746,7 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
         }
       }
 
-      // Debugging: Originaler Text im Input-Element
+      // Debugging: Original text in the input element
       const originalText = inputElement.textContent || '';
 
       if (originalText.length > 0) {
@@ -608,14 +755,14 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
         this.allowMessageSend = false;
       }
 
-      // Text ohne Spans
+      // Text without spans
       const text = this.getTextWithoutSpans(inputElement) || '';
 
-      // Finde das letzte @- oder #-Zeichen vor dem Cursor
+      // Find the last @ or # character before the cursor
       let atIndex = text.lastIndexOf('@', cursorPosition - 1);
       let hashIndex = text.lastIndexOf('#', cursorPosition - 1);
 
-      // Funktion zum Verarbeiten von Erwähnungen (@) und Kanälen (#)
+      // Function to process mentions (@) and channels (#)
       const processTag = (index: number, type: 'user' | 'channel') => {
         let textAfterTag = text.substring(index + 1, cursorPosition);
         const spaceIndex = textAfterTag.search(/\s/);
@@ -631,7 +778,7 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
             this.userSearch = searchTerm;
             this.tagUserSelector = true;
             this.tagChannelSelector = false;
-            // Suche nach passenden Benutzern
+            // Search for matching users
             this.allUids = [];
             for (let i = 0; i < this.currentChannel.uids.length; i++) {
               const element = this.currentChannel.uids[i];
@@ -644,12 +791,16 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
             this.channelSearch = searchTerm;
             this.tagChannelSelector = true;
             this.tagUserSelector = false;
-            // Suche nach passenden Kanälen
+            // Search for matching channels
             this.allChannelArray = [];
             for (let i = 0; i < this.allChannel.length; i++) {
               const channel = this.allChannel[i];
               const channelName = channel.name.toLowerCase();
-              if (channelName.includes(this.channelSearch)) {
+              if (
+                (channelName.includes(this.channelSearch) &&
+                  channel.uids.includes(this.currentUserId)) ||
+                channel.id == 'wXzgNEb34DReQq3fEsAo7VTcXXNA'
+              ) {
                 this.allChannelArray.push(channel);
               }
             }
@@ -663,7 +814,7 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
         }
       };
 
-      // Prüfe, ob der Cursor in einem @- oder #-Bereich ist
+      // Check if the cursor is in an @ or # area
       if (atIndex !== -1 && (hashIndex === -1 || atIndex > hashIndex)) {
         processTag(atIndex, 'user');
       } else if (hashIndex !== -1) {
@@ -675,6 +826,12 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     }, 0);
   }
 
+  /**
+   * Retrieves text from the given element without span elements.
+   *
+   * @param {HTMLElement} element - The HTML element from which to retrieve text.
+   * @returns {string} The text content without span elements.
+   */
   getTextWithoutSpans(element: HTMLElement): string {
     let text = '';
     element.childNodes.forEach((node) => {
@@ -690,6 +847,9 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     return text;
   }
 
+  /**
+   * Opens the tag input for a user when the last character is "@".
+   */
   openTag() {
     const inputElement = document.getElementById('input') as HTMLElement;
 
@@ -698,36 +858,36 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    // Überprüfen, ob das letzte Zeichen ein @ ist
+    // Check if the last character is an @
     const lastChild =
       inputElement.childNodes[inputElement.childNodes.length - 1];
     if (lastChild && lastChild.nodeType === Node.TEXT_NODE) {
       if (lastChild.textContent!.endsWith('@')) {
-        // @-Zeichen entfernen
+        // Remove the @ symbol
         lastChild.textContent = lastChild.textContent!.slice(0, -1);
 
-        // Optional: Wenn kein Text mehr vorhanden ist, den leeren Textknoten entfernen
+        // Optional: Remove the empty text node if there's no text left
         if (lastChild.textContent === '') {
           inputElement.removeChild(lastChild);
         }
 
-        // Tag User Selector deaktivieren
+        // Disable tag user selector
         this.tagUserSelector = false;
       } else {
-        // @-Zeichen hinzufügen
+        // Add the @ symbol
         lastChild.textContent += '@';
         this.tagUserSelector = true;
-        this.triggerAtKeyDown(inputElement); // onKeyDown für @ ausführen
+        this.triggerAtKeyDown(inputElement); // Execute onKeyDown for @
       }
     } else {
-      // Neues @-Zeichen hinzufügen, wenn kein letzter Textknoten existiert
+      // Add a new @ symbol if no last text node exists
       const atSymbol = document.createTextNode('@');
       inputElement.appendChild(atSymbol);
       this.tagUserSelector = true;
-      this.triggerAtKeyDown(inputElement); // onKeyDown für @ ausführen
+      this.triggerAtKeyDown(inputElement); // Execute onKeyDown for @
     }
 
-    // Cursor nach dem @-Zeichen setzen, wenn hinzugefügt
+    // Set the cursor after the @ symbol if added
     if (this.tagUserSelector) {
       const range = document.createRange();
       const selection = window.getSelection();
@@ -740,26 +900,36 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
       selection!.removeAllRanges();
       selection!.addRange(range);
 
-      // Optional: Die Position des @-Zeichens für die Funktion addTagUser speichern
+      // Optional: Store the position of the @ symbol for addTagUser function
       this.lastAtPosition = inputElement.innerText.length;
     }
   }
 
+  /**
+   * Triggers a keydown event for the "@" character in the input element.
+   *
+   * @param {HTMLElement} inputElement - The HTML element in which to trigger the event.
+   */
   triggerAtKeyDown(inputElement: HTMLElement) {
-    // Erstelle ein keydown-Event für das @-Zeichen
+    // Create a keydown event for the @ character
     const event = new KeyboardEvent('keydown', {
       key: '@',
-      code: 'Digit2', // Standardmäßig das @-Zeichen auf QWERTZ-Tastaturen
-      keyCode: 50, // KeyCode für 2/@
-      charCode: 64, // charCode für @
-      bubbles: true, // Event kann nach oben "blubbern"
-      cancelable: true, // Event kann abgebrochen werden
+      code: 'Digit2', // Default for QWERTZ keyboards
+      keyCode: 50, // KeyCode for 2/@
+      charCode: 64, // charCode for @
+      bubbles: true, // Event can bubble up
+      cancelable: true, // Event can be canceled
     });
 
-    // Manuell die onKeyDown Funktion auslösen
+    // Manually trigger the onKeyDown function
     inputElement.dispatchEvent(event);
   }
 
+  /**
+   * Opens the user profile for the specified user ID.
+   *
+   * @param {any} uid - The unique identifier for the user whose profile should be opened.
+   */
   openUserProfil(uid: any) {
     this.channelInfo.userProfilOpen = true;
     this.channelInfo.activeUserProfil = 0;
@@ -769,12 +939,23 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     this.channelInfo.activeUid = uid;
   }
 
+  /**
+   * Opens the channel for the specified channel ID.
+   *
+   * @param {any} uid - The unique identifier for the channel to be opened.
+   */
   openChannel(uid: any) {
     this.channelSelectionService.openChannel();
     this.channelSelectionService.setSelectedChannel(uid);
   }
 
-  log(channel: any) {
+  /**
+   * Logs the specified channel and returns it.
+   *
+   * @param {any} channel - The channel to log.
+   * @returns {any} The logged channel.
+   */
+  log(channel: any): any {
     return channel;
   }
 }

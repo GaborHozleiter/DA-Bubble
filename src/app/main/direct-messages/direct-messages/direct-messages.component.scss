@@ -20,3 +20,9 @@
     display: none;
   }
 }
+
+@media(max-width: 500px) {
+  .contentContainer {
+    margin-right: 0; 
+}
+}

@@ -43,3 +43,17 @@
 .selectedContent {
   background-color: #c8d1fc !important;
 }
+
+@media (max-width: 500px) {
+  .title-mobile{
+    font-size: 25px;
+  }
+
+  .user{
+    gap: 10px;
+    img{
+      height: 40px;
+      width: 40px;
+    }
+  }
+}

@@ -48,7 +48,6 @@ export class AuthService {
           const imgUrl = result.user.photoURL ?? '';
           const uId = result.user.uid;
           this.currentUserSignal.set({name,email,imgUrl,uId,});
-          console.log("User signed in with Google:", name, email);
           this.saveUser.saveUser(uId, email, name, imgUrl);
         })
         .catch((error) => {
@@ -165,21 +164,22 @@ export class AuthService {
    * @param {string} name - The new display name.
    * @returns {Promise<void>} A promise that resolves when the user's data is successfully updated.
    */
-  async updateUserData(email: string, name: string): Promise<void> {
+  async updateUserData(email: string | null, name: string | null): Promise<void> {
     const currentUser = this.firebaseAuth.currentUser;
     if (!currentUser) {
       throw new Error('No user is currently signed in.');
-    }
-    try {
-      if (currentUser.email !== email) {
+    } try {
+      if (email && currentUser.email !== email) {
         await updateEmail(currentUser, email);
-      }
-      if (currentUser.displayName !== name) {
+      } if (name && currentUser.displayName !== name) {
         await updateProfile(currentUser, { displayName: name });
       }
-      await this.updateUserInDatabase(currentUser.uid, name);
+      await this.updateUserInDatabase(currentUser.uid, name || currentUser.displayName || '');
       this.currentUserSignal.set({
-        email, name, imgUrl: currentUser.photoURL ?? '', uId: currentUser.uid
+        email: email || currentUser.email || '',  
+        name: name || currentUser.displayName || '', 
+        imgUrl: currentUser.photoURL ?? '',
+        uId: currentUser.uid
       });
     } catch (error) {
       console.error('Error updating user profile:', error);

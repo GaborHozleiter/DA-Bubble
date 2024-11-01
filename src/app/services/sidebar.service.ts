@@ -49,7 +49,7 @@ export class SidebarService {
   currentChannelNumber: number = 0;
   activeUserIndex: number | undefined;
   activeUserProfil: number | undefined;
-  activeChannelIndex: number | null = 0;
+  activeChannelIndex: number | null | any = 0;
   threadService = inject(ThreadService);
   asd = 0;
   online = false;
@@ -58,7 +58,7 @@ export class SidebarService {
   constructor(
     private firestore: Firestore,
     private channelSelectionService: ChannelSelectionService
-  ) {}
+  ) { }
 
   openChannel(i: number) {
     this.threadService.closeThread();
@@ -71,89 +71,52 @@ export class SidebarService {
     this.activeUserIndex = -1;
   }
 
-fetchChannels() {
+  fetchChannels() {
     const channelsCollection = collection(this.firestore, 'Channels');
-    
+
     onSnapshot(channelsCollection, (querySnapshot) => {
-        this.AllChannels = [];
-        this.AllChannelsUsers = [];
-        this.AllChannelsEmails = [];
-        this.AllChannelsIds = [];
-        this.AllChannelsImages = [];
-        this.AllChannelsUids = [];
-        this.AllChannelsDescriptions = [];
-        this.AllChannelsCreatorsNames = [];
-        this.AllChannelsCreatorsUids = [];
-        this.GlobalChannelUids = [];
-        this.AllChannelsCreationsDate = [];
+      this.AllChannels = [];
+      this.AllChannelsUsers = [];
+      this.AllChannelsEmails = [];
+      this.AllChannelsIds = [];
+      this.AllChannelsImages = [];
+      this.AllChannelsUids = [];
+      this.AllChannelsDescriptions = [];
+      this.AllChannelsCreatorsNames = [];
+      this.AllChannelsCreatorsUids = [];
+      this.GlobalChannelUids = [];
+      this.AllChannelsCreationsDate = [];
 
-        querySnapshot.forEach((doc) => {
-            const channelData = doc.data();
-            this.AllChannels.push(channelData['name']);
-            this.AllChannelsUsers.push(channelData['users']);
-            this.AllChannelsEmails.push(channelData['emails']);
-            this.AllChannelsIds.push(doc.id); 
-            this.AllChannelsImages.push(channelData['images']);
-            this.AllChannelsDescriptions.push(channelData['description']);
-            this.AllChannelsCreatorsNames.push(channelData['channelCreatorName']);
-            this.AllChannelsCreatorsUids.push(channelData['channelCreatorUid']);
-            this.GlobalChannelUids.push(channelData['uids']);
-            this.AllChannelsCreationsDate.push(channelData['creationsDate']);
+      querySnapshot.forEach((doc) => {
+        const channelData = doc.data();
+        if (channelData['users'].length > 0) {
+          this.AllChannels.push(channelData['name']);
+          this.AllChannelsUsers.push(channelData['users']);
+          this.AllChannelsEmails.push(channelData['emails']);
+          this.AllChannelsIds.push(doc.id);
+          this.AllChannelsImages.push(channelData['images']);
+          this.AllChannelsDescriptions.push(channelData['description']);
+          this.AllChannelsCreatorsNames.push(channelData['channelCreatorName']);
+          this.AllChannelsCreatorsUids.push(channelData['channelCreatorUid']);
+          this.GlobalChannelUids.push(channelData['uids']);
+          this.AllChannelsCreationsDate.push(channelData['creationsDate']);
 
-            const uids = channelData['uids'];
-            if (Array.isArray(uids)) {
-                uids.forEach(uid => {
-                    this.AllChannelsUids.push(uid);
-                });
-            } else {
-                this.AllChannelsUids.push(uids);
-            }
-        });
-        this.setTopChannel();
+          const uids = channelData['uids'];
+          if (Array.isArray(uids)) {
+            uids.forEach(uid => {
+              this.AllChannelsUids.push(uid);
+            });
+          } else {
+            this.AllChannelsUids.push(uids);
+          }
+        }
+
+      });
+      this.setTopChannel();
     }, (error) => {
-        console.error('Fehler beim Abrufen der Kanaldaten:', error);
+      console.error('Fehler beim Abrufen der Kanaldaten:', error);
     });
-}
-
-  /* Alte fetchChannels Funktion
-  async fetchChannels() {
-    this.AllChannels = [];
-    this.AllChannelsUsers = [];
-    this.AllChannelsEmails = [];
-    this.AllChannelsIds = [];
-    this.AllChannelsImages = [];
-    this.AllChannelsUids = [];
-    this.AllChannelsDescriptions = [];
-    this.AllChannelsCreators = [];
-    this.GlobalChannelUids = [];
-  
-    const channelsCollection = collection(this.firestore, 'Channels');
-    const querySnapshot = await getDocs(channelsCollection);
-  
-    querySnapshot.forEach((doc) => {
-      const channelData = doc.data();
-      this.AllChannels.push(channelData['name']);
-      this.AllChannelsUsers.push(channelData['users']);
-      this.AllChannelsEmails.push(channelData['emails']);
-      this.AllChannelsIds.push(doc.id);  // A Firestore dokumentum azonosítója a csatorna ID
-      this.AllChannelsImages.push(channelData['images']);
-      this.AllChannelsDescriptions.push(channelData['description']);
-      this.AllChannelsCreators.push(channelData['channelCreator']);
-      this.GlobalChannelUids.push(channelData['uids']);
-  
-      const uids = channelData['uids'];
-      if (Array.isArray(uids)) {
-        uids.forEach(uid => {
-          this.AllChannelsUids.push(uid);
-        });
-      } else {
-        this.AllChannelsUids.push(uids);
-      }
-    });
-  
-    this.setTopChannel();
   }
-  */
 
   setTopChannel() {
     const topChannelIndex = this.AllChannelsIds.length - 1;
@@ -162,57 +125,33 @@ fetchChannels() {
   }
 
 
-fetchUsers() {
+  fetchUsers() {
     const usersCollection = collection(this.firestore, 'Users');
-    
+
     onSnapshot(usersCollection, (querySnapshot) => {
-        this.AllUsers = [];
-        this.AllImages = [];
-        this.AllEmails = [];
-        this.AllUids = [];
-        this.userList = [];
-        this.imageList = [];
-        this.uidList = [];
-        this.emailList = [];
+      this.AllUsers = [];
+      this.AllImages = [];
+      this.AllEmails = [];
+      this.AllUids = [];
+      this.userList = [];
+      this.imageList = [];
+      this.uidList = [];
+      this.emailList = [];
 
-        querySnapshot.forEach((doc) => {
-            const userData = doc.data();
-            this.AllUsers.push(userData['name']);
-            this.AllEmails.push(userData['email']);
-            this.AllImages.push(userData['image']);
-            this.AllUids.push(userData['uid']);
-            this.AllCreators.push(userData['channelCreator']);
-            this.userList.push(userData['name']);
-            this.imageList.push(userData['image']);
-            this.uidList.push(userData['uid']);
-            this.emailList.push(userData['email']);
-        });
+      querySnapshot.forEach((doc) => {
+        const userData = doc.data();
+        this.AllUsers.push(userData['name']);
+        this.AllEmails.push(userData['email']);
+        this.AllImages.push(userData['image']);
+        this.AllUids.push(userData['uid']);
+        this.AllCreators.push(userData['channelCreator']);
+        this.userList.push(userData['name']);
+        this.imageList.push(userData['image']);
+        this.uidList.push(userData['uid']);
+        this.emailList.push(userData['email']);
+      });
     }, (error) => {
-        console.error('Fehler beim Abrufen der Benutzerdaten:', error);
+      console.error('Fehler beim Abrufen der Benutzerdaten:', error);
     });
   }
-
-
-  /* Alte FetchUsers
-  async fetchUsers() {
-    this.AllUsers = [];
-    this.userList = [];
-    this.imageList = [];
-    this.uidList = [];
-    this.emailList = [];
-    const usersCollection = collection(this.firestore, 'Users');
-    const querySnapshot = await getDocs(usersCollection);
-    querySnapshot.forEach((doc) => {
-      const userData = doc.data();
-      this.AllUsers.push(userData['name']);
-      this.AllEmails.push(userData['email']);
-      this.AllImages.push(userData['image']);
-      this.AllUids.push(userData['uid']);
-      this.userList.push(userData['name']);
-      this.imageList.push(userData['image']);
-      this.uidList.push(userData['uid']);
-      this.emailList.push(userData['email']);
-    });
-  }
-  */
 }

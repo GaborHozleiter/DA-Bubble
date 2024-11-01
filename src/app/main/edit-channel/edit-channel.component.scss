@@ -66,6 +66,13 @@ button {
   }
 }
 
+.edit-button-empty {
+  span{
+    color: black;
+  }
+  cursor: default !important;
+}
+
 .content {
   width: 832px;
   display: flex;

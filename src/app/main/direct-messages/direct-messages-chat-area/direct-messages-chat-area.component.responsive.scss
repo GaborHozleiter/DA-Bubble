@@ -1,0 +1,136 @@
+@media (max-width: 500px) {
+  .date {
+    padding: 2px 10px;
+
+    p {
+      font-size: 12px;
+    }
+  }
+
+  .messageResive {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 10px 20px 10px 20px;
+
+    span {
+      background-color: #eceefe;
+      padding: 15px;
+      border-radius: 0px 30px 30px 30px;
+      width: fit-content;
+      word-break: break-all;
+    }
+
+    .profilePicture {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 100%;
+    }
+  }
+
+  .messageSend {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 10px 20px 10px 20px;
+
+    span {
+      background-color: #797ef3;
+      padding: 15px;
+      border-radius: 30px 0px 30px 30px;
+      color: white;
+      width: fit-content;
+      word-break: break-all;
+    }
+
+    .profilePicture {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 100%;
+    }
+
+    .messageInfo {
+      align-items: flex;
+
+      .messageUserName {
+        flex-direction: row-reverse;
+      }
+    }
+  }
+
+  .noMessagesContainer {
+    div {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+
+  .noMessages {
+    margin: 0;
+  }
+
+  .noMessagesTitleContainer {
+    img {
+      width: 88px;
+      height: 88px;
+    }
+  }
+
+  .noMessageDescription {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .messageTitleResive {
+    justify-content: space-between;
+  }
+
+  .hoverSend {
+    display: none !important;
+  }
+
+  .hoverResive {
+    display: none !important;
+  }
+
+  .messageSend {
+    padding: 10px 20px 10px 20px;
+  }
+
+  .messageResive {
+    padding: 10px 20px 10px 20px;
+  }
+}
+
+@media (min-width: 1000px) {
+  .messageSendContainer {
+    &:hover {
+      .hoverSend {
+        display: flex !important;
+      }
+    }
+  }
+
+  .messageResiveContainer {
+    &:hover {
+      .hoverResive {
+        display: flex !important;
+      }
+    }
+  }
+
+  .messageSend,
+  .messageResive {
+    &:hover {
+      .hoverSendMobile,
+      .hoverResiveMobile {
+        display: flex !important;
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 <div class="header">
-  <div>
+  <div class="headerTitle">
     <p>Thread</p>
-    <p># Entwicklerteam</p>
+    <span *ngIf="currentChannel"># {{ currentChannel.name }}</span>
   </div>
   <div class="channelUserContainer">
     <div class="cursor-pointer" (click)="closeThread()">

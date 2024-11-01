@@ -25,13 +25,14 @@
   padding: 20px;
   height: 65px;
   box-sizing: border-box; /* Sicherstellen, dass das Padding und der Border zur Breite beitragen */
+  white-space: pre-wrap; /* Zeilenumbruch, auch ohne Leerzeichen */
+  word-break: break-all; /* Lässt Wörter umbrechen */
   p {
     position: absolute;
     pointer-events: none;
     top: 50%;
     left: 25px;
     transform: translateY(-50%);
-    white-space: nowrap;
   }
 }
 

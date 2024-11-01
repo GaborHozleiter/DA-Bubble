@@ -19,11 +19,23 @@ export class OpenImgComponent implements OnInit {
     });
   }
 
-  stopEvent(event: any) {
+  /**
+   * Stops the propagation of the specified event, preventing it from bubbling up to parent elements.
+   *
+   * @param {any} event - The event object to stop propagation for.
+   * @returns {void}
+   */
+  stopEvent(event: any): void {
     event.stopPropagation();
   }
 
-  getImageDimensionBasedOnAspect(src: string) {
+  /**
+   * Determines whether the provided image source has a greater width or height based on its aspect ratio.
+   *
+   * @param {string} src - The source URL of the image.
+   * @returns {'width' | 'height'} - Returns 'width' if the image is wider than it is tall, otherwise returns 'height'.
+   */
+  getImageDimensionBasedOnAspect(src: string): 'width' | 'height' {
     const img = new Image();
     img.src = src;
 

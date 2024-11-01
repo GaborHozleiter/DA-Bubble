@@ -47,6 +47,7 @@
     height: 40px;
     cursor: pointer;
     background-image: url('../../../assets/img/create-channel/close_button.png');
+
     &:hover {
         background-image: url('../../../assets/img/create-channel/close_button_hover.png');
     }
@@ -54,6 +55,7 @@
 
 .description {
     width: 792px;
+
     span {
         font-weight: 400;
     }
@@ -67,6 +69,7 @@
     align-items: flex-start;
     justify-content: space-between;
     position: relative;
+
     span {
         font-weight: 700;
     }
@@ -81,6 +84,7 @@ input {
     padding: 18px, 20px, 18px, 20px;
     font-size: 18px;
     gap: 20px;
+
     &:focus {
         outline: 2px solid #535AF1;
     }
@@ -93,21 +97,23 @@ input {
 }
 
 .input-field {
-    width: 100%; 
+    width: 100%;
     padding: 0px 50px;
     box-sizing: border-box;
+
     &:focus {
         border-color: none;
     }
 }
 
 .input-field-add-user-to-channel {
-    min-width: 170px; 
+    min-width: 170px;
     max-width: 200px;
     padding: 0px 20px;
     box-sizing: border-box;
     border: none;
     outline: none;
+
     &:hover {
         outline: 2px solid #535AF1;
     }
@@ -196,6 +202,7 @@ input {
     height: 40px;
     cursor: pointer;
     background-image: url('../../../assets/img/create-channel/close_button.png');
+
     &:hover {
         background-image: url('../../../assets/img/create-channel/close_button_hover.png');
     }
@@ -216,7 +223,7 @@ input {
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    gap : 10px;
+    gap: 10px;
     margin-top: 10px;
     position: relative;
 }
@@ -297,6 +304,7 @@ input {
     align-items: center;
     padding: 4px 16px;
     border-radius: 32px;
+
     &:hover {
         background-color: #ECEEFE;
     }
@@ -348,4 +356,47 @@ input {
     font-weight: 400;
     color: #797EF3;
 
+}
+
+@media(max-width: 500px) {
+    .add-user-to-channel-dialog {
+        width: calc(100vw - 80px);
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .selected-user {
+        height: 40px;
+    }
+
+    .selected-img {
+        height: 25px;
+        width: 25px;
+        border-radius: 72px;
+        margin: 0 10px;
+        object-fit: cover;
+    }
+
+    .input-hidden {
+        gap: 10px;
+        padding: 10px;
+        width: auto;
+        max-height: 300px;
+        overflow: scroll;
+    }
+
+    input {
+        height: 40px;
+    }
+
+    .userList {
+        padding: 5px;
+        height: 50px;
+        font-weight: 700;
+    }
+
+    .profil-image {
+        height: 38px;
+        width: 38px;
+    }
 }

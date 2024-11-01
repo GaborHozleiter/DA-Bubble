@@ -23,7 +23,7 @@ export class SaveNewUserService {
       console.error(err);
     })
     .then(() => {
-      console.log('User saved with ID:', uId);
+      //console.log('User saved with ID:', uId);
     });
   }
 

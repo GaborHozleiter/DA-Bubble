@@ -8,6 +8,7 @@ import { SidebarService } from '../../../services/sidebar.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { ResponsiveService } from '../../../services/responsive.service';
+import { zip } from 'rxjs';
 
 @Component({
   selector: 'app-search-field',
@@ -43,10 +44,7 @@ export class SearchFieldComponent {
   async onSearch(event: Event) {
     this.searchTerm = (event.target as HTMLInputElement).value.trim().toLowerCase();
     if (this.searchTerm.length < 3) {
-      this.channels = [];
-      this.users = [];
-      this.messages = [];
-      this.searchService.isSearching = false;
+      this.clearSearch();
       return;
     } if (this.searchTerm) {
       this.channels = await this.searchService.searchChannels(this.searchTerm);
@@ -62,13 +60,18 @@ export class SearchFieldComponent {
           userImage: userImage,
         };
       });
+      console.log(this.hideOrShowSidebar.GlobalChannelUids);
       this.searchService.isSearching = true;
     } else {
-      this.channels = [];
-      this.users = [];
-      this.messages = [];
-      this.searchService.isSearching = false;
+      this.clearSearch();
     }
+  }
+
+  clearSearch() {
+    this.channels = [];
+    this.users = [];
+    this.messages = [];
+    this.searchService.isSearching = false;
   }
 
 
@@ -204,6 +207,7 @@ export class SearchFieldComponent {
       this.searchService.isSearching = false;
       this.channelActive(channelIndex);
       this.scrollToMessage(messageId);
+      this.searchService.searching = true
       this.responsiveService.isChannelOpen = true;
       if (window.innerWidth < 1000) {
         this.responsiveService.isSidebarOpen = false;
@@ -212,6 +216,22 @@ export class SearchFieldComponent {
       console.error('Kanal nicht gefunden oder Benutzer ist kein Mitglied:', channelId);
     }
   }
+
+/**
+ * Checks if the current user is a member of the specified channel by ID.
+ * @param channelId - The ID of the channel to check.
+ * @returns {boolean} True if the user is a member, false otherwise.
+ */
+isUserMemberOfChannel(channelId: string): boolean {
+  const currentUserId = this.authService.currentUserSignal()?.uId ?? '';
+  const channelIndex = this.hideOrShowSidebar.AllChannelsIds.findIndex((channel, index) => {
+    return channel === channelId &&
+      (this.hideOrShowSidebar.GlobalChannelUids[index].includes(currentUserId) || 
+       channel === 'wXzgNEb34DReQq3fEsAo7VTcXXNA');
+  });
+
+  return channelIndex !== -1;
+}
 
   /**
    * Scrolls smoothly to the specified message in the view.

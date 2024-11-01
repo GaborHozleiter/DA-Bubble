@@ -246,6 +246,26 @@ input {
     cursor: pointer;
 }
 
+.save-empty {
+    width: 125px;
+    height: 49px;
+    padding: 12px 25px 12px 25px;
+    gap: 10px;
+    border-radius: 25px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    background-color: #686868;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+}
+
+.white {
+    color: white;
+}
+
 .radio-button {
     cursor: pointer;
 }

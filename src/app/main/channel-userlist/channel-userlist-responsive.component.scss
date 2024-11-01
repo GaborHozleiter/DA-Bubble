@@ -1,24 +1,34 @@
-@media(max-width: 1000px){
+@media(max-width: 1000px) {
     .channel-userlist-dialog {
         top: 170px;
         left: calc(50vw - 248px);
     }
 }
 
-@media(max-width: 495px){
+@media(max-width: 495px) {
     .channel-userlist-dialog {
-        width: 100vw;
+        width: calc(100vw - 60px);
         left: 0;
+        margin: 0 auto;
+        right: 0;
+        padding: 20px;
     }
 
-    .userlist, .dialog-title-container {
+    .userlist,
+    .dialog-title-container {
         width: calc(100vw - 80px);
-        transform: translateX(-40px);
+        transform: translateX(-20px);
     }
 
     .add-user-container {
         width: 100%;
         justify-content: center;
         background-repeat: no-repeat;
+    }
+}
+
+@media(max-width: 375px) {
+    .channel-userlist-dialog {
+        top: 85px;
     }
 }

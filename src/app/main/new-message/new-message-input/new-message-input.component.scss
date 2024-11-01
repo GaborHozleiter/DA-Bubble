@@ -6,7 +6,7 @@
   border-radius: 0 0 30px 30px;
 }
 
-textarea {
+.textAreaNewMessage {
   border: none;
   overflow: auto;
   outline: none;
@@ -16,10 +16,7 @@ textarea {
   box-shadow: none;
 
   resize: none; /*remove the resize handle on the bottom right*/
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
+  position: relative;
   width: 100%;
   border-radius: 20px 20px 0 0;
   border: 1px solid #adb0d9;
@@ -28,6 +25,15 @@ textarea {
   padding: 20px;
   height: 65px;
   box-sizing: border-box; /* Sicherstellen, dass das Padding und der Border zur Breite beitragen */
+  white-space: pre-wrap; /* Zeilenumbruch, auch ohne Leerzeichen */
+  word-break: break-all; /* Lässt Wörter umbrechen */
+  p {
+    position: absolute;
+    pointer-events: none;
+    top: 50%;
+    left: 25px;
+    transform: translateY(-50%);
+  }
 }
 
 .inputButtons {
@@ -116,4 +122,66 @@ textarea {
 emoji-mart {
   position: absolute;
   transform: translateY(-618px) translatex(45px);
+}
+
+.tagContainer {
+  position: absolute;
+  transform: translateY(calc(-100% - 146px - 20px - 40px)) translateX(45px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: white;
+  padding: 16px;
+  border-radius: 30px;
+  border: 1px solid #d9d9d9;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.tagUser {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  padding: 6px 16px 6px 16px;
+  border-radius: 30px;
+  font-weight: 400;
+  cursor: pointer;
+  &:hover {
+    background-color: #eceefe;
+  }
+}
+
+.userListTitle {
+  padding: 6px 16px 6px 16px;
+}
+
+.online-icon {
+  position: absolute;
+  top: 35px;
+  left: 47px;
+  width: 10px;
+  height: 10px;
+}
+
+.selected-img {
+  height: 40px;
+  width: 40px;
+  border-radius: 80px;
+  margin-right: 10px;
+}
+
+
+@media (max-width: 500px){
+  .content {
+    padding: 40px 10px 20px 10px;
+    width: calc(100% - 20px);
+}
 }

@@ -8,41 +8,42 @@
         <div class="select-user-group-container">
             <div class="select-user-group">
                 <img class="tag" src="../../../assets/img/sidebar/tag_hover.png">
-                <span class="channel-name fs-18">{{ this.hideOrShowSidebar.AllChannels[this.hideOrShowSidebar.currentChannelNumber] }}</span>
+                <span class="channel-name fs-18">{{ this.hideOrShowSidebar.AllChannels[this.realChannelIndex] }}</span>
             </div>
         </div>
         <div>
-                <div class="input-hidden">
-                    <div *ngFor="let selectedUser of hideOrShowSidebar.selectedUsers; let i = index" class="selected-user">
-                        <div>
-                            <img src="{{hideOrShowSidebar.selectedImages[i]}}" class="selected-img">
-                        </div>
-                        <span>{{ selectedUser }}</span>
-                        <div (click)="deleteUser(i)" class="close-button"></div>
-                    </div>
+            <div class="input-hidden">
+                <div *ngFor="let selectedUser of hideOrShowSidebar.selectedUsers; let i = index" class="selected-user">
                     <div>
-                        <input type="text" class="input-field-add-user-to-channel" id="name" name="name" placeholder="Name eingeben"
-                        (input)="onSearch($event)" [(ngModel)]="searchTerm">
+                        <img src="{{hideOrShowSidebar.selectedImages[i]}}" class="selected-img">
                     </div>
+                    <span>{{ selectedUser }}</span>
+                    <div (click)="deleteUser(i)" class="close-button"></div>
                 </div>
+                <div>
+                    <input type="text" class="input-field-add-user-to-channel" id="name" name="name"
+                        placeholder="Name eingeben" (input)="onSearch($event)" [(ngModel)]="searchTerm">
+                </div>
+            </div>
         </div>
         <div class="button-container-addUser">
-                <div class="userList" (click)="notCloseDialog($event)">
-                    <div *ngFor="let user of filteredUserList; let i = index" class="user" (click)="selectUser(i)">
-                        <img class="profil-image" [src]="filteredImageList[i]">
-                        @if(authService.currentUserSignal()?.uId == filteredUidList[i] || this.hideOrShowSidebar.onlineUserUidList.includes(filteredUidList[i])){
-                            <img class="online-icon" src="../../../assets/img/sidebar/Online.png" />
-                          }@else {
-                            <img class="online-icon" src="../../../assets/img/sidebar/Offline.png" />
-                          }
-                        <span>{{ user }}</span>
-                      </div>
+            <div class="userList" (click)="notCloseDialog($event)">
+                <div *ngFor="let user of filteredUserList; let i = index" class="user" (click)="selectUser(i)">
+                    <img class="profil-image" [src]="filteredImageList[i]">
+                    @if(authService.currentUserSignal()?.uId == filteredUidList[i] ||
+                    this.hideOrShowSidebar.onlineUserUidList.includes(filteredUidList[i])){
+                    <img class="online-icon" src="../../../assets/img/sidebar/Online.png" />
+                    }@else {
+                    <img class="online-icon" src="../../../assets/img/sidebar/Offline.png" />
+                    }
+                    <span>{{ user }}</span>
                 </div>
-                @if(this.addUserEnabled){
-                    <button type="submit" class="save" (click)="saveUsers()"><span class="fs-18">Hinzufügen</span></button>
-                }@else{
-                    <button type="submit" class="disabled"><span class="fs-18">Hinzufügen</span></button>
-                }
+            </div>
+            @if(this.addUserEnabled){
+            <button type="submit" class="save" (click)="saveUsers()"><span class="fs-18">Hinzufügen</span></button>
+            }@else{
+            <button type="submit" class="disabled"><span class="fs-18">Hinzufügen</span></button>
+            }
         </div>
     </div>
 </div>

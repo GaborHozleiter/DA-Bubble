@@ -1,13 +1,25 @@
-<div class="contentContainer" [ngClass]="{
-  'channel-display-flex': responsiveService.isChannelOpen
-}">
+<div
+  class="contentContainer"
+  [ngClass]="{
+    'channel-display-flex': responsiveService.isChannelOpen
+  }"
+>
   <div
     class="contentThreadClosed"
-    [ngClass]="{ contentThreadOpen: currentThread }"
+    [ngClass]="{
+      contentThreadOpen: currentThread,
+      'channel-display-none': responsiveService.isThreadOpen
+    }"
   >
-    <app-channel-header [ngClass]="{'channel-display-none': responsiveService.isThreadOpen}"></app-channel-header>
-    <app-channel-chat-area [ngClass]="{'channel-display-none': responsiveService.isThreadOpen}"></app-channel-chat-area>
-    <app-channel-message-input [ngClass]="{'channel-display-none': responsiveService.isThreadOpen}"></app-channel-message-input>
+    <app-channel-header
+      [ngClass]="{ 'channel-display-none': responsiveService.isThreadOpen }"
+    ></app-channel-header>
+    <app-channel-chat-area
+      [ngClass]="{ 'channel-display-none': responsiveService.isThreadOpen }"
+    ></app-channel-chat-area>
+    <app-channel-message-input
+      [ngClass]="{ 'channel-display-none': responsiveService.isThreadOpen }"
+    ></app-channel-message-input>
   </div>
   <div id="slideIn" class="thread" *ngIf="currentThread">
     <app-thread [thread]="currentThread"></app-thread>

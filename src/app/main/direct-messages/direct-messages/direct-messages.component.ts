@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
     DirectMessagesHeaderComponent,
     DirectMessagesChatAreaComponent,
     DirectMessagesMessageInputComponent,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './direct-messages.component.html',
   styleUrl: './direct-messages.component.scss',
@@ -25,10 +25,19 @@ export class DirectMessagesComponent implements OnInit {
   constructor(
     public directMessageSelectionService: DirectMessageSelectionService
   ) {}
+
   ngOnInit(): void {
     this.setUser();
   }
 
+  /**
+   * Sets the user based on the currently selected channel.
+   *
+   * This method subscribes to the observable from `directMessageSelectionService.getSelectedChannel()`,
+   * which emits the currently selected channel information. When a new value is emitted,
+   * it assigns the emitted value to the `user` property.
+   *
+   */
   setUser() {
     this.directMessageSelectionService
       .getSelectedChannel()

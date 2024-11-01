@@ -1,8 +1,8 @@
-@media(max-width: 1000px){
+@media(max-width: 1000px) {
     .dialog {
-    border-radius: 30px;
-    top : calc(50vh - 313px);
-    left: calc(50vw - 228px);
+        border-radius: 30px;
+        top: calc(50vh - 313px);
+        left: calc(50vw - 228px);
     }
 
     .header-title {
@@ -12,29 +12,63 @@
     .account-icon {
         display: flex;
     }
-    
-    .mail-icon{
+
+    .mail-icon {
         display: flex;
     }
 }
 
-@media(max-width: 500px){
+@media(max-width: 500px) {
     .dialog {
-    width: calc(100vw - 60px);
-    left: 0;
+        width: calc(100vw - 100px);
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+
+    .profil-image {
+        width: 180px;
+        height: 180px;
     }
 
     .channel-name-container {
-        width: calc(100vw - 50px);
+        width: calc(100vw - 100px);
     }
 }
 
-@media(max-width: 400px){
+@media(max-width: 400px) {
     .dialog {
         padding: 20px 15px 20px 15px;
-        width: calc(100vw - 30px);
-        top : calc(50vh - 297px);
-        left: 0;
+        width: calc(100vw - 80px);
+        top: calc(50vh - 297px);
+    }
+
+    button {
+        width: 110px;
+        height: 40px;
+    }
+
+    .header-title {
+       font-size: 20px;
+    }
+
+    input {
+        height: 40px;
+    }
+
+    .buttons-container{
+        span{
+            font-size: 14px;
+        }
+    }
+
+    .error-message{
+        font-size: 12px;
+    }
+
+    .profil-image {
+        width: 150px;
+        height: 150px;
     }
 
     .input-field {
