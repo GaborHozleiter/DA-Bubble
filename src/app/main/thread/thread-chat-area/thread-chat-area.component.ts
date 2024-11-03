@@ -480,7 +480,41 @@ export class ThreadChatAreaComponent implements OnInit, AfterViewInit {
         message.id
       );
       await deleteDoc(messageRef);
-    } catch (error) {
+      this.updateMessageVariable();
+    } catch (error) {}
+  }
+
+  /**
+   * Updates the message variable by updating the thread count and the last thread message time in Firestore.
+   * @async
+   * @returns {Promise<void>}
+   */
+  async updateMessageVariable() {
+    let value = this.allMessages.length;
+    const messageRef = doc(
+      this.firestore,
+      'Channels',
+      this.currentChannelId,
+      'messages',
+      this.threadId
+    );
+
+    try {
+      let date =
+        this.allMessagesSortedDate[
+          this.allMessagesSortedDate.length - 1
+        ].hour.toString() +
+        ':' +
+        this.allMessagesSortedDate[
+          this.allMessagesSortedDate.length - 1
+        ].minute.toString();
+
+
+      await updateDoc(messageRef, {
+        threadCount: value,
+        lastThreadMessage: date,
+      });
+    } catch (err) {
     }
   }
 
@@ -565,8 +599,7 @@ export class ThreadChatAreaComponent implements OnInit, AfterViewInit {
     await updateDoc(messageRef, {
       message: message.trim(),
       updatedAt: new Date(), // Optional: store the time of the last change
-    }).catch((err) => {
-    });
+    }).catch((err) => {});
   }
 
   /**

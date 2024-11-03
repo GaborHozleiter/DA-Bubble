@@ -86,7 +86,7 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
         this.subUser();
         this.subChannels();
         this.clearInput();
-        // this.setFokus();
+        this.setFokus();
       }
     });
   }
@@ -97,7 +97,6 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {}
 
   setFokus() {
-    console.log('set fokus');
     setTimeout(() => {
       this.messageTextarea.nativeElement.focus();
     }, 100);
@@ -159,7 +158,6 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
       );
       this.FileUrl = imageUrl;
     } else {
-      console.error('No file selected');
     }
   }
 
@@ -184,7 +182,16 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     if (this.FileUrl) {
       this.deleteFile();
     }
-    this.selectedFile = event.target.files[0];
+    const originalFile = event.target.files[0];
+    const newFile = new File(
+      [originalFile],
+      `${Date.now()}.${originalFile.type.split('/')[1]}`,
+      {
+        type: originalFile.type,
+      }
+    );
+
+    this.selectedFile = newFile;
     this.saveFileToCache();
   }
 
@@ -258,7 +265,6 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
         messageId = docRef.id; // Save the message ID
       })
       .catch((err) => {
-        console.error(err);
       });
 
     await addDoc(
@@ -272,7 +278,6 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
       ),
       this.toJSON()
     ).catch((err) => {
-      console.error(err);
     });
 
     // Clear the input
@@ -362,7 +367,6 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     // Get the current selection
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) {
-      console.error('No valid selection found.');
       return;
     }
 
@@ -372,14 +376,12 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     // Ensure the range is within the `textarea`
     const commonAncestor = range.commonAncestorContainer;
     if (!textarea.contains(commonAncestor)) {
-      console.error('Selection is outside of the `textarea`.');
       return;
     }
 
     // Extract the emoji text
     const emojiText = emoji.native || emoji.emoji || emoji;
     if (!emojiText) {
-      console.error('No valid emoji text found.');
       return;
     }
 
@@ -548,7 +550,6 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     const inputElement = document.getElementById('input') as HTMLElement;
 
     if (!inputElement) {
-      console.error('Input element not found.');
       return;
     }
 
@@ -631,9 +632,7 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     const inputElement = document.getElementById('input') as HTMLElement;
 
     if (!inputElement || this.lastAtPosition === null) {
-      console.error(
-        'Das Eingabeelement wurde nicht gefunden oder die Position des Symbols ist unbekannt.'
-      );
+
       return;
     }
 
@@ -854,7 +853,6 @@ export class ChannelMessageInputComponent implements OnInit, AfterViewInit {
     const inputElement = document.getElementById('input') as HTMLElement;
 
     if (!inputElement) {
-      console.error('Das Eingabeelement wurde nicht gefunden.');
       return;
     }
 

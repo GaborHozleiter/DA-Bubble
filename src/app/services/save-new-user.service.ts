@@ -20,7 +20,6 @@ export class SaveNewUserService {
       this.toJSON(uId, email, name, url)
     )
     .catch((err) => {
-      console.error(err);
     })
     .then(() => {
       //console.log('User saved with ID:', uId);

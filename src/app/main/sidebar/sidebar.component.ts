@@ -176,7 +176,6 @@ export class SidebarComponent implements OnInit, AfterViewInit {
         });
       },
       (error) => {
-        console.error('Fehler beim Abrufen der Benutzerdaten:', error);
       }
     );
   }

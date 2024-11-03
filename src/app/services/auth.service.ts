@@ -11,7 +11,7 @@ import {
   sendPasswordResetEmail,
   confirmPasswordReset,
   verifyPasswordResetCode,
-  updateEmail
+  updateEmail,
 } from '@angular/fire/auth';
 import { from, Observable } from 'rxjs';
 import { UserInterFace } from '../../models/user.interface';
@@ -19,7 +19,7 @@ import { SaveNewUserService } from './save-new-user.service';
 import { doc, Firestore, updateDoc } from '@angular/fire/firestore';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   firebaseAuth = inject(Auth);
@@ -27,7 +27,7 @@ export class AuthService {
   currentUserSignal = signal<UserInterFace | null | undefined>(undefined);
   provider = new GoogleAuthProvider();
   saveUser = inject(SaveNewUserService);
-  firestore = inject(Firestore)
+  firestore = inject(Firestore);
 
   /**
    * Signs in a user with Google using a popup window.
@@ -47,13 +47,12 @@ export class AuthService {
           const email = result.user.email ?? 'unknown@example.com';
           const imgUrl = result.user.photoURL ?? '';
           const uId = result.user.uid;
-          this.currentUserSignal.set({name,email,imgUrl,uId,});
+          this.currentUserSignal.set({ name, email, imgUrl, uId });
           this.saveUser.saveUser(uId, email, name, imgUrl);
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.error("Error during Google Sign-In:", errorCode, errorMessage);
           throw error;
         })
     );
@@ -68,17 +67,28 @@ export class AuthService {
    * @param {string} imgUrl - The user's profile image URL.
    * @returns {Observable<string>} An observable that returns the user's ID on successful registration.
    */
-  register(email: string, name: string, password: string, imgUrl: string): Observable<string> {
-    const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
-      .then(response => {
+  register(
+    email: string,
+    name: string,
+    password: string,
+    imgUrl: string
+  ): Observable<string> {
+    const promise = createUserWithEmailAndPassword(
+      this.firebaseAuth,
+      email,
+      password
+    )
+      .then((response) => {
         const uId = response.user.uid;
-        return updateProfile(response.user, { displayName: name, photoURL: imgUrl })
-          .then(() => {
-            this.currentUserSignal.set({ name, email, imgUrl, uId, });
-            return uId;
-          });
-      }).catch(error => {
-        console.error('Error updating profile:', error);
+        return updateProfile(response.user, {
+          displayName: name,
+          photoURL: imgUrl,
+        }).then(() => {
+          this.currentUserSignal.set({ name, email, imgUrl, uId });
+          return uId;
+        });
+      })
+      .catch((error) => {
         throw error;
       });
     return from(promise);
@@ -92,11 +102,15 @@ export class AuthService {
    * @returns {Observable<void>} An observable that resolves when the login is successful.
    */
   logIn(email: string, password: string): Observable<void> {
-    const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then((result) => {
+    const promise = signInWithEmailAndPassword(
+      this.firebaseAuth,
+      email,
+      password
+    ).then((result) => {
       const uId = result.user.uid;
       const name = result.user.displayName ?? 'Unknown User';
       const imgUrl = result.user.photoURL ?? '';
-      this.currentUserSignal.set({ name, email, imgUrl, uId, });
+      this.currentUserSignal.set({ name, email, imgUrl, uId });
     });
     return from(promise);
   }
@@ -108,13 +122,17 @@ export class AuthService {
   guestLogin(): Observable<void> {
     const predefinedEmail = 'gast@gastmail.com';
     const predefinedPassword = 'asdasd';
-    const promise = signInWithEmailAndPassword(this.firebaseAuth, predefinedEmail, predefinedPassword)
-      .then((result) => {
-        const uId = result.user.uid;
-        const name = result.user.displayName ?? 'Gast';
-        const imgUrl = result.user.photoURL ?? '../../../assets/img/landing-page/profile.png';
-        this.currentUserSignal.set({ name, email: predefinedEmail, imgUrl, uId });
-      });
+    const promise = signInWithEmailAndPassword(
+      this.firebaseAuth,
+      predefinedEmail,
+      predefinedPassword
+    ).then((result) => {
+      const uId = result.user.uid;
+      const name = result.user.displayName ?? 'Gast';
+      const imgUrl =
+        result.user.photoURL ?? '../../../assets/img/landing-page/profile.png';
+      this.currentUserSignal.set({ name, email: predefinedEmail, imgUrl, uId });
+    });
 
     return from(promise);
   }
@@ -145,17 +163,19 @@ export class AuthService {
    * @returns {Promise<void>} A promise that resolves when the password is successfully changed.
    */
   changePassword(actionCode: string, newPassword: string): Promise<void> {
-    return verifyPasswordResetCode(this.firebaseAuth, actionCode).then((email) => {
-      return confirmPasswordReset(this.firebaseAuth, actionCode, newPassword).then(() => {
-        console.log('Password reset has been confirmed and updated for email:', email);
-      }).catch((error) => {
-        console.error('Error during password confirmation:', error);
-        throw new Error('Failed to reset password. The code might have expired or the password is too weak.');
+    return verifyPasswordResetCode(this.firebaseAuth, actionCode)
+      .then((email) => {
+        return confirmPasswordReset(this.firebaseAuth, actionCode, newPassword)
+          .then(() => {})
+          .catch((error) => {
+            throw new Error(
+              'Failed to reset password. The code might have expired or the password is too weak.'
+            );
+          });
+      })
+      .catch((error) => {
+        throw new Error('Invalid or expired password reset code.');
       });
-    }).catch((error) => {
-      console.error('Invalid or expired action code:', error);
-      throw new Error('Invalid or expired password reset code.');
-    });
   }
 
   /**
@@ -164,25 +184,32 @@ export class AuthService {
    * @param {string} name - The new display name.
    * @returns {Promise<void>} A promise that resolves when the user's data is successfully updated.
    */
-  async updateUserData(email: string | null, name: string | null): Promise<void> {
+  async updateUserData(
+    email: string | null,
+    name: string | null
+  ): Promise<void> {
     const currentUser = this.firebaseAuth.currentUser;
     if (!currentUser) {
       throw new Error('No user is currently signed in.');
-    } try {
+    }
+    try {
       if (email && currentUser.email !== email) {
         await updateEmail(currentUser, email);
-      } if (name && currentUser.displayName !== name) {
+      }
+      if (name && currentUser.displayName !== name) {
         await updateProfile(currentUser, { displayName: name });
       }
-      await this.updateUserInDatabase(currentUser.uid, name || currentUser.displayName || '');
+      await this.updateUserInDatabase(
+        currentUser.uid,
+        name || currentUser.displayName || ''
+      );
       this.currentUserSignal.set({
-        email: email || currentUser.email || '',  
-        name: name || currentUser.displayName || '', 
+        email: email || currentUser.email || '',
+        name: name || currentUser.displayName || '',
         imgUrl: currentUser.photoURL ?? '',
-        uId: currentUser.uid
+        uId: currentUser.uid,
       });
     } catch (error) {
-      console.error('Error updating user profile:', error);
       throw error;
     }
   }

@@ -56,9 +56,9 @@
       }
     }
   }
-  
-  .noMessagesContainer{
-    div{
+
+  .noMessagesContainer {
+    div {
       padding-left: 10px;
       padding-right: 10px;
     }
@@ -111,5 +111,23 @@
         display: flex !important;
       }
     }
+  }
+}
+
+@media (max-width: 1350px) {
+  .messageResive {
+    padding: 10px 100px 10px 45px;
+  }
+  .messageSend {
+    padding: 10px 45px 10px 100px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .messageResive {
+    padding: 10px 45px 10px 45px;
+  }
+  .messageSend {
+    padding: 10px 45px 10px 45px;
   }
 }

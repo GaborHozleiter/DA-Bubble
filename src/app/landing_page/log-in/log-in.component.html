@@ -1,6 +1,44 @@
+<style>
+    @keyframes logoSlide430px {
+        0% {
+            opacity: 1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        100% {
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            height: 50px;
+            width: auto;
+            opacity: 0;
+        }
+    }
+
+    @keyframes logoSlidePhone375px {
+        0% {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        100% {
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            height: 50px;
+            width: auto;
+        }
+    }
+</style>
+
 <div class="animation-wrapper-global"></div>
 
-<section>
+<section class="main-content">
     <div class="animation-wrapper-local">
         <div class="logo-wrapper">
             <img class="animated-logo" src="../../../assets/img/landing-page/animation-step1.png" alt="daBubble-logo">
@@ -10,14 +48,14 @@
     <img class="logo" src="../../../assets/img/landing-page/DABubble-logo.png" alt="daBubble-logo">
 
     <div class="sign-in-section">
-        <p  class="fs-18">Neu bei DABubble?</p>
+        <p class="fs-18">Neu bei DABubble?</p>
         <a class="fs-18 purp-link" [routerLink]="['/sign-up']">Konto erstellen</a>
     </div>
 
     <div class="login-section">
         <h1 class="fs-46">Anmeldung</h1>
 
-        <p  class="fs-20">Wir empfehlen dir, die E-Mail-Adresse zu nutzen,
+        <p class="fs-20">Wir empfehlen dir, die E-Mail-Adresse zu nutzen,
             die du bei der Arbeit verwendest.</p>
 
         <form [formGroup]="form" class="formfield" (ngSubmit)="onSubmit()">
@@ -32,8 +70,10 @@
 
             <div class="input-container" style="position: relative;">
                 <img class="input-icon-lock" src="../../../assets/img/landing-page/lock.png" alt="">
-                <img (click)="revealPasswordService.togglePassword()" class="input-icon-reveal" src="{{revealPasswordService.imgUrl}}" alt="">
-                <input maxlength="21" formControlName="password" class="input-design" placeholder="Passwort" type="{{revealPasswordService.type}}">
+                <img (click)="revealPasswordService.togglePassword()" class="input-icon-reveal"
+                    src="{{revealPasswordService.imgUrl}}" alt="">
+                <input maxlength="21" formControlName="password" class="input-design" placeholder="Passwort"
+                    type="{{revealPasswordService.type}}">
                 <span
                     *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)"
                     class="error-message">
@@ -59,7 +99,7 @@
             <span class="btn-container">
                 <button [disabled]="!form.valid" [ngClass]="{'blue-btn': form.valid, 'disabled-btn fs-18': !form.valid}"
                     type="submit" class="blue-btn fs-18 cursor-pointer">Anmelden</button>
-                    
+
                 <button (click)="guestLogin()" class="white-btn fs-18 cursor-pointer">Gäste-Login</button>
             </span>
         </form>

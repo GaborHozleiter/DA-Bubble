@@ -7,25 +7,28 @@
         </div>
         <div>
             @if (authService.currentUserSignal() == null ) {
-                <img class="profil-image" src="../../../assets/img/landing-page/profile.png">
+            <img class="profil-image" src="../../../assets/img/landing-page/profile.png">
             } @else {
-                <img class="profil-image" src="{{authService.currentUserSignal()?.imgUrl}}">
+            <img class="profil-image" src="{{authService.currentUserSignal()?.imgUrl}}">
             }
-            
+
         </div>
         <div class="name-container">
             <div class="name-edit">
-                <span class="user-name fs-32">{{authService.currentUserSignal()?.name}}</span>
+                <span limit class="user-name fs-32"
+                    [ngClass]="{'fs-24': (authService.currentUserSignal()?.name?.length || 0) > 17}">
+                    {{authService.currentUserSignal()?.name}}
+                </span>
                 <span class="edit fs-18" (click)="editUser()">Bearbeiten</span>
                 <div (click)="editUser()" class="responsive-edit-icon"></div>
             </div>
             <div class="online">
                 @if(!userOnline){
-                    <div class="online-icon"></div>
-                    <span class="fs-20">Aktiv</span>
+                <div class="online-icon"></div>
+                <span class="fs-20">Aktiv</span>
                 }@else {
-                    <div class="offline-icon"></div>
-                    <span class="fs-20">Abwesend</span>
+                <div class="offline-icon"></div>
+                <span class="fs-20">Abwesend</span>
                 }
             </div>
         </div>

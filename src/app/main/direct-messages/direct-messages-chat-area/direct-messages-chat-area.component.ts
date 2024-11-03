@@ -501,8 +501,8 @@ export class DirectMessagesChatAreaComponent implements AfterViewInit, OnInit {
         message.id
       );
       await deleteDoc(messageRef2);
-    } catch (error) {
-    }
+      this.threadService.closeThread();
+    } catch (error) {}
   }
 
   onInputChange(message: any) {
@@ -585,8 +585,7 @@ export class DirectMessagesChatAreaComponent implements AfterViewInit, OnInit {
     await updateDoc(messageRef, {
       message: message.trim(),
       updatedAt: new Date(), // Optional: store the last modified time
-    }).catch((err) => {
-    });
+    }).catch((err) => {});
 
     // Update the message in the Firestore database
     const messageRef2 = doc(
@@ -600,8 +599,7 @@ export class DirectMessagesChatAreaComponent implements AfterViewInit, OnInit {
     await updateDoc(messageRef2, {
       message: message.trim(),
       updatedAt: new Date(), // Optional: store the last modified time
-    }).catch((err) => {
-    });
+    }).catch((err) => {});
   }
 
   /**

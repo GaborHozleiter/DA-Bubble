@@ -165,12 +165,9 @@ export class ChatAreaService {
         await updateDoc(messageRef, {
           [variableName]: updatedValue,
         });
-        console.log('Document successfully updated!');
       } else {
-        console.log('No such document!');
       }
     } catch (err) {
-      console.error('Error updating document: ', err);
     }
   }
 

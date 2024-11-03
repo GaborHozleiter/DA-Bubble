@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -19,7 +19,8 @@ import {
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './log-in.component.html',
-  styleUrls: ['./log-in.component.scss','./log-in.component-2.scss'] 
+  styleUrl: './log-in.component.scss',
+  encapsulation: ViewEncapsulation.None 
 })
 export class LogInComponent implements OnInit{
   authService = inject(AuthService);

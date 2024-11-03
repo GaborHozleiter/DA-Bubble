@@ -474,14 +474,12 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
       this.updateMessage(event, message.id);
       this.openEditMessage = '';
     } else {
-      console.log('nachricht leer');
       this.deleteMessage(message);
     }
   }
 
   async deleteMessage(message: any) {
     try {
-      console.log(this.currentChannelId, message.id);
       const messageRef = doc(
         this.firestore,
         'Channels',
@@ -490,9 +488,8 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
         message.id
       );
       await deleteDoc(messageRef);
-      console.log('Message deleted successfully');
+      this.threadService.closeThread();
     } catch (error) {
-      console.error('Error deleting message: ', error);
     }
   }
 

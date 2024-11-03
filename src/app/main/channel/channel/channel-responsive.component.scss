@@ -23,3 +23,13 @@
     transition: none;
   }
 }
+
+@media (max-width: 1500px) {
+  .contentThreadOpen {
+    width: 55% !important;
+  }
+
+  .slide-in-right {
+    width: 45%;
+  }
+}

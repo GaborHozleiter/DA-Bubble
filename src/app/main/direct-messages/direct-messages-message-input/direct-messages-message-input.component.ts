@@ -210,7 +210,16 @@ export class DirectMessagesMessageInputComponent implements OnInit {
     if (this.FileUrl) {
       this.deleteFile();
     }
-    this.selectedFile = event.target.files[0];
+    const originalFile = event.target.files[0];
+    const newFile = new File(
+      [originalFile],
+      `${Date.now()}.${originalFile.type.split('/')[1]}`,
+      {
+        type: originalFile.type,
+      }
+    );
+
+    this.selectedFile = newFile;
     this.saveFileToCache();
   }
 

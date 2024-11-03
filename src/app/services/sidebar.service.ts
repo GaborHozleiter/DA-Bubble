@@ -114,7 +114,6 @@ export class SidebarService {
       });
       this.setTopChannel();
     }, (error) => {
-      console.error('Fehler beim Abrufen der Kanaldaten:', error);
     });
   }
 
@@ -151,7 +150,6 @@ export class SidebarService {
         this.emailList.push(userData['email']);
       });
     }, (error) => {
-      console.error('Fehler beim Abrufen der Benutzerdaten:', error);
     });
   }
 }

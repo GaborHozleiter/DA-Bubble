@@ -187,7 +187,6 @@ export class NewMessageInputComponent {
       );
       this.FileUrl = imageUrl;
     } else {
-      console.error('No file selected');
     }
   }
 
@@ -220,10 +219,8 @@ export class NewMessageInputComponent {
       '.textAreaNewMessage'
     ) as HTMLElement;
 
-    console.log(messageTextarea);
 
     if (messageTextarea) {
-      console.log(messageTextarea);
 
       const children = messageTextarea.childNodes;
       let result = '';
@@ -279,7 +276,6 @@ export class NewMessageInputComponent {
   }
 
   saveMessageOnline() {
-    console.log(this.selectedChannel); // Ellenőrizd, hogy itt már a megfelelő értéket kapja
 
     if (this.selectedChannel === 'user') {
         this.saveDirectMessage();
@@ -296,7 +292,6 @@ export class NewMessageInputComponent {
         this.channelSelectionService.setSelectedChannel(this.selecteduid);
         this.updateSidebarFocus();
     } else {
-        console.log('no channel selected');
     }
 }
 
@@ -310,7 +305,6 @@ updateSidebarFocus() {
 
   //erstannt eine nachricht
   async saveChannelMessage() {
-    console.log('saveChannelMessage');
     if (this.selectedFile) {
       await this.saveFile();
       this.addIMG();
@@ -322,14 +316,12 @@ updateSidebarFocus() {
       collection(this.firestore, 'Channels', this.selecteduid, 'messages'),
       this.toJSON()
     ).catch((err) => {
-      console.error(err);
     });
     this.message.message = '';
   }
 
   //erstannt eine nachricht
   async saveDirectMessage() {
-    console.log('saveDirectMessage');
     this.user = this.authService.currentUserSignal()?.uId;
     if (this.selectedFile) {
       await this.saveFile();
@@ -348,7 +340,6 @@ updateSidebarFocus() {
 
     // Speichere die Nachricht mit der generierten ID für den Sender
     await setDoc(messageRef, this.directMessageToJson()).catch((err) => {
-      console.error(err);
     });
 
     this.directMessage.communicationType = 'resive';
@@ -362,7 +353,6 @@ updateSidebarFocus() {
       messageId
     );
     await setDoc(recipientRef, this.directMessageToJson()).catch((err) => {
-      console.error(err);
     });
 
     this.message.message = '';
@@ -483,7 +473,6 @@ updateSidebarFocus() {
     // Aktuelle Selektion erhalten
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) {
-      console.error('Keine gültige Selektion gefunden.');
       return;
     }
 
@@ -493,14 +482,12 @@ updateSidebarFocus() {
     // Sicherstellen, dass der Range im `textarea` liegt
     const commonAncestor = range.commonAncestorContainer;
     if (!textarea.contains(commonAncestor)) {
-      console.error('Selektion liegt außerhalb des `textarea`.');
       return;
     }
 
     // Emoji Text extrahieren
     const emojiText = emoji.native || emoji.emoji || emoji;
     if (!emojiText) {
-      console.error('Kein gültiger Emoji-Text gefunden.');
       return;
     }
 
@@ -606,7 +593,6 @@ updateSidebarFocus() {
     const inputElement = document.getElementById('input') as HTMLElement;
 
     if (!inputElement) {
-      console.error('Das Eingabeelement wurde nicht gefunden.');
       return;
     }
 
@@ -670,7 +656,6 @@ updateSidebarFocus() {
         this.tagUserSelector = false;
       }
     } else {
-      console.log(`Kein ${tagSymbol}-Zeichen gefunden.`);
     }
   }
 
@@ -683,9 +668,7 @@ updateSidebarFocus() {
     const inputElement = document.getElementById('input') as HTMLElement;
 
     if (!inputElement || this.lastAtPosition === null) {
-      console.error(
-        'Das Eingabeelement wurde nicht gefunden oder die Position des Symbols ist unbekannt.'
-      );
+
       return;
     }
 
@@ -895,7 +878,6 @@ updateSidebarFocus() {
     const inputElement = document.getElementById('input') as HTMLElement;
 
     if (!inputElement) {
-      console.error('Das Eingabeelement wurde nicht gefunden.');
       return;
     }
 

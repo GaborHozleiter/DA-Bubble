@@ -120,41 +120,44 @@
                           </g>
                         </svg>
                       </p>
-                      <p (click)="openThread(message)" class="cursor-pointer">
+                      <p
+                        *ngIf="
+                          message.uid ===
+                            authService.currentUserSignal()?.uId && i != 0
+                        "
+                        (click)="deleteMessage(message)"
+                      >
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="25"
-                          height="24"
-                          viewBox="0 0 25 24"
+                          width="24px"
+                          height="24px"
+                          viewBox="0 0 24 24"
                           fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
                         >
-                          <mask
-                            id="mask0_65979_17714"
-                            style="mask-type: alpha"
-                            maskUnits="userSpaceOnUse"
-                            x="0"
-                            y="0"
-                            width="25"
-                            height="24"
-                          >
-                            <rect
-                              x="0.936523"
-                              width="24"
-                              height="24"
-                              fill="#D9D9D9"
-                            />
-                          </mask>
-                          <g mask="url(#mask0_65979_17714)">
-                            <path
-                              d="M7.93652 14H17.9365C18.2199 14 18.4572 13.904 18.6485 13.712C18.8405 13.5207 18.9365 13.2833 18.9365 13C18.9365 12.7167 18.8405 12.479 18.6485 12.287C18.4572 12.0957 18.2199 12 17.9365 12H7.93652C7.65319 12 7.41552 12.0957 7.22352 12.287C7.03219 12.479 6.93652 12.7167 6.93652 13C6.93652 13.2833 7.03219 13.5207 7.22352 13.712C7.41552 13.904 7.65319 14 7.93652 14ZM7.93652 11H17.9365C18.2199 11 18.4572 10.904 18.6485 10.712C18.8405 10.5207 18.9365 10.2833 18.9365 10C18.9365 9.71667 18.8405 9.479 18.6485 9.287C18.4572 9.09567 18.2199 9 17.9365 9H7.93652C7.65319 9 7.41552 9.09567 7.22352 9.287C7.03219 9.479 6.93652 9.71667 6.93652 10C6.93652 10.2833 7.03219 10.5207 7.22352 10.712C7.41552 10.904 7.65319 11 7.93652 11ZM7.93652 8H17.9365C18.2199 8 18.4572 7.90433 18.6485 7.713C18.8405 7.521 18.9365 7.28333 18.9365 7C18.9365 6.71667 18.8405 6.479 18.6485 6.287C18.4572 6.09567 18.2199 6 17.9365 6H7.93652C7.65319 6 7.41552 6.09567 7.22352 6.287C7.03219 6.479 6.93652 6.71667 6.93652 7C6.93652 7.28333 7.03219 7.521 7.22352 7.713C7.41552 7.90433 7.65319 8 7.93652 8ZM21.2365 20.3L18.9365 18H4.93652C4.38652 18 3.91586 17.8043 3.52452 17.413C3.13252 17.021 2.93652 16.55 2.93652 16V4C2.93652 3.45 3.13252 2.979 3.52452 2.587C3.91586 2.19567 4.38652 2 4.93652 2H20.9365C21.4865 2 21.9575 2.19567 22.3495 2.587C22.7409 2.979 22.9365 3.45 22.9365 4V19.575C22.9365 20.025 22.7325 20.3373 22.3245 20.512C21.9159 20.6873 21.5532 20.6167 21.2365 20.3ZM4.93652 4V16H19.7615L20.9365 17.175V4H4.93652Z"
-                              fill="black"
-                            />
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
+                            <g id="Interface / Trash_Full">
+                              <path
+                                id="Vector"
+                                d="M14 10V17M10 10V17M6 6V17.8C6 18.9201 6 19.4798 6.21799 19.9076C6.40973 20.2839 6.71547 20.5905 7.0918 20.7822C7.5192 21 8.07899 21 9.19691 21H14.8031C15.921 21 16.48 21 16.9074 20.7822C17.2837 20.5905 17.5905 20.2839 17.7822 19.9076C18 19.4802 18 18.921 18 17.8031V6M6 6H8M6 6H4M8 6H16M8 6C8 5.06812 8 4.60241 8.15224 4.23486C8.35523 3.74481 8.74432 3.35523 9.23438 3.15224C9.60192 3 10.0681 3 11 3H13C13.9319 3 14.3978 3 14.7654 3.15224C15.2554 3.35523 15.6447 3.74481 15.8477 4.23486C15.9999 4.6024 16 5.06812 16 6M16 6H18M18 6H20"
+                                stroke="#000000"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              ></path>
+                            </g>
                           </g>
                         </svg>
                       </p>
                       <p
                         *ngIf="
-                          message.uid === authService.currentUserSignal()?.uId
+                          message.uid ===
+                            authService.currentUserSignal()?.uId && i != 0
                         "
                         (click)="editMessage(message)"
                       >
@@ -246,20 +249,6 @@
                   src="{{ message.fileUrl }}"
                   (click)="setImg(message.fileUrl)"
                 />
-                <div class="answers" *ngIf="message.threadCount > 0">
-                  <a
-                    class="middlePurple cursor-pointer"
-                    (click)="openThread(message)"
-                  >
-                    <p *ngIf="message.threadCount < 2">
-                      {{ message.threadCount }} Antwort
-                    </p>
-                    <p *ngIf="message.threadCount > 2">
-                      {{ message.threadCount }} Antworten
-                    </p>
-                  </a>
-                  <p class="smallGray">Letzte Antwort 14:56</p>
-                </div>
               </div>
               <div class="profileImg">
                 <img

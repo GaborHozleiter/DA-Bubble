@@ -1,11 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormsModule,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { getStorage, ref } from "firebase/storage";
-import { deleteObject, getDownloadURL, uploadBytesResumable } from '@angular/fire/storage';
+import { getStorage, ref } from 'firebase/storage';
+import {
+  deleteObject,
+  getDownloadURL,
+  uploadBytesResumable,
+} from '@angular/fire/storage';
 import { SaveNewUserService } from '../../services/save-new-user.service';
 import { RevealPasswordService } from '../../services/reveal-password.service';
 
@@ -14,21 +23,26 @@ import { RevealPasswordService } from '../../services/reveal-password.service';
   standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.scss', 'sign-up.component-2.scss']
+  styleUrls: ['./sign-up.component.scss', 'sign-up.component-2.scss'],
 })
 export class SignUpComponent {
   authService = inject(AuthService);
   router = inject(Router);
   fb = inject(FormBuilder);
   saveUser = inject(SaveNewUserService);
-  revealPasswordService = inject(RevealPasswordService)
+  revealPasswordService = inject(RevealPasswordService);
 
   imgSrcArrow: string = '../../../assets/img/landing-page/arrow-back.png';
-  imgSrcCheck: string = '../../../assets/img/landing-page/checkbox-unchecked.png';
-  imgSrcUnchecked: string = '../../../assets/img/landing-page/checkbox-unchecked.png';
-  imgSrcChecked: string = '../../../assets/img/landing-page/checkbox-checked.png';
-  imgSrcUncheckedHover: string = '../../../assets/img/landing-page/checkbox-unchecked-hover.png';
-  imgSrcCheckedHover: string = '../../../assets/img/landing-page/checkbox-checked-hover.png';
+  imgSrcCheck: string =
+    '../../../assets/img/landing-page/checkbox-unchecked.png';
+  imgSrcUnchecked: string =
+    '../../../assets/img/landing-page/checkbox-unchecked.png';
+  imgSrcChecked: string =
+    '../../../assets/img/landing-page/checkbox-checked.png';
+  imgSrcUncheckedHover: string =
+    '../../../assets/img/landing-page/checkbox-unchecked-hover.png';
+  imgSrcCheckedHover: string =
+    '../../../assets/img/landing-page/checkbox-checked-hover.png';
 
   profileImgsSrc: string[] = [
     '../../../assets/img/profile-imgs/female1.png',
@@ -37,7 +51,7 @@ export class SignUpComponent {
     '../../../assets/img/profile-imgs/male2.png',
     '../../../assets/img/profile-imgs/male3.png',
     '../../../assets/img/profile-imgs/male4.png',
-  ]
+  ];
   stepTwo: boolean = false;
   isClicked: boolean = false;
   isHoveringOver: boolean = false;
@@ -55,9 +69,15 @@ export class SignUpComponent {
 
   form = this.fb.nonNullable.group({
     name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}')]],
+    email: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}'),
+      ],
+    ],
     password: ['', Validators.required],
-  })
+  });
 
   constructor(private _location: Location) {
     this.updateImageSrc();
@@ -99,25 +119,34 @@ export class SignUpComponent {
     const rawForm = this.form.getRawValue();
     if (this.selectedFile) {
       await this.saveFile();
-    } if (this.isClicked) {
-      this.authService.register(rawForm.email, rawForm.name, rawForm.password, this.imgUrl).subscribe({
-        next: (userId) => {
-          this.registerSuccesful = true;
-          this.saveUser.saveUser(userId, rawForm.email, rawForm.name, this.imgUrl);
-          setTimeout(() => {
-            this.registerSuccesful = false;
-            this.router.navigateByUrl('/');
-          }, 500);
-        }, 
-        error: (err) => {
-          if (err.code === 'auth/email-already-in-use') {
-            this.stepTwo = false;
-            this.errorMessage = 'Diese E-Mail-Adresse ist bereits registriert. Bitte verwenden Sie eine andere E-Mail.';
-          } else {
-            this.errorMessage = err.code;
-          }
-        }
-      });
+    }
+    if (this.isClicked) {
+      this.authService
+        .register(rawForm.email, rawForm.name, rawForm.password, this.imgUrl)
+        .subscribe({
+          next: (userId) => {
+            this.registerSuccesful = true;
+            this.saveUser.saveUser(
+              userId,
+              rawForm.email,
+              rawForm.name,
+              this.imgUrl
+            );
+            setTimeout(() => {
+              this.registerSuccesful = false;
+              this.router.navigateByUrl('/');
+            }, 500);
+          },
+          error: (err) => {
+            if (err.code === 'auth/email-already-in-use') {
+              this.stepTwo = false;
+              this.errorMessage =
+                'Diese E-Mail-Adresse ist bereits registriert. Bitte verwenden Sie eine andere E-Mail.';
+            } else {
+              this.errorMessage = err.code;
+            }
+          },
+        });
     }
   }
 
@@ -187,7 +216,7 @@ export class SignUpComponent {
     return new Promise<string>((resolve, reject) => {
       uploadTask.on(
         'state_changed',
-        (snapshot) => { },
+        (snapshot) => {},
         (error) => {
           reject(error);
         },
@@ -213,7 +242,7 @@ export class SignUpComponent {
     return new Promise<string>((resolve, reject) => {
       uploadTask.on(
         'state_changed',
-        (snapshot) => { },
+        (snapshot) => {},
         (error) => {
           reject(error);
         },
@@ -249,10 +278,15 @@ export class SignUpComponent {
    * Handles mouse hover over the checkbox, changing its appearance.
    */
   mouseOver() {
-    if (this.imgSrcCheck == "../../../assets/img/landing-page/checkbox-unchecked.png") {
-      this.imgSrcCheck = "../../../assets/img/landing-page/checkbox-unchecked-hover.png";
+    if (
+      this.imgSrcCheck ==
+      '../../../assets/img/landing-page/checkbox-unchecked.png'
+    ) {
+      this.imgSrcCheck =
+        '../../../assets/img/landing-page/checkbox-unchecked-hover.png';
     } else {
-      this.imgSrcCheck = "../../../assets/img/landing-page/checkbox-checked-hover.png";
+      this.imgSrcCheck =
+        '../../../assets/img/landing-page/checkbox-checked-hover.png';
     }
   }
 
@@ -260,10 +294,19 @@ export class SignUpComponent {
    * Handles mouse out from the checkbox, changing its appearance back to default.
    */
   mouseOut() {
-    if (this.imgSrcCheck == "../../../assets/img/landing-page/checkbox-unchecked-hover.png") {
-      this.imgSrcCheck = "../../../assets/img/landing-page/checkbox-unchecked.png";
-    } else if (this.imgSrcCheck == "../../../assets/img/landing-page/checkbox-checked-hover.png" || this.isClicked) {
-      this.imgSrcCheck = "../../../assets/img/landing-page/checkbox-checked.png";
+    if (
+      this.imgSrcCheck ==
+      '../../../assets/img/landing-page/checkbox-unchecked-hover.png'
+    ) {
+      this.imgSrcCheck =
+        '../../../assets/img/landing-page/checkbox-unchecked.png';
+    } else if (
+      this.imgSrcCheck ==
+        '../../../assets/img/landing-page/checkbox-checked-hover.png' ||
+      this.isClicked
+    ) {
+      this.imgSrcCheck =
+        '../../../assets/img/landing-page/checkbox-checked.png';
     }
   }
 

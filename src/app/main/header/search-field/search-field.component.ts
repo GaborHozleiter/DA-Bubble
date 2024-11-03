@@ -60,7 +60,6 @@ export class SearchFieldComponent {
           userImage: userImage,
         };
       });
-      console.log(this.hideOrShowSidebar.GlobalChannelUids);
       this.searchService.isSearching = true;
     } else {
       this.clearSearch();

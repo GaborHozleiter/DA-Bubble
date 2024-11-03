@@ -225,7 +225,6 @@ export class AddUserToChannelComponent {
       const channelDoc = await getDoc(channelRef);
       await this.updateChannelAndResetUser(channelDoc, channelRef); 
     } catch (error) {
-      console.error('Fehler beim Speichern der Daten:', error);
     }
   }
 

@@ -70,7 +70,6 @@ export class EditProfilContactformComponent {
       this.successMessage = 'Profil erfolgreich aktualisiert.';
       this.closePopup();
     } catch (error) {
-      console.error(error);
     }
   }
 

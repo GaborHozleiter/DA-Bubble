@@ -260,7 +260,6 @@ export class EditChannelComponent implements OnInit {
  */
   async saveChannelName() {
     if (!this.originalChannelData.name) {
-      console.error('Channel name is empty. Please provide a valid name.');
       return;
     }
     const channelRef = doc(
@@ -271,7 +270,6 @@ export class EditChannelComponent implements OnInit {
       await updateDoc(channelRef, this.toJSON());
       this.closeChannelEditor();
     } catch (err) {
-      console.error('Error updating channel name: ', err);
     }
   }
 
@@ -341,9 +339,7 @@ export class EditChannelComponent implements OnInit {
  */
   async saveChannelDescription() {
     if (!this.originalChannelData.description) {
-      console.error(
-        'Channel name is empty. Please provide a valid description.'
-      );
+
       return;
     }
     const channelRef = doc(
@@ -354,7 +350,6 @@ export class EditChannelComponent implements OnInit {
       await updateDoc(channelRef, this.toJSONDescription());
       this.closeChannelDescriptionEdit();
     } catch (err) {
-      console.error('Error updating channel name: ', err);
     }
   }
 
