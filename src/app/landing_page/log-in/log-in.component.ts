@@ -29,7 +29,7 @@ export class LogInComponent implements OnInit{
   errorMessage: string | null = null; 
   userInfo = inject(SidebarService);
   revealPasswordService = inject(RevealPasswordService);
-
+  animationDone:boolean = false;
   form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}')]],
     password: ['', [Validators.required]],
@@ -38,10 +38,11 @@ export class LogInComponent implements OnInit{
   constructor(private firestore : Firestore) {}
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.animationDone = true;
+    }, 4000);
     
   }
-
-  
   
   /**
    * Initiates Google Sign-In process.
@@ -226,6 +227,9 @@ export class LogInComponent implements OnInit{
         break;
       case 'auth/too-many-requests':
         this.errorMessage = 'Zu viele fehlgeschlagene Anmeldeversuche. Bitte versuchen Sie es später erneut.';
+        break;
+      case 'auth/wrong-password':
+        this.errorMessage = 'Das Passwort ist falsch. Bitte überprüfen Sie es und versuchen Sie es erneut.';
         break;
       default:
         this.errorMessage = 'Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.';

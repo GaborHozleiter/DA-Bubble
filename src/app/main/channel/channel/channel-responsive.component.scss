@@ -17,9 +17,11 @@
 
   app-thread {
     margin-left: 0;
+    width: 100%;
   }
 
   .thread {
+    width: 100% !important;
     transition: none;
   }
 }

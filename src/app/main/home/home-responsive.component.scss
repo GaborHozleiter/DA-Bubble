@@ -1,19 +1,19 @@
-@media(max-width: 1000px){
-    app-sidebar {
-        margin-bottom: 0px;
-      }
+@media (max-width: 1000px) {
+  app-sidebar {
+    margin-bottom: 0px;
+  }
 
-    app-header {
+  app-header {
     height: 80px;
-    }
+  }
 
-    .content {
+  .content {
     display: flex;
     flex-direction: row;
     height: calc(100vh - 80px);
-    }
+  }
 
-    app-channel {
-      margin-bottom: 0;
-    }
+  app-channel {
+    margin-bottom: 0;
+  }
 }

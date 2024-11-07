@@ -24,3 +24,20 @@ img {
   height: 80%;
   max-width: 80%;
 }
+
+.imgContainer {
+  position: relative;
+  button {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    border: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0;
+    &:hover {
+      background-color: #eceefe;
+    }
+  }
+}

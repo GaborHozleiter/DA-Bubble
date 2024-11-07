@@ -1,22 +1,20 @@
 <style>
-    @keyframes logoSlide430px {
-        0% {
-            opacity: 1;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        100% {
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
-            height: 50px;
-            width: auto;
-            opacity: 0;
-        }
+    @keyframes logoSlidePhone430px {
+    0% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
+
+    100% {
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        height: 50px;
+        width: auto;
+    }
+}
 
     @keyframes logoSlidePhone375px {
         0% {
@@ -41,7 +39,11 @@
 <section class="main-content">
     <div class="animation-wrapper-local">
         <div class="logo-wrapper">
-            <img class="animated-logo" src="../../../assets/img/landing-page/animation-step1.png" alt="daBubble-logo">
+            <div class="animated-logo">
+                <img class="sizeAuto"  src="../../../assets/img/landing-page/animation-step1.png"
+                    alt="daBubble-logo">
+                <span class="reveal">DABubble</span>
+            </div>
         </div>
     </div>
 
@@ -52,7 +54,7 @@
         <a class="fs-18 purp-link" [routerLink]="['/sign-up']">Konto erstellen</a>
     </div>
 
-    <div class="login-section">
+    <div [ngClass]="{'zindex999': animationDone}" class="login-section">
         <h1 class="fs-46">Anmeldung</h1>
 
         <p class="fs-20">Wir empfehlen dir, die E-Mail-Adresse zu nutzen,

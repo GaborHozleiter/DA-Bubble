@@ -197,6 +197,9 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
    * @returns {void}
    */
   openThread(thread: any): void {
+    if (this.responsiveService.width < 1350) {
+      this.channelInfo.sidebarOpen = true;
+    }
     if (this.threadService.isThreadOpen()) {
       this.threadService.closeThread();
       setTimeout(() => {
@@ -489,8 +492,7 @@ export class ChannelChatAreaComponent implements AfterViewInit, OnInit {
       );
       await deleteDoc(messageRef);
       this.threadService.closeThread();
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   onInputChange(message: any) {

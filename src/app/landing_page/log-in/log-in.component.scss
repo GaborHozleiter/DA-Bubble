@@ -14,6 +14,10 @@
     gap: 20px;
 }
 
+.zindex999 {
+    z-index: 998;
+}
+
 .logo {
     position: absolute;
     animation: logoSlideOriginal;
@@ -115,7 +119,7 @@
     top: 19px
 }
 
-.input-icon-reveal{
+.input-icon-reveal {
     position: absolute;
     right: 25px;
     top: 19px;
@@ -173,7 +177,7 @@
     width: 100vw;
     height: 100%;
     position: absolute;
-    z-index: 998;
+    z-index: 999;
     background: linear-gradient(1.46deg, #313AE6 1.22%, #797EF3 98.76%);
     animation: backgroundAnimation;
     animation-delay: 2500ms;
@@ -190,15 +194,41 @@
 }
 
 .animated-logo {
+    display: flex;
+    align-items: center;
     height: auto;
     width: auto;
     animation: logoAnimation;
     animation-delay: 500ms;
     animation-timing-function: ease-out;
-    animation-duration: 500ms;
+    animation-duration: 400ms;
     animation-fill-mode: forwards;
-    height: auto;
     max-width: 100%;
+    z-index: -1;
+    transform: translateX(30%);
+}
+
+.sizeAuto {
+    height: auto;
+    width: auto;
+}
+
+.reveal {
+    color: #0000;
+    font-weight: 700;
+    font-size: 70px;
+    background:
+        linear-gradient(white 0 0) no-repeat;
+    background-size: 0% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: t .5s 1s both;
+}
+
+@keyframes t {
+    to {
+        background-size: 100% 100%
+    }
 }
 
 .logo-wrapper {
@@ -207,11 +237,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    animation: logoSlide;
-    animation-delay: 2500ms;
-    animation-timing-function: ease-in-out;
-    animation-duration: 500ms;
-    animation-fill-mode: forwards;
+    animation: logoSlide 500ms ease-in-out 2500ms forwards;
 }
 
 .error-message {
@@ -243,14 +269,8 @@
         opacity: 1;
     }
 
-    50% {
-        content: url("../../../assets/img/landing-page/animation-step2.png");
-        transform: translateX(-5%)
-    }
-
     100% {
-        content: url("../../../assets/img/landing-page/animation-step3.png");
-        transform: translateX(0);
+        transform: translateX(0%);
     }
 }
 
@@ -306,53 +326,15 @@
     }
 }
 
-@keyframes logoSlidePhone430px {
-    0% {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    100% {
-        top: 100px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1;
-        height: 50px;
-        width: auto;
-    }
-}
-
 @keyframes logoSlide430px {
     0% {
         opacity: 1;
         top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
     }
+
     100% {
         top: 100px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1;
-        height: 50px;
-        width: auto;
-        opacity: 0;
-    }
-}
-
-@keyframes logoSlidePhone375px {
-    0% {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    100% {
-        top: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1;
-        height: 50px;
-        width: auto;
+        opacity: 0; 
     }
 }
 
@@ -360,17 +342,11 @@
     0% {
         opacity: 1;
         top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
     }
+
     100% {
-        top: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1;
-        height: 50px;
-        width: auto;
-        opacity: 0;
+        top: 100px;
+        opacity: 0; 
     }
 }
 
@@ -441,6 +417,15 @@
         }
     }
 
+    .reveal{
+        font-size: 50px;
+    }
+
+    .sizeAuto{
+        width: 100px;
+        height: 100px;
+    }
+
     .error-message {
         font-size: 12px;
     }
@@ -488,7 +473,7 @@
         height: 45px;
     }
 
-    .input-icon-reveal{
+    .input-icon-reveal {
         top: 11px;
     }
 
@@ -515,15 +500,26 @@
         }
     }
 
+    .reveal{
+        font-size: 40px;
+    }
+
+    .sizeAuto{
+        width: 80px;
+        height: 80px;
+    }
+
     .sign-in-section {
         display: none;
     }
 
     .sign-in-section-phone {
         display: flex;
-        p{
+
+        p {
             padding-right: 0px;
         }
+
         a {
             color: #464bdf;
             border: 1px solid #797ef3;
@@ -533,13 +529,12 @@
     }
 
     .logo-wrapper {
+        top: 50%;
+        left: 50%;
         transform: translate(-50%, -50%);
-        animation: logoSlide430px;
-        animation-delay: 2500ms;
-        animation-timing-function: ease-in-out;
-        animation-duration: 500ms;
-        animation-fill-mode: forwards;
+        animation: logoSlide430px 500ms ease-in-out 2500ms forwards;
     }
+    
 
     .logo {
         animation: logoSlidePhone430px !important;
@@ -590,9 +585,19 @@
         padding: 20px;
         max-width: 300px;
         gap: 10px;
+
         p {
             max-width: 250px;
         }
+    }
+
+    .reveal{
+        font-size: 30px;
+    }
+
+    .sizeAuto{
+        width: 60px;
+        height: 60px;
     }
 
     .sign-in-section {
@@ -600,9 +605,10 @@
     }
 
     .sign-in-section-phone {
-        p{
+        p {
             font-size: 12px;
         }
+
         a {
             font-size: 12px;
         }

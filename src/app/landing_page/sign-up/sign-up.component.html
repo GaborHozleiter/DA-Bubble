@@ -64,9 +64,9 @@
                                 href="privacy">Datenschutzerklärung</a>zu.</p>
                     </div>
 
-                    <span *ngIf="!isClicked" class="error-message">
-                        Bitte akzeptieren Sie die Datenschutzrichtlinie.
-                    </span>
+                    <span *ngIf="form.valid && !isClicked" class="error-message">
+                  Bitte akzeptieren Sie die Datenschutzrichtlinie.
+                </span>
                 </div>
 
                 <span class="btn-container">

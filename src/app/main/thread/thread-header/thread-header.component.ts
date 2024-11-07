@@ -19,6 +19,7 @@ import {
 import { ChatAreaService } from '../../../services/chat-area.service';
 import { ChannelSelectionService } from '../../../services/channel-selection.service';
 import { CommonModule } from '@angular/common';
+import { SidebarService } from '../../../services/sidebar.service';
 
 @Component({
   selector: 'app-thread-header',
@@ -34,6 +35,7 @@ export class ThreadHeaderComponent {
     public channelSelectionService: ChannelSelectionService,
     public chatAreaService: ChatAreaService
   ) {}
+  channelInfo = inject(SidebarService);
   responsiveService = inject(ResponsiveService);
   allChannels: any = [];
   currentChannelId: any;
@@ -57,6 +59,9 @@ export class ThreadHeaderComponent {
   closeThread() {
     this.threadService.closeThread();
     this.responsiveService.isThreadOpen = false;
+    if (this.responsiveService.width < 1350) {
+      this.channelInfo.sidebarOpen = false;
+    }
   }
 
   /**
